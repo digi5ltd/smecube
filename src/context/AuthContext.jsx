@@ -1,6 +1,4 @@
-// File: src/context/AuthContext.jsx
 import React, { createContext, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 
 const AuthContext = createContext();
@@ -9,7 +7,6 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Check if user is already logged in on mount
   useEffect(() => {
     const token = localStorage.getItem('token');
     const savedUser = localStorage.getItem('user');
@@ -22,6 +19,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('user');
       }
     }
+    
     setLoading(false);
   }, []);
 

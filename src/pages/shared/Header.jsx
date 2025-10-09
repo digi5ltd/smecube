@@ -1,97 +1,123 @@
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
-import React from 'react';
-import { Link } from 'react-router-dom';
 
-const Header = ({ setMobileMenuOpen, scrolled, mobileMenuOpen }) => {
+const Header = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const navLinks = [
+    { path: '/', label: 'হোম' },
+    { path: '/services', label: 'সেবাসমূহ' },
+    { path: '/about', label: 'আমাদের সম্পর্কে' },
+    { path: '/blog', label: 'ব্লগ' },
+    { path: '/contact', label: 'যোগাযোগ' }
+  ];
+
   return (
-    <header
-      className={`fixed w-full top-0 z-50 transition-all duration-300 ${
-        scrolled ? 'bg-white/95 backdrop-blur-lg shadow-lg' : 'bg-gradient-to-r from-purple-200/40 via-pink-200/40 to-red-200/40 backdrop-blur-md'
+    <header 
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled 
+          ? 'bg-white shadow-lg' 
+          : 'bg-white/95 backdrop-blur-sm'
       }`}
+      style={{ width: '100%' }}
     >
-      <div className="absolute inset-0 -z-10 overflow-hidden">
-        <div
-          className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-purple-200/20 to-pink-200/20 opacity-50"
-        ></div>
-        <div className="absolute top-10 left-10 w-40 h-40 bg-purple-300/20 rounded-full mix-blend-multiply filter blur-3xl animate-pulse"></div>
-        <div
-          className="absolute bottom-10 right-10 w-40 h-40 bg-pink-300/20 rounded-full mix-blend-multiply filter blur-3xl animate-pulse"
-          style={{ animationDelay: '1s' }}
-        ></div>
-      </div>
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
+        <div className="flex justify-between items-center h-20 md:h-24">
           {/* Logo */}
-          <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-3 group">
-              <div className="relative">
-                <div className="w-12 h-12 bg-gradient-to-br from-red-500 via-pink-500 to-red-600 rounded-2xl flex items-center justify-center transform transition-transform group-hover:rotate-180 duration-500 shadow-lg">
-                  <div className="text-white font-bold text-2xl">S</div>
-                </div>
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-blue-500 rounded-full animate-pulse"></div>
-              </div>
-              <div>
-                <span className="text-2xl font-black tracking-tight">
-                  <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">sme</span>
-                  <span className="text-gray-900">cube</span>
-                </span>
-                <div className="text-xs text-gray-500 font-medium">Digital Solutions</div>
-              </div>
+          <Link 
+            to="/" 
+            className="flex items-center space-x-2 z-50"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-red-500 to-pink-600 rounded-xl flex items-center justify-center">
+              <span className="text-white font-bold text-xl md:text-2xl">S</span>
+            </div>
+            <span className="text-xl md:text-2xl font-bold bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
+              SME CUBE
+            </span>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex items-center space-x-8">
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={`font-semibold transition-all duration-300 hover:text-red-500 ${
+                  location.pathname === link.path
+                    ? 'text-red-500'
+                    : 'text-gray-700'
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
+            <Link
+              to="/login"
+              className="bg-gradient-to-r from-red-500 to-pink-600 text-white px-6 py-2.5 rounded-full font-semibold hover:shadow-lg hover:scale-105 transition-all duration-300"
+            >
+              লগইন
             </Link>
           </div>
 
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-1">
-            <Link to="/#home" className="px-4 py-2 text-gray-700 hover:text-red-500 transition-colors font-medium rounded-lg hover:bg-red-50/50">
-              হোম
-            </Link>
-            <Link to="/#services" className="px-4 py-2 text-gray-700 hover:text-red-500 transition-colors font-medium rounded-lg hover:bg-red-50/50">
-              সার্ভিস
-            </Link>
-            <Link to="/#pricing" className="px-4 py-2 text-gray-700 hover:text-red-500 transition-colors font-medium rounded-lg hover:bg-red-50/50">
-              প্রাইসিং
-            </Link>
-            <Link to="/#contact" className="px-4 py-2 text-gray-700 hover:text-red-500 transition-colors font-medium rounded-lg hover:bg-red-50/50">
-              যোগাযোগ
-            </Link>
-            <Link to="/login" className="ml-4 bg-gradient-to-r from-red-500 to-pink-600 text-white px-6 py-2.5 rounded-full hover:shadow-lg hover:scale-105 transition-all duration-300 font-semibold">
-              ক্লায়েন্ট এরিয়া
-            </Link>
-          </div>
-
-          {/* Mobile menu button */}
+          {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-gray-100/50 transition-colors"
+            className="lg:hidden z-50 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            aria-label="Toggle menu"
           >
             {mobileMenuOpen ? (
-              <X className="w-6 h-6 text-gray-900" />
+              <X className="w-6 h-6 text-gray-700" />
             ) : (
-              <Menu className="w-6 h-6 text-gray-900" />
+              <Menu className="w-6 h-6 text-gray-700" />
             )}
           </button>
         </div>
 
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden py-6 space-y-2 bg-white/95 border-t backdrop-blur-md">
-            <Link to="/#home" className="block px-4 py-3 text-gray-700 hover:bg-red-50/50 hover:text-red-500 rounded-lg transition-colors font-medium">
-              হোম
-            </Link>
-            <Link to="/#services" className="block px-4 py-3 text-gray-700 hover:bg-red-50/50 hover:text-red-500 rounded-lg transition-colors font-medium">
-              সার্ভিস
-            </Link>
-            <Link to="/#pricing" className="block px-4 py-3 text-gray-700 hover:bg-red-50/50 hover:text-red-500 rounded-lg transition-colors font-medium">
-              প্রাইসিং
-            </Link>
-            <Link to="/#contact" className="block px-4 py-3 text-gray-700 hover:bg-red-50/50 hover:text-red-500 rounded-lg transition-colors font-medium">
-              যোগাযোগ
-            </Link>
-            <Link to="/login" className="block w-full mt-4 bg-gradient-to-r from-red-500 to-pink-600 text-white px-6 py-3 rounded-full hover:shadow-lg transition-all font-semibold text-center">
-              ক্লায়েন্ট এরিয়া
+        {/* Mobile Navigation */}
+        <div
+          className={`lg:hidden fixed inset-0 bg-white z-40 transition-all duration-300 ${
+            mobileMenuOpen 
+              ? 'opacity-100 visible' 
+              : 'opacity-0 invisible'
+          }`}
+          style={{ top: '80px' }}
+        >
+          <div className="flex flex-col items-center justify-center h-full space-y-6 px-4">
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                onClick={() => setMobileMenuOpen(false)}
+                className={`text-2xl font-semibold transition-all duration-300 hover:text-red-500 ${
+                  location.pathname === link.path
+                    ? 'text-red-500'
+                    : 'text-gray-700'
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
+            <Link
+              to="/login"
+              onClick={() => setMobileMenuOpen(false)}
+              className="bg-gradient-to-r from-red-500 to-pink-600 text-white px-8 py-3 rounded-full font-semibold text-lg hover:shadow-lg hover:scale-105 transition-all duration-300"
+            >
+              লগইন
             </Link>
           </div>
-        )}
+        </div>
       </nav>
     </header>
   );

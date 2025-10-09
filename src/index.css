@@ -2,7 +2,7 @@
 
 @import "tailwindcss";
 
-button{
+button {
   cursor: pointer;
 }
 
@@ -11,6 +11,5 @@ body {
 }
 
 .english-text {
-  font-family: 'Arial', sans-serif; /* Fallback for Akceler Alter */
+  font-family: 'Arial', sans-serif;
 }
-

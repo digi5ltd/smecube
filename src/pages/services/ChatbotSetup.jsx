@@ -195,82 +195,86 @@ const ChatbotSetup = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-5xl font-bold mb-6">
+      <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-12 sm:py-16 md:py-20">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <div className="text-center">
+            <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-4 md:mb-6 px-2">
               চ্যাটবট সেটআপ সার্ভিস
             </h1>
-            <p className="text-xl mb-8 text-blue-100">
+            <p className="text-base sm:text-lg md:text-xl mb-6 md:mb-8 text-blue-100 max-w-3xl mx-auto px-4">
               আপনার ব্যবসায় ২৪/৭ কাস্টমার সাপোর্ট দিন AI-চালিত স্বয়ংক্রিয় চ্যাটবটের মাধ্যমে। 
               সব প্রধান প্ল্যাটফর্মে সম্পূর্ণ সেটআপ ও কনফিগারেশন।
             </p>
-            <div className="flex justify-center gap-4">
+            <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 px-4">
               <Link
                 to="/contact"
-                className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition"
+                className="bg-white text-blue-600 px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition text-sm sm:text-base"
               >
                 ফ্রি কনসালটেশন
               </Link>
-              <button className="border-2 border-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition">
+              <button className="border-2 border-white px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition text-sm sm:text-base">
                 ডেমো দেখুন
               </button>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Features Grid */}
-      <div className="container mx-auto px-4 py-16">
-        <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">
-          চ্যাটবট সেটআপের সুবিধা
-        </h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {features.map((feature, index) => (
-            <div
-              key={index}
-              className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition transform hover:-translate-y-1"
-            >
-              <div className="text-5xl mb-4">{feature.icon}</div>
-              <h3 className="text-xl font-bold mb-3 text-gray-800">
-                {feature.title}
-              </h3>
-              <p className="text-gray-600">{feature.description}</p>
-            </div>
-          ))}
+      {/* Features Grid - 2 cards per row on mobile */}
+      <section className="py-10 sm:py-12 md:py-16 bg-white">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <h2 className="text-xl sm:text-2xl md:text-4xl font-bold text-center mb-8 md:mb-12 text-gray-800">
+            চ্যাটবট সেটআপের সুবিধা
+          </h2>
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
+            {features.map((feature, index) => (
+              <div
+                key={index}
+                className="flex flex-col h-full bg-white p-4 sm:p-5 md:p-6 rounded-xl shadow-lg hover:shadow-xl transition transform hover:-translate-y-1"
+              >
+                <div className="text-center">
+                  <div className="text-3xl sm:text-4xl md:text-5xl mb-2 sm:mb-3 md:mb-4">{feature.icon}</div>
+                  <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold mb-2 md:mb-3 text-gray-800">
+                    {feature.title}
+                  </h3>
+                  <p className="text-xs sm:text-sm md:text-base text-gray-600">{feature.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      </section>
 
-      {/* Platform Selection */}
-      <div className="bg-gray-50 py-16">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-4 text-gray-800">
+      {/* Platform Selection - 2 cards per row on mobile */}
+      <section className="py-10 sm:py-12 md:py-16 bg-gradient-to-b from-gray-50 to-white">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <h2 className="text-xl sm:text-2xl md:text-4xl font-bold text-center mb-3 md:mb-4 text-gray-800">
             সব প্রধান প্ল্যাটফর্ম সাপোর্ট
           </h2>
-          <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+          <p className="text-center text-gray-600 mb-8 md:mb-12 max-w-2xl mx-auto text-sm sm:text-base px-4">
             যেকোনো প্ল্যাটফর্মে আপনার চ্যাটবট সেটআপ করুন - একক বা মাল্টি-চ্যানেল
           </p>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
             {platforms.map((platform) => (
               <div
                 key={platform.id}
                 onClick={() => setSelectedPlatform(platform.id)}
-                className={`bg-white p-6 rounded-xl cursor-pointer border-4 transition transform hover:-translate-y-1 ${
+                className={`flex flex-col h-full bg-white p-4 sm:p-5 md:p-6 rounded-xl cursor-pointer border-4 transition transform hover:-translate-y-1 ${
                   selectedPlatform === platform.id
                     ? 'border-blue-500 shadow-xl'
                     : 'border-transparent shadow-md'
                 }`}
               >
-                <div className="text-center">
-                  <div className="text-5xl mb-4">{platform.icon}</div>
-                  <h3 className="font-bold text-lg mb-4 text-gray-800">
+                <div className="text-center flex-1 flex flex-col">
+                  <div className="text-3xl sm:text-4xl md:text-5xl mb-2 sm:mb-3 md:mb-4">{platform.icon}</div>
+                  <h3 className="font-bold text-sm sm:text-base md:text-lg mb-2 sm:mb-3 md:mb-4 text-gray-800">
                     {platform.name}
                   </h3>
-                  <ul className="text-sm text-gray-600 space-y-2">
+                  <ul className="text-xs sm:text-sm text-gray-600 space-y-1 sm:space-y-2 text-center sm:text-left flex-1">
                     {platform.features.map((feat, idx) => (
-                      <li key={idx} className="flex items-center gap-2">
-                        <span className="text-green-500">✓</span>
-                        {feat}
+                      <li key={idx} className="flex items-center justify-center sm:justify-start gap-2">
+                        <span className="text-green-500 flex-shrink-0">✓</span>
+                        <span>{feat}</span>
                       </li>
                     ))}
                   </ul>
@@ -279,192 +283,210 @@ const ChatbotSetup = () => {
             ))}
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Chatbot Types */}
-      <div className="container mx-auto px-4 py-16">
-        <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">
-          আপনার প্রয়োজন অনুযায়ী চ্যাটবট টাইপ
-        </h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-          {chatbotTypes.map((bot, index) => (
-            <div
-              key={index}
-              className="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-xl border-2 border-blue-100 hover:border-blue-300 transition"
-            >
-              <div className="text-4xl mb-4">{bot.icon}</div>
-              <h3 className="font-bold text-lg mb-2 text-gray-800">
-                {bot.type}
-              </h3>
-              <p className="text-gray-600 text-sm mb-2">{bot.description}</p>
-              <div className="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full inline-block">
-                {bot.useCase}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Setup Process */}
-      <div className="bg-gradient-to-r from-blue-50 to-purple-50 py-16">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">
-            সেটআপ প্রক্রিয়া
+      {/* Chatbot Types - 2 cards per row on mobile */}
+      <section className="py-10 sm:py-12 md:py-16 bg-white">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <h2 className="text-xl sm:text-2xl md:text-4xl font-bold text-center mb-8 md:mb-12 text-gray-800">
+            আপনার প্রয়োজন অনুযায়ী চ্যাটবট টাইপ
           </h2>
-          <div className="max-w-5xl mx-auto">
-            <div className="grid md:grid-cols-4 gap-6">
-              {setupSteps.map((item, index) => (
-                <div key={index} className="relative">
-                  <div className="bg-white p-6 rounded-xl shadow-lg text-center">
-                    <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                      {item.step}
-                    </div>
-                    <h3 className="font-bold text-lg mb-3 text-gray-800">
-                      {item.title}
-                    </h3>
-                    <p className="text-sm text-gray-600">{item.description}</p>
-                  </div>
-                  {index < setupSteps.length - 1 && (
-                    <div className="hidden md:block absolute top-1/2 -right-3 transform -translate-y-1/2">
-                      <div className="text-3xl text-blue-400">→</div>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Chatbot Features Breakdown */}
-      <div className="container mx-auto px-4 py-16">
-        <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">
-          চ্যাটবট ফিচার ব্রেকডাউন
-        </h2>
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {chatbotFeatures.map((feature, index) => (
-            <div
-              key={index}
-              className="bg-white p-6 rounded-xl shadow-lg border-t-4 border-blue-500"
-            >
-              <h3 className="font-bold text-xl mb-4 text-gray-800">
-                {feature.category}
-              </h3>
-              <ul className="space-y-3">
-                {feature.items.map((item, idx) => (
-                  <li key={idx} className="flex items-center gap-3 text-gray-700">
-                    <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Design Showcase */}
-      <div className="bg-gray-50 py-16">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">
-            UI ডিজাইন ফিচার
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {designShowcase.map((design, index) => (
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+            {chatbotTypes.map((bot, index) => (
               <div
                 key={index}
-                className="bg-gradient-to-br from-white to-blue-50 p-8 rounded-xl shadow-md text-center"
+                className="flex flex-col h-full bg-gradient-to-br from-blue-50 to-purple-50 p-4 sm:p-5 md:p-6 rounded-xl border-2 border-blue-100 hover:border-blue-300 transition"
               >
-                <div className="text-4xl mb-4">🎨</div>
-                <h3 className="font-bold text-lg mb-2 text-gray-800">
-                  {design.title}
-                </h3>
-                <p className="text-gray-600 text-sm">{design.description}</p>
+                <div className="text-center flex-1 flex flex-col">
+                  <div className="text-2xl sm:text-3xl md:text-4xl mb-2 sm:mb-3 md:mb-4">{bot.icon}</div>
+                  <h3 className="font-bold text-sm sm:text-base md:text-lg mb-1 sm:mb-2 text-gray-800">
+                    {bot.type}
+                  </h3>
+                  <p className="text-gray-600 text-xs sm:text-sm mb-2 sm:mb-3 flex-1">{bot.description}</p>
+                  <div className="text-xs bg-blue-100 text-blue-700 px-2 sm:px-3 py-1 rounded-full inline-block mx-auto">
+                    {bot.useCase}
+                  </div>
+                </div>
               </div>
             ))}
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Pricing Packages */}
-      <div className="container mx-auto px-4 py-16">
-        <h2 className="text-4xl font-bold text-center mb-4 text-gray-800">
-          সেটআপ প্যাকেজ
-        </h2>
-        <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-          আপনার বাজেট এবং প্রয়োজন অনুযায়ী প্যাকেজ বেছে নিন
-        </p>
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {packages.map((pkg, index) => (
-            <div
-              key={index}
-              className={`relative bg-white rounded-xl shadow-xl overflow-hidden ${
-                pkg.popular ? 'ring-4 ring-blue-500 transform scale-105' : ''
-              }`}
-            >
-              {pkg.popular && (
-                <div className="bg-gradient-to-r from-blue-500 to-purple-500 text-white text-center py-2 font-semibold">
-                  জনপ্রিয়
+      {/* Setup Process - 2 cards per row on mobile */}
+      <section className="py-10 sm:py-12 md:py-16 bg-gradient-to-r from-blue-50 to-purple-50">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <h2 className="text-xl sm:text-2xl md:text-4xl font-bold text-center mb-8 md:mb-12 text-gray-800">
+            সেটআপ প্রক্রিয়া
+          </h2>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+            {setupSteps.map((item, index) => (
+              <div key={index} className="relative h-full">
+                <div className="flex flex-col h-full bg-white p-4 sm:p-5 md:p-6 rounded-xl shadow-lg">
+                  <div className="text-center flex-1">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-br from-blue-500 to-purple-500 text-white rounded-full flex items-center justify-center text-lg sm:text-xl md:text-2xl font-bold mx-auto mb-2 sm:mb-3 md:mb-4">
+                      {item.step}
+                    </div>
+                    <h3 className="font-bold text-sm sm:text-base md:text-lg mb-1 sm:mb-2 md:mb-3 text-gray-800">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-gray-600">{item.description}</p>
+                  </div>
                 </div>
-              )}
-              <div className="p-8">
-                <h3 className="text-2xl font-bold mb-2 text-gray-800">
-                  {pkg.name}
+                {index < setupSteps.length - 1 && (
+                  <div className="hidden lg:block absolute top-1/2 -right-3 transform -translate-y-1/2">
+                    <div className="text-3xl text-blue-400">→</div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Chatbot Features Breakdown - 2 cards per row on mobile */}
+      <section className="py-10 sm:py-12 md:py-16 bg-white">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <h2 className="text-xl sm:text-2xl md:text-4xl font-bold text-center mb-8 md:mb-12 text-gray-800">
+            চ্যাটবট ফিচার ব্রেকডাউন
+          </h2>
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
+            {chatbotFeatures.map((feature, index) => (
+              <div
+                key={index}
+                className="flex flex-col h-full bg-white p-4 sm:p-5 md:p-6 rounded-xl shadow-lg border-t-4 border-blue-500"
+              >
+                <h3 className="font-bold text-sm sm:text-base md:text-lg lg:text-xl mb-2 sm:mb-3 md:mb-4 text-gray-800 text-center sm:text-left">
+                  {feature.category}
                 </h3>
-                <div className="mb-4">
-                  <span className="text-4xl font-bold text-blue-600">
-                    ৳{pkg.price}
-                  </span>
-                  <span className="text-gray-500 text-sm ml-2">
-                    {pkg.duration}
-                  </span>
-                </div>
-                <ul className="space-y-3 mb-8">
-                  {pkg.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-start gap-3">
-                      <span className="text-green-500 mt-1">✓</span>
-                      <span className="text-gray-700">{feature}</span>
+                <ul className="space-y-1 sm:space-y-2 md:space-y-3 flex-1">
+                  {feature.items.map((item, idx) => (
+                    <li key={idx} className="flex items-center justify-center sm:justify-start gap-2 text-gray-700 text-xs sm:text-sm md:text-base">
+                      <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-blue-500 rounded-full flex-shrink-0"></span>
+                      <span>{item}</span>
                     </li>
                   ))}
                 </ul>
-                <Link
-                  to="/contact"
-                  className={`block text-center py-3 rounded-lg font-semibold transition ${
-                    pkg.popular
-                      ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600'
-                      : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-                  }`}
-                >
-                  এখনই অর্ডার করুন
-                </Link>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+      </section>
+
+      {/* Design Showcase - 2 cards per row on mobile */}
+      <section className="py-10 sm:py-12 md:py-16 bg-gradient-to-b from-gray-50 to-white">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <h2 className="text-xl sm:text-2xl md:text-4xl font-bold text-center mb-8 md:mb-12 text-gray-800">
+            UI ডিজাইন ফিচার
+          </h2>
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
+            {designShowcase.map((design, index) => (
+              <div
+                key={index}
+                className="flex flex-col h-full bg-gradient-to-br from-white to-blue-50 p-4 sm:p-6 md:p-8 rounded-xl shadow-md"
+              >
+                <div className="text-center">
+                  <div className="text-2xl sm:text-3xl md:text-4xl mb-2 sm:mb-3 md:mb-4">🎨</div>
+                  <h3 className="font-bold text-sm sm:text-base md:text-lg mb-1 sm:mb-2 text-gray-800">
+                    {design.title}
+                  </h3>
+                  <p className="text-gray-600 text-xs sm:text-sm">{design.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Packages - Mobile: 2 cards then 1 full width */}
+      <section className="py-10 sm:py-12 md:py-16 bg-white">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <h2 className="text-xl sm:text-2xl md:text-4xl font-bold text-center mb-3 md:mb-4 text-gray-800">
+            সেটআপ প্যাকেজ
+          </h2>
+          <p className="text-center text-gray-600 mb-8 md:mb-12 max-w-2xl mx-auto text-sm sm:text-base px-4">
+            আপনার বাজেট এবং প্রয়োজন অনুযায়ী প্যাকেজ বেছে নিন
+          </p>
+          
+          {/* Grid: 2 columns on mobile, 3 on medium+ */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-8">
+            {packages.map((pkg, index) => (
+              <div
+                key={index}
+                className={`flex flex-col h-full rounded-xl md:rounded-2xl overflow-hidden ${
+                  index === 2 ? 'col-span-2 md:col-span-1' : ''
+                } ${
+                  pkg.popular ? 'ring-2 sm:ring-4 ring-blue-500 md:transform md:scale-105 shadow-2xl' : 'shadow-xl'
+                }`}
+              >
+                {pkg.popular && (
+                  <div className="bg-gradient-to-r from-blue-500 to-purple-500 text-white text-center py-2 font-semibold text-xs sm:text-sm">
+                    জনপ্রিয়
+                  </div>
+                )}
+                <div className="flex flex-col flex-1 bg-white p-4 sm:p-6 md:p-8">
+                  <div className="text-center">
+                    <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-2 text-gray-800">
+                      {pkg.name}
+                    </h3>
+                    <div className="mb-4 sm:mb-6">
+                      <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600">
+                        ৳{pkg.price}
+                      </span>
+                      <div className="text-gray-500 text-xs sm:text-sm mt-1">
+                        {pkg.duration}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <ul className="space-y-2 sm:space-y-3 mb-5 sm:mb-6 md:mb-8 text-xs sm:text-sm md:text-base flex-1 text-center sm:text-left">
+                    {pkg.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-center justify-center sm:justify-start gap-2">
+                        <span className="text-green-500 flex-shrink-0">✓</span>
+                        <span className="text-gray-700">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  
+                  <Link
+                    to="/contact"
+                    className={`block text-center py-2 sm:py-2.5 md:py-3 rounded-lg font-semibold transition text-xs sm:text-sm md:text-base mt-auto ${
+                      pkg.popular
+                        ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600'
+                        : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+                    }`}
+                  >
+                    এখনই অর্ডার করুন
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* CTA Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold mb-6">
+      <section className="py-10 sm:py-12 md:py-16 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+        <div className="container mx-auto px-4 max-w-7xl text-center">
+          <h2 className="text-xl sm:text-2xl md:text-4xl font-bold mb-4 sm:mb-5 md:mb-6 px-2">
             আজই শুরু করুন আপনার চ্যাটবট সেটআপ
           </h2>
-          <p className="text-xl mb-8 text-blue-100 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl mb-6 md:mb-8 text-blue-100 max-w-2xl mx-auto px-4">
             ফ্রি কনসালটেশন বুক করুন এবং জেনে নিন কীভাবে চ্যাটবট আপনার ব্যবসা বাড়াতে পারে
           </p>
-          <div className="flex justify-center gap-4">
+          <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 px-4">
             <Link
               to="/contact"
-              className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-blue-50 transition text-lg"
+              className="bg-white text-blue-600 px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-blue-50 transition text-sm sm:text-base md:text-lg"
             >
               ফ্রি কনসালটেশন বুক করুন →
             </Link>
-            <button className="border-2 border-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition text-lg">
+            <button className="border-2 border-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition text-sm sm:text-base md:text-lg">
               হোয়াটসঅ্যাপে যোগাযোগ করুন
             </button>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 };

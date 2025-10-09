@@ -97,7 +97,7 @@ export default function SMECubeLanding() {
     },
     {
       icon: <Users className="w-10 h-10" />,
-      title: "বিজনেস কনসালটিং",
+      title: "বিজনেস কনসাল্টিং",
       desc: "ব্যবসায়িক পরামর্শ এবং কৌশল উন্নয়ন",
       gradient: "from-yellow-500 to-orange-600",
       iconBg: "bg-yellow-50",
@@ -105,7 +105,7 @@ export default function SMECubeLanding() {
     },
     {
       icon: <BarChart3 className="w-10 h-10" />,
-      title: "রেস পেইজ সেটআপ",
+      title: "ব্রেন্ড পেইজ সেটআপ",
       desc: "প্রফেশনাল বিজনেস পেজ সেটআপ",
       gradient: "from-cyan-500 to-blue-600",
       iconBg: "bg-cyan-50",
@@ -121,7 +121,7 @@ export default function SMECubeLanding() {
     },
     {
       icon: <FileText className="w-10 h-10" />,
-      title: "চাটবট সেটআপ",
+      title: "চ্যাটবট সেটআপ",
       desc: "অটোমেটেড কাস্টমার সাপোর্ট সিস্টেম",
       gradient: "from-teal-500 to-cyan-600",
       iconBg: "bg-teal-50",
