@@ -1,10 +1,11 @@
 import { ChevronRight, Lightbulb } from 'lucide-react'
+import { Link } from 'react-router-dom';
 import React from 'react'
 
 const HeroSection = () => {
     return (
         <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 overflow-hidden" id="home">
-            <div className="max-w-7xl mx-auto">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid lg:grid-cols-2 gap-12 items-center">
                     <div className="space-y-8">
                         <div className="inline-block">
@@ -22,11 +23,15 @@ const HeroSection = () => {
                         </p>
                         <div className="flex flex-wrap gap-4">
                             <button className="group bg-gradient-to-r from-red-500 to-pink-600 text-white px-8 py-4 rounded-full hover:shadow-2xl hover:scale-105 transition-all duration-300 font-semibold text-lg flex items-center">
-                                শুরু করুন
+                                <Link to="/pricing">
+                                    শুরু করুন
+                                </Link>
                                 <ChevronRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                             </button>
                             <button className="border-2 border-gray-900 text-gray-900 px-8 py-4 rounded-full hover:bg-gray-900 hover:text-white transition-all duration-300 font-semibold text-lg">
-                                আরও জানুন
+                                <Link to="/services">
+                                    আরও জানুন
+                                </Link>
                             </button>
                         </div>
 
@@ -109,7 +114,7 @@ const HeroSection = () => {
                 </div>
             </div>
         </section>
-    )
-}
+    );
+};
 
-export default HeroSection
+export default HeroSection;
