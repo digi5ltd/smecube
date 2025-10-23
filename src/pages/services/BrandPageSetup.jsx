@@ -1,5 +1,17 @@
-import { ArrowRight, BarChart3, Eye, Share2, Sparkles, Star, TrendingUp, Users } from 'lucide-react';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import {
+  ArrowRight,
+  BarChart3,
+  Eye,
+  Share2,
+  Sparkles,
+  Star,
+  TrendingUp,
+  Users,
+  CheckCircle,
+  Zap,
+} from "lucide-react";
 
 const BrandPageSetup = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
