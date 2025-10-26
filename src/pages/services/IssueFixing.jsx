@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-// import Tilt from "react-parallax-tilt";
+import Tilt from "react-parallax-tilt";
 
 import {
   Wrench,
