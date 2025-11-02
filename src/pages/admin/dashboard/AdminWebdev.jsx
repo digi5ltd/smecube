@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Plus,
   Trash2,
@@ -12,20 +12,30 @@ import {
   X,
   Briefcase,
 } from "lucide-react";
+import { webdevHeroAPI } from "../../../services/api";
 
 const AdminWebdev = () => {
-  const [heroData, setHeroData] = useState({
-    title: "আপনার ব্যবসার জন্য পেশাদার ওয়েবসাইট",
-    description:
-      "আধুনিক ডিজাইন এবং সর্বশেষ প্রযুক্তি দিয়ে তৈরি আপনার ব্যবসার জন্য একটি সম্পূর্ণ ওয়েবসাইট সমাধান। দ্রুত, নিরাপদ এবং মোবাইল-ফ্রেন্ডলি।",
-    image:
-      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=400&fit=crop",
-    cta1: "প্রজেক্ট শুরু করুন →",
-    cta2: "পোর্টফোলিও দেখুন →",
-  });
+  const [heroData, setHeroData] = useState([]);
+
+  useEffect(() => {
+    fetchHeroData();
+  }, []);
+
+  const fetchHeroData = async () => {
+    try {
+      const response = await webdevHeroAPI.getAll();
+      console.log(response);
+
+      // const data = await response.json();
+      setHeroData(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error fetching hero data:", error);
+    }
+  };
 
   const [editingHero, setEditingHero] = useState(false);
-  const [showPreview, setShowPreview] = useState(false);
+  // const [showPreview, setShowPreview] = useState(false);
   const [packages, setPackages] = useState([
     {
       name: "বেসিক",
@@ -66,6 +76,7 @@ const AdminWebdev = () => {
     message: "",
     type: "",
   });
+
   const [animate, setAnimate] = useState(true);
   const [sectionData, setSectionData] = useState({
     title: "আমাদের সাম্প্রতিক কাজ",
@@ -123,11 +134,13 @@ const AdminWebdev = () => {
   };
 
   const saveChangesHeroSection = async () => {
+    console.log(heroData[0].id);
+
     try {
       // Replace with your actual axios call
-      // const response = await axios.put('/api/hero-section', heroData);
+      const response = await webdevHeroAPI.update(heroData[0].id, heroData);
 
-      console.log("Saving hero data:", heroData);
+      console.log("Saving hero data:", response);
 
       setNotification({
         show: true,
@@ -313,12 +326,9 @@ const AdminWebdev = () => {
                   এডিট করুন
                 </h2>
                 <button
-                  onClick={() => setShowPreview(!showPreview)}
+                  // onClick={() => setShowPreview(!showPreview)}
                   className="lg:hidden bg-blue-100 text-blue-600 px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-200 transition"
-                >
-                  {showPreview ? <EyeOff size={18} /> : <Eye size={18} />}
-                  {showPreview ? "এডিটর" : "প্রিভিউ"}
-                </button>
+                ></button>
               </div>
 
               {editingHero ? (
@@ -330,7 +340,7 @@ const AdminWebdev = () => {
                     <input
                       type="text"
                       name="title"
-                      value={heroData.title}
+                      value={heroData[0].title}
                       onChange={handleHeroChange}
                       className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all duration-300"
                       placeholder="টাইটেল লিখুন"
@@ -343,7 +353,7 @@ const AdminWebdev = () => {
                     </label>
                     <textarea
                       name="description"
-                      value={heroData.description}
+                      value={heroData[0].description}
                       onChange={handleHeroChange}
                       className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all duration-300"
                       rows="4"
@@ -358,7 +368,7 @@ const AdminWebdev = () => {
                     <input
                       type="url"
                       name="image"
-                      value={heroData.image}
+                      value={heroData[0].image}
                       onChange={handleHeroChange}
                       className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all duration-300"
                       placeholder="https://example.com/image.jpg"
@@ -373,7 +383,7 @@ const AdminWebdev = () => {
                       <input
                         type="text"
                         name="cta1"
-                        value={heroData.cta1}
+                        value={heroData[0].cta1}
                         onChange={handleHeroChange}
                         className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all duration-300"
                         placeholder="বাটন টেক্সট"
@@ -386,7 +396,7 @@ const AdminWebdev = () => {
                       <input
                         type="text"
                         name="cta2"
-                        value={heroData.cta2}
+                        value={heroData[0].cta2}
                         onChange={handleHeroChange}
                         className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all duration-300"
                         placeholder="বাটন টেক্সট"
@@ -421,26 +431,26 @@ const AdminWebdev = () => {
                         <span className="font-semibold text-sm text-gray-500">
                           টাইটেল:
                         </span>
-                        <p className="mt-1">{heroData.title}</p>
+                        <p className="mt-1">{heroData[0].title}</p>
                       </div>
                       <div>
                         <span className="font-semibold text-sm text-gray-500">
                           বিবরণ:
                         </span>
-                        <p className="mt-1">{heroData.description}</p>
+                        <p className="mt-1">{heroData[0].description}</p>
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div>
                           <span className="font-semibold text-sm text-gray-500">
                             বাটন ১:
                           </span>
-                          <p className="mt-1">{heroData.cta1}</p>
+                          <p className="mt-1">{heroData[0].cta1}</p>
                         </div>
                         <div>
                           <span className="font-semibold text-sm text-gray-500">
                             বাটন ২:
                           </span>
-                          <p className="mt-1">{heroData.cta2}</p>
+                          <p className="mt-1">{heroData[0].cta2}</p>
                         </div>
                       </div>
                     </div>
@@ -455,76 +465,6 @@ const AdminWebdev = () => {
                 </div>
               )}
             </div>
-
-            {/* Live Preview Section */}
-            <div
-              className={`bg-white rounded-2xl shadow-xl p-6 transform transition-all duration-300 hover:shadow-2xl ${
-                showPreview ? "block" : "hidden lg:block"
-              }`}
-            >
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-                  <Eye className="w-6 h-6 text-green-500" />
-                  লাইভ প্রিভিউ
-                </h2>
-                <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">
-                  রিয়েল-টাইম
-                </span>
-              </div>
-
-              {/* Preview Content */}
-              <div className="border-2 border-gray-200 rounded-xl overflow-hidden">
-                {/* Hero Image */}
-                <div className="relative h-48 bg-gradient-to-r from-blue-500 to-purple-600 overflow-hidden">
-                  <img
-                    src={heroData.image}
-                    alt="Hero"
-                    className="w-full h-full object-cover opacity-90"
-                    onError={(e) => {
-                      e.currentTarget.onerror = null;
-                      e.currentTarget.src =
-                        "https://via.placeholder.com/1200x400?text=Hero+Image";
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-                </div>
-
-                {/* Hero Content */}
-                <div className="p-6 bg-gradient-to-br from-gray-50 to-white">
-                  <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3 leading-tight">
-                    {heroData.title || "টাইটেল যোগ করুন..."}
-                  </h3>
-                  <p className="text-gray-600 mb-6 leading-relaxed">
-                    {heroData.description || "বিবরণ যোগ করুন..."}
-                  </p>
-
-                  {/* CTA Buttons Preview */}
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <button className="bg-gradient-to-r from-yellow-400 to-amber-500 text-gray-900 px-6 py-3 rounded-lg font-semibold hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg">
-                      {heroData.cta1 || "বাটন ১"}
-                    </button>
-                    <button className="border-2 border-gray-300 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 hover:scale-105 transition-all duration-300">
-                      {heroData.cta2 || "বাটন ২"}
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Preview Note */}
-              <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <p className="text-sm text-blue-700">
-                  <span className="font-semibold">নোট:</span> এটি একটি লাইভ
-                  প্রিভিউ। আপনার করা সকল পরিবর্তন তাৎক্ষণিকভাবে এখানে দেখা যাবে।
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Mobile Preview Toggle Info */}
-          <div className="lg:hidden mt-6 p-4 bg-white rounded-lg shadow-md text-center">
-            <p className="text-sm text-gray-600">
-              মোবাইলে এডিটর এবং প্রিভিউ দেখতে উপরের বাটন ব্যবহার করুন
-            </p>
           </div>
         </div>
       </div>
@@ -537,9 +477,6 @@ const AdminWebdev = () => {
             animate ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
           }`}
         >
-          {/* <div className="inline-block p-4 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full mb-4 animate-bounce">
-            <DollarSign className="w-4 h-4 text-white" />
-          </div> */}
           <h1 className="text-3xl font-bold text-gray-800 mb-3">
             প্রাইসিং প্ল্যান আপডেট করুন
           </h1>
@@ -795,9 +732,6 @@ const AdminWebdev = () => {
       <div className="max-w-7xl mx-auto mt-10">
         {/* Header */}
         <div className="text-center mb-8">
-          {/* <div className="inline-block p-4 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full mb-4">
-            <Briefcase className="w-8 h-8 text-white" />
-          </div> */}
           <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
             পোর্টফোলিও সেকশন ম্যানেজমেন্ট
           </h1>
@@ -827,11 +761,11 @@ const AdminWebdev = () => {
                   সেকশন এডিট করুন
                 </h2>
                 <button
-                  onClick={() => setShowPreview(!showPreview)}
+                  // onClick={() => setShowPreview(!showPreview)}
                   className="lg:hidden bg-purple-100 text-purple-600 px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-purple-200 transition"
                 >
-                  {showPreview ? <EyeOff size={18} /> : <Eye size={18} />}
-                  {showPreview ? "এডিটর" : "প্রিভিউ"}
+                  {/* {showPreview ? <EyeOff size={18} /> : <Eye size={18} />} */}
+                  {/* {showPreview ? "এডিটর" : "প্রিভিউ"} */}
                 </button>
               </div>
 
@@ -1061,102 +995,8 @@ const AdminWebdev = () => {
               </button>
             </div>
           </div>
-
-          {/* Live Preview Section */}
-          <div className={`${showPreview ? "block" : "hidden lg:block"}`}>
-            <div className="bg-white rounded-2xl shadow-xl p-6 sticky top-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-                  <Eye className="w-6 h-6 text-green-500" />
-                  লাইভ প্রিভিউ
-                </h2>
-                <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">
-                  রিয়েল-টাইম
-                </span>
-              </div>
-
-              {/* Preview Content */}
-              <div className="border-2 border-gray-200 rounded-xl p-6 bg-gradient-to-br from-gray-50 to-white">
-                <div className="text-center mb-8">
-                  <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-                    {sectionData.title}
-                  </h2>
-                  <p className="text-lg text-gray-600">
-                    {sectionData.subtitle}
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {portfolio.slice(0, 6).map((project, index) => (
-                    <div
-                      key={index}
-                      className="bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition"
-                    >
-                      <div className="bg-gradient-to-br from-purple-100 to-pink-100 h-32 flex items-center justify-center text-4xl hover:scale-110 transition duration-300">
-                        {project.image}
-                      </div>
-                      <div className="p-3">
-                        <div className="text-xs text-purple-600 font-semibold mb-2">
-                          {project.category}
-                        </div>
-                        <h3 className="text-sm font-bold text-gray-800 mb-2">
-                          {project.name}
-                        </h3>
-                        <button className="text-xs text-purple-600 font-semibold hover:text-purple-700">
-                          বিস্তারিত দেখুন →
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Preview Note */}
-              <div className="mt-4 p-4 bg-purple-50 border border-purple-200 rounded-lg">
-                <p className="text-sm text-purple-700">
-                  <span className="font-semibold">নোট:</span> প্রিভিউতে সর্বোচ্চ
-                  ৬টি প্রজেক্ট প্রদর্শিত হবে। সকল প্রজেক্ট মূল পেজে দেখা যাবে।
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
-
-      {/* <style>{`
-        @keyframes slideIn {
-          from {
-            transform: translateX(100%);
-            opacity: 0;
-          }
-          to {
-            transform: translateX(0);
-            opacity: 1;
-          }
-        }
-
-        .animate-slide-in {
-          animation: slideIn 0.3s ease-out;
-        }
-
-        ::-webkit-scrollbar {
-          width: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-          background: #f1f1f1;
-          border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-          background: #a855f7;
-          border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-          background: #9333ea;
-        }
-      `}</style> */}
     </div>
   );
 };
