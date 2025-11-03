@@ -20,12 +20,13 @@ import javascript from "../../assets/img/svg/webdevelopment/technologysvg/javasc
 import restaurantpic from "../../assets/img/webdevelopment/restaurant.jpg";
 import schoolPic from "../../assets/img/webdevelopment/school.jfif";
 import realstatePic from "../../assets/img/webdevelopment/real-state.jpg";
-import { webdevHeroAPI } from "../../services/api";
+import { webdevHeroAPI, webdevPortfolioAPI } from "../../services/api";
 
 const WebDevelopment = () => {
   const [heroData, setHeroData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [portfolio, setPortfolio] = useState([]);
 
   useEffect(() => {
     const fetchHeroData = async () => {
@@ -45,6 +46,49 @@ const WebDevelopment = () => {
 
     fetchHeroData();
   }, []);
+
+  useEffect(() => {
+    webdevPortfolioAPI.getAll().then((response) => {
+      console.log(response);
+      setPortfolio(response.data);
+    });
+  }, []);
+
+  /* const portfolio = [
+    {
+      name: "রেস্টুরেন্ট ওয়েবসাইট",
+      category: "খাদ্য ও পানীয়",
+      image: (
+        <img
+          src={restaurantpic}
+          alt="Restaurant"
+          className="w-full h-full object-cover"
+        />
+      ),
+    },
+    {
+      name: "শিক্ষা প্রতিষ্ঠান",
+      category: "শিক্ষা",
+      image: (
+        <img
+          src={schoolPic}
+          alt="School"
+          className="w-full h-full object-cover"
+        />
+      ),
+    },
+    {
+      name: "রিয়েল এস্টেট",
+      category: "সম্পত্তি",
+      image: (
+        <img
+          src={realstatePic}
+          alt="Real Estate"
+          className="w-full h-full object-cover"
+        />
+      ),
+    },
+  ]; */
 
   const services = [
     {
@@ -173,42 +217,6 @@ const WebDevelopment = () => {
         "১ বছর সাপোর্ট",
       ],
       span: 2,
-    },
-  ];
-
-  const portfolio = [
-    {
-      name: "রেস্টুরেন্ট ওয়েবসাইট",
-      category: "খাদ্য ও পানীয়",
-      image: (
-        <img
-          src={restaurantpic}
-          alt="Restaurant"
-          className="w-full h-full object-cover"
-        />
-      ),
-    },
-    {
-      name: "শিক্ষা প্রতিষ্ঠান",
-      category: "শিক্ষা",
-      image: (
-        <img
-          src={schoolPic}
-          alt="School"
-          className="w-full h-full object-cover"
-        />
-      ),
-    },
-    {
-      name: "রিয়েল এস্টেট",
-      category: "সম্পত্তি",
-      image: (
-        <img
-          src={realstatePic}
-          alt="Real Estate"
-          className="w-full h-full object-cover"
-        />
-      ),
     },
   ];
 

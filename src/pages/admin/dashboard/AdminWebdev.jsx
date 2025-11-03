@@ -12,13 +12,14 @@ import {
   X,
   Briefcase,
 } from "lucide-react";
-import { webdevHeroAPI } from "../../../services/api";
+import { webdevHeroAPI, webdevPortfolioAPI } from "../../../services/api";
 
 const AdminWebdev = () => {
   const [heroData, setHeroData] = useState({});
 
   useEffect(() => {
     fetchHeroData();
+    fetchPortfolioData();
   }, []);
 
   const fetchHeroData = async () => {
@@ -83,8 +84,21 @@ const AdminWebdev = () => {
     subtitle: "বিভিন্ন শিল্পে আমাদের সফলতার গল্প",
   });
 
+  const fetchPortfolioData = async () => {
+    try {
+      const response = await webdevPortfolioAPI.getAll();
+      console.log(response);
+
+      // const data = await response.json();
+      setPortfolio(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error fetching hero data:", error);
+    }
+  };
+
   const [portfolio, setPortfolio] = useState([
-    {
+    /* {
       name: "ই-কমার্স ওয়েবসাইট",
       category: "ই-কমার্স",
       image: "🛒",
@@ -119,7 +133,7 @@ const AdminWebdev = () => {
       category: "রিয়েল এস্টেট",
       image: "🏢",
       description: "প্রপার্টি লিস্টিং ওয়েবসাইট",
-    },
+    }, */
   ]);
 
   const [editingSection, setEditingSection] = useState(false);
@@ -266,9 +280,13 @@ const AdminWebdev = () => {
   const saveChangesProjectSection = async () => {
     try {
       // Replace with your actual axios call
-      // const response = await axios.put('/api/portfolio-section', { sectionData, portfolio });
+      const response = await webdevPortfolioAPI.update(portfolio);
 
-      console.log("Saving portfolio data:", { sectionData, portfolio });
+      console.log("Saving portfolio data:", {
+        response,
+        sectionData,
+        portfolio,
+      });
 
       setNotification({
         show: true,
