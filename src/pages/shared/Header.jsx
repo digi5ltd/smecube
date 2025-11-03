@@ -1,9 +1,19 @@
-import { Menu, X } from "lucide-react";
-import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+// src/pages/shared/Header.jsx
+import { Menu, X, LogOut } from "lucide-react";
+import React, { useState, useContext } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import AuthContext from "../../context/AuthContext";  // Fixed: Two levels up
 
 const Header = ({ setMobileMenuOpen, scrolled, mobileMenuOpen }) => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, isAdmin, logout } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+    setMobileMenuOpen(false);
+  };
 
   return (
     <header
@@ -88,26 +98,44 @@ const Header = ({ setMobileMenuOpen, scrolled, mobileMenuOpen }) => {
             >
               যোগাযোগ
             </Link>
-            <Link
-              to="/admin/dashboard"
-              className={`font-semibold transition-all duration-300 hover:text-red-500 ${
-                location.pathname === "/admin/dashboard" ? "text-red-500" : "text-gray-700"
-              }`}
-            >
-              ড্যাশবোর্ড
-            </Link>
-            <Link
-              to="/client/dashboard"
-              className="bg-gradient-to-r from-red-500 to-pink-600 text-white px-6 py-2.5 rounded-full font-semibold hover:shadow-lg hover:scale-105 transition-all duration-300"
-            >
-              ক্লায়েন্ট স্পেস
-            </Link>
-            <Link
-              to="/login"
-              className="bg-gradient-to-r from-red-500 to-pink-600 text-white px-6 py-2.5 rounded-full font-semibold hover:shadow-lg hover:scale-105 transition-all duration-300"
-            >
-              ক্লায়েন্ট এরিয়া
-            </Link>
+
+            {/* Auth-based navigation */}
+            {user ? (
+              <>
+                {isAdmin && (
+                  <Link
+                    to="/admin/dashboard"
+                    className={`font-semibold transition-all duration-300 hover:text-red-500 ${
+                      location.pathname.startsWith("/admin") ? "text-red-500" : "text-gray-700"
+                    }`}
+                  >
+                    ড্যাশবোর্ড
+                  </Link>
+                )}
+                {!isAdmin && (
+                  <Link
+                    to="/client/dashboard"
+                    className="bg-gradient-to-r from-red-500 to-pink-600 text-white px-6 py-2.5 rounded-full font-semibold hover:shadow-lg hover:scale-105 transition-all duration-300"
+                  >
+                    ক্লায়েন্ট স্পেস
+                  </Link>
+                )}
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 text-gray-700 hover:text-red-500 font-semibold transition-all duration-300"
+                >
+                  <LogOut className="w-5 h-5" />
+                  লগআউট
+                </button>
+              </>
+            ) : (
+              <Link
+                to="/login"
+                className="bg-gradient-to-r from-red-500 to-pink-600 text-white px-6 py-2.5 rounded-full font-semibold hover:shadow-lg hover:scale-105 transition-all duration-300"
+              >
+                লগইন
+              </Link>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -192,29 +220,47 @@ const Header = ({ setMobileMenuOpen, scrolled, mobileMenuOpen }) => {
                 >
                   যোগাযোগ
                 </Link>
-                <Link
-                  to="/admin/dashboard"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`text-xl font-semibold transition-all duration-300 hover:text-red-500 ${
-                    location.pathname === "/admin/dashboard" ? "text-red-500" : "text-gray-700"
-                  }`}
-                >
-                  ড্যাশবোর্ড
-                </Link>
-                <Link
-                  to="/client/dashboard"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="bg-gradient-to-r from-red-500 to-pink-600 text-white px-8 py-3 rounded-full font-semibold text-lg hover:shadow-lg hover:scale-105 transition-all duration-300"
-                >
-                  ক্লায়েন্ট স্পেস
-                </Link>
-                <Link
-                  to="/login"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="bg-gradient-to-r from-red-500 to-pink-600 text-white px-8 py-3 rounded-full font-semibold text-lg hover:shadow-lg hover:scale-105 transition-all duration-300"
-                >
-                  ক্লায়েন্ট এরিয়া
-                </Link>
+
+                {/* Auth-based mobile navigation */}
+                {user ? (
+                  <>
+                    {isAdmin && (
+                      <Link
+                        to="/admin/dashboard"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={`text-xl font-semibold transition-all duration-300 hover:text-red-500 ${
+                          location.pathname.startsWith("/admin") ? "text-red-500" : "text-gray-700"
+                        }`}
+                      >
+                        ড্যাশবোর্ড
+                      </Link>
+                    )}
+                    {!isAdmin && (
+                      <Link
+                        to="/client/dashboard"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="bg-gradient-to-r from-red-500 to-pink-600 text-white px-8 py-3 rounded-full font-semibold text-lg hover:shadow-lg hover:scale-105 transition-all duration-300"
+                      >
+                        ক্লায়েন্ট স্পেস
+                      </Link>
+                    )}
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center gap-2 text-xl font-semibold text-gray-700 hover:text-red-500 transition-all duration-300"
+                    >
+                      <LogOut className="w-6 h-6" />
+                      লগআউট
+                    </button>
+                  </>
+                ) : (
+                  <Link
+                    to="/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="bg-gradient-to-r from-red-500 to-pink-600 text-white px-8 py-3 rounded-full font-semibold text-lg hover:shadow-lg hover:scale-105 transition-all duration-300"
+                  >
+                    লগইন
+                  </Link>
+                )}
               </div>
             </div>
 
