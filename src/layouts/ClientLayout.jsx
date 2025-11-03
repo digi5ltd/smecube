@@ -1,4 +1,5 @@
 import { Outlet, Link, useLocation } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async"; // Add this import
 import { useState } from "react";
 
 function ClientLayout() {
@@ -17,75 +18,77 @@ function ClientLayout() {
   ];
 
   return (
-    <div className="flex h-screen bg-gray-50 font-sans">
-      {/* Sidebar */}
-      <aside
-        className={`fixed inset-y-0 left-0 w-64 bg-white shadow-lg transform ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } md:relative md:translate-x-0 transition-transform duration-300 ease-in-out z-20`}
-      >
-        <div className="p-6 bg-gradient-to-b from-blue-700 to-blue-900 text-white">
-          <h2 className="text-xl font-bold font-normal">Client Hub</h2>
-        </div>
-        <nav className="mt-4">
-          <ul className="space-y-2">
-            {menuItems.map((item) => (
-              <li key={item.name}>
-                <Link
-                  to={item.path}
-                  className={`flex items-center py-3 px-6 text-gray-700 font-medium font-normal hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 ${
-                    location.pathname === item.path ? "bg-blue-100 text-blue-600" : ""
-                  }`}
-                  onClick={() => setSidebarOpen(false)}
-                >
-                  <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
-                  </svg>
-                  {item.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </aside>
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-y-auto">
-        <header className="bg-white shadow-sm border-b border-gray-200">
-          <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-            <button
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="md:hidden text-gray-700 hover:text-blue-600 focus:outline-none"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d={sidebarOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
-                />
-              </svg>
-            </button>
-            <div className="hidden md:block"></div>
-            <div className="flex items-center space-x-4">
-              <span className="text-gray-700 font-medium">Welcome, User</span>
-              <button className="text-blue-600 hover:text-blue-700 font-medium">Logout</button>
-            </div>
+    <HelmetProvider> {/* Add HelmetProvider wrapper */}
+      <div className="flex h-screen bg-gray-50 font-sans">
+        {/* Sidebar */}
+        <aside
+          className={`fixed inset-y-0 left-0 w-64 bg-white shadow-lg transform ${
+            sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } md:relative md:translate-x-0 transition-transform duration-300 ease-in-out z-20`}
+        >
+          <div className="p-6 bg-gradient-to-b from-blue-700 to-blue-900 text-white">
+            <h2 className="text-xl font-bold font-normal">Client Hub</h2>
           </div>
-        </header>
-        <main className="container mx-auto px-6 py-8">
-          <Outlet />
-        </main>
-      </div>
+          <nav className="mt-4">
+            <ul className="space-y-2">
+              {menuItems.map((item) => (
+                <li key={item.name}>
+                  <Link
+                    to={item.path}
+                    className={`flex items-center py-3 px-6 text-gray-700 font-medium font-normal hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 ${
+                      location.pathname === item.path ? "bg-blue-100 text-blue-600" : ""
+                    }`}
+                    onClick={() => setSidebarOpen(false)}
+                  >
+                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
+                    </svg>
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </aside>
 
-      {/* Overlay for Mobile Sidebar */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 md:hidden z-10"
-          onClick={() => setSidebarOpen(false)}
-        ></div>
-      )}
-    </div>
+        {/* Main Content */}
+        <div className="flex-1 flex flex-col overflow-y-auto">
+          <header className="bg-white shadow-sm border-b border-gray-200">
+            <div className="container mx-auto px-6 py-4 flex items-center justify-between">
+              <button
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                className="md:hidden text-gray-700 hover:text-blue-600 focus:outline-none"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d={sidebarOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
+                  />
+                </svg>
+              </button>
+              <div className="hidden md:block"></div>
+              <div className="flex items-center space-x-4">
+                <span className="text-gray-700 font-medium">Welcome, User</span>
+                <button className="text-blue-600 hover:text-blue-700 font-medium">Logout</button>
+              </div>
+            </div>
+          </header>
+          <main className="container mx-auto px-6 py-8">
+            <Outlet />
+          </main>
+        </div>
+
+        {/* Overlay for Mobile Sidebar */}
+        {sidebarOpen && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 md:hidden z-10"
+            onClick={() => setSidebarOpen(false)}
+          ></div>
+        )}
+      </div>
+    </HelmetProvider>
   );
 }
 

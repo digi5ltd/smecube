@@ -1,4 +1,5 @@
 import { Outlet } from "react-router";
+import { HelmetProvider } from "react-helmet-async"; // Add this import
 import Header from "../pages/shared/Header";
 import Footer from "../pages/shared/Footer";
 import ScrollToTop from "../utils/ScrollToTop";
@@ -18,7 +19,7 @@ function App() {
   }, []);
 
   return (
-    <>
+    <HelmetProvider> {/* Wrap entire app with HelmetProvider */}
       <ScrollToTop />
       <Header
         mobileMenuOpen={mobileMenuOpen}
@@ -32,7 +33,7 @@ function App() {
       </main>
 
       <Footer />
-    </>
+    </HelmetProvider>
   );
 }
 

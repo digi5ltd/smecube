@@ -1,3 +1,4 @@
+// src/pages/Login.jsx
 import React, { useState, useContext } from 'react';
 import { ChevronRight } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
@@ -43,8 +44,16 @@ const Login = () => {
     setError('');
 
     try {
-      await login(userId, otp);
-      navigate('/'); // Redirect to home after successful login
+      const user = await login(phone, otp);
+      
+      // Navigate based on user role
+      if (user.role === 'admin') {
+        navigate('/admin/dashboard');
+      } else if (user.role === 'client') {
+        navigate('/client/dashboard');
+      } else {
+        navigate('/');
+      }
     } catch (err) {
       setError(err.response?.data?.message || 'ভুল OTP');
     } finally {
@@ -109,6 +118,9 @@ const Login = () => {
           </div>
         ) : (
           <div className="space-y-4">
+            <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-lg text-sm text-center">
+              OTP পাঠানো হয়েছে {phone} নম্বরে
+            </div>
             <input
               type="text"
               placeholder="OTP লিখুন"
@@ -128,7 +140,11 @@ const Login = () => {
               {!loading && <ChevronRight className="w-5 h-5" />}
             </button>
             <button
-              onClick={() => setStep(1)}
+              onClick={() => {
+                setStep(1);
+                setOtp('');
+                setError('');
+              }}
               className="w-full text-gray-600 hover:text-gray-800 py-2 text-sm"
               disabled={loading}
             >

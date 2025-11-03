@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+// src/pages/admin/dashboard/AdminEcommerceSolution.jsx
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Save, Trash2, Plus, Edit, Zap, Shield, Globe, Rocket, Sparkles, Clock } from 'lucide-react';
+import { ecommerceService } from '../../../services/ecommerceService';
 
 // Icon mapping for dynamic rendering
 const iconMap = {
@@ -13,296 +15,248 @@ const iconMap = {
 };
 
 const AdminEcommerceSolution = () => {
-  // State for hero section
-  const [heroData, setHeroData] = useState({
-    title: 'ডিজিটাল ই-কমার্স',
-    subtitle: 'প্রিমিয়াম ই-কমার্স সলিউশন',
-    description: 'আপনার বিজনেসকে নেক্সট লেভেলে নিয়ে যান\nমডার্ন, ফাস্ট এবং হাই-কনভার্সন ই-কমার্স এক্সপেরিয়েন্স',
-    cta1: 'ফ্রী প্রোজেক্ট কন্সাল্ট',
-    cta2: 'ভিউ পোর্টফোলিও',
-    stats: [
-      { number: '৫০০+', label: 'সফল প্রজেক্ট' },
-      { number: '৯৯%', label: 'সন্তুষ্টি' },
-      { number: '২৪/৭', label: 'সাপোর্ট' },
-    ],
-  });
-
-  // State for features
-  const [features, setFeatures] = useState([
-    {
-      id: 1,
-      title: 'হাই-স্পিড ওয়েবসাইট',
-      description: 'ব্লিটজ-ফাস্ট লোডিং স্পিড...',
-      icon: 'Zap',
-      gradient: 'from-blue-500 to-cyan-600',
-      iconBg: 'bg-blue-100',
-    },
-    {
-      id: 2,
-      title: 'এডভান্স সিকিউরিটি',
-      description: 'SSL প্রোটেকশন এবং...',
-      icon: 'Shield',
-      gradient: 'from-green-500 to-emerald-600',
-      iconBg: 'bg-green-100',
-    },
-    {
-      id: 3,
-      title: 'গ্লোবাল রেসপন্সিভ',
-      description: 'সব ডিভাইসে পারফেক্ট...',
-      icon: 'Globe',
-      gradient: 'from-purple-500 to-pink-600',
-      iconBg: 'bg-purple-100',
-    },
-    {
-      id: 4,
-      title: 'সেলস বুস্ট',
-      description: 'কনভার্সন রেট বাড়ানোর...',
-      icon: 'Rocket',
-      gradient: 'from-orange-500 to-red-600',
-      iconBg: 'bg-orange-100',
-    },
-    {
-      id: 5,
-      title: 'মডার্ন ডিজাইন',
-      description: 'কাস্টমাইজড এবং ব্র্যান্ডেড...',
-      icon: 'Sparkles',
-      gradient: 'from-yellow-500 to-amber-600',
-      iconBg: 'bg-yellow-100',
-    },
-    {
-      id: 6,
-      title: '২৪/৭ সাপোর্ট',
-      description: 'রাউন্ড-দ্য-ক্লক...',
-      icon: 'Clock',
-      gradient: 'from-indigo-500 to-blue-600',
-      iconBg: 'bg-indigo-100',
-    },
-  ]);
-
-  // State for process steps
-  const [processSteps, setProcessSteps] = useState([
-    {
-      id: 1,
-      step: '০১',
-      title: 'কন্সাল্টেশন',
-      description: 'আপনার বিজনেস নিডস...',
-      gradient: 'from-red-500 to-pink-600',
-      iconBg: 'bg-red-100',
-    },
-    {
-      id: 2,
-      step: '০২',
-      title: 'ডিজাইন ক্রিয়েশন',
-      description: 'ইউনিক এবং ব্র্যান্ড-অ্যালাইনড...',
-      gradient: 'from-blue-500 to-cyan-600',
-      iconBg: 'bg-blue-100',
-    },
-    {
-      id: 3,
-      step: '০৩',
-      title: 'ডেভেলপমেন্ট',
-      description: 'এডভান্স টেকনোলজি...',
-      gradient: 'from-green-500 to-emerald-600',
-      iconBg: 'bg-green-100',
-    },
-    {
-      id: 4,
-      step: '০৪',
-      title: 'লঞ্চ সাপোর্ট',
-      description: 'লাইভ করার পর কন্টিনিউয়াস...',
-      gradient: 'from-purple-500 to-pink-600',
-      iconBg: 'bg-purple-100',
-    },
-  ]);
-
-  // State for demo projects
-  const [demoProjects, setDemoProjects] = useState([
-    {
-      id: 1,
-      title: 'ফ্যাশন ই-কমার্স',
-      description: 'মডার্ন ফ্যাশন রিটেইল স্টোর',
-      image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=400&fit=crop',
-      gradient: 'from-pink-500 to-rose-600',
-    },
-    {
-      id: 2,
-      title: 'ইলেকট্রনিক্স শপ',
-      description: 'ইলেকট্রনিক গ্যাজেটস অনলাইন স্টোর',
-      image: 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400&h=400&fit=crop',
-      gradient: 'from-blue-500 to-cyan-600',
-    },
-    {
-      id: 3,
-      title: 'ফুড ডেলিভারি',
-      description: 'রেস্টুরেন্ট ফুড অর্ডারিং সিস্টেম',
-      image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=400&fit=crop',
-      gradient: 'from-orange-500 to-red-600',
-    },
-    {
-      id: 4,
-      title: 'বুক স্টোর',
-      description: 'অনলাইন বুক শপিং প্লাটফর্ম',
-      image: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=400&fit=crop',
-      gradient: 'from-emerald-500 to-green-600',
-    },
-    {
-      id: 5,
-      title: 'হেলথ কেয়ার',
-      description: 'মেডিকেল প্রোডাক্টস ই-কমার্স',
-      image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=400&h=400&fit=crop',
-      gradient: 'from-teal-500 to-blue-600',
-    },
-    {
-      id: 6,
-      title: 'হোম ডেকোর',
-      description: 'হোম ডেকোরেশন প্রোডাক্টস স্টোর',
-      image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=400&fit=crop',
-      gradient: 'from-amber-500 to-yellow-600',
-    },
-    {
-      id: 7,
-      title: 'জুয়েলারি স্টোর',
-      description: 'প্রিমিয়াম জুয়েলারি কালেকশন',
-      image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=400&fit=crop',
-      gradient: 'from-purple-500 to-pink-600',
-    },
-    {
-      id: 8,
-      title: 'স্পোর্টস শপ',
-      description: 'স্পোর্টস ইকুইপমেন্ট স্টোর',
-      image: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=400&h=400&fit=crop',
-      gradient: 'from-red-500 to-orange-600',
-    },
-  ]);
-
-  // State for clients
-  const [clients, setClients] = useState([
-    { id: 1, name: 'Rokomari', domain: 'rokomari.com' },
-    { id: 2, name: 'Grameenphone', domain: 'grameenphone.com' },
-    { id: 3, name: 'bKash', domain: 'bkash.com' },
-    { id: 4, name: 'Daraz', domain: 'daraz.com.bd' },
-    { id: 5, name: 'Pathao', domain: 'pathao.com' },
-    { id: 6, name: 'Shopify', domain: 'shopify.com' },
-    { id: 7, name: 'Unilever', domain: 'unilever.com' },
-    { id: 8, name: 'Google', domain: 'google.com' },
-  ]);
-
+  // State for all data
+  const [heroData, setHeroData] = useState(null);
+  const [features, setFeatures] = useState([]);
+  const [processSteps, setProcessSteps] = useState([]);
+  const [demoProjects, setDemoProjects] = useState([]);
+  const [clients, setClients] = useState([]);
+  
   // State for editing
   const [editingHero, setEditingHero] = useState(false);
   const [editingFeature, setEditingFeature] = useState(null);
   const [editingProcessStep, setEditingProcessStep] = useState(null);
   const [editingDemoProject, setEditingDemoProject] = useState(null);
   const [editingClient, setEditingClient] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Handle hero section update
+  // Load all data
+  useEffect(() => {
+    loadAllData();
+  }, []);
+
+  const loadAllData = async () => {
+    try {
+      const [hero, featuresData, stepsData, projectsData, clientsData] = await Promise.all([
+        ecommerceService.getHero(),
+        ecommerceService.getFeatures(),
+        ecommerceService.getProcessSteps(),
+        ecommerceService.getDemoProjects(),
+        ecommerceService.getClients()
+      ]);
+
+      setHeroData(hero);
+      setFeatures(featuresData);
+      setProcessSteps(stepsData);
+      setDemoProjects(projectsData);
+      setClients(clientsData);
+    } catch (error) {
+      console.error('Error loading data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Hero Section Functions
   const handleHeroChange = (e) => {
     setHeroData({ ...heroData, [e.target.name]: e.target.value });
   };
 
-  // Handle hero stats update
   const handleStatChange = (index, field, value) => {
     const updatedStats = [...heroData.stats];
     updatedStats[index] = { ...updatedStats[index], [field]: value };
     setHeroData({ ...heroData, stats: updatedStats });
   };
 
-  // Handle feature CRUD
-  const addFeature = () => {
+  const handleSaveHero = async () => {
+    try {
+      await ecommerceService.updateHero(heroData);
+      setEditingHero(false);
+      alert('Hero section updated successfully!');
+    } catch (error) {
+      console.error('Error saving hero:', error);
+      alert('Error saving hero section');
+    }
+  };
+
+  // Features Functions
+  const addFeature = async () => {
     const newFeature = {
-      id: features.length + 1,
-      title: '',
-      description: '',
+      title: 'নতুন ফিচার',
+      description: 'বর্ণনা লিখুন...',
       icon: 'Zap',
       gradient: 'from-blue-500 to-cyan-600',
-      iconBg: 'bg-blue-100',
+      icon_bg: 'bg-blue-100',
+      display_order: features.length + 1,
     };
-    setFeatures([...features, newFeature]);
-    setEditingFeature(newFeature.id);
+
+    try {
+      const savedFeature = await ecommerceService.createFeature(newFeature);
+      setFeatures([...features, savedFeature]);
+      setEditingFeature(savedFeature.id);
+    } catch (error) {
+      console.error('Error creating feature:', error);
+    }
   };
 
-  const updateFeature = (id, updatedData) => {
-    setFeatures(features.map((f) => (f.id === id ? { ...f, ...updatedData } : f)));
-    setEditingFeature(null);
+  const updateFeature = async (id, updatedData) => {
+    try {
+      await ecommerceService.updateFeature(id, updatedData);
+      setFeatures(features.map((f) => (f.id === id ? { ...f, ...updatedData } : f)));
+      setEditingFeature(null);
+    } catch (error) {
+      console.error('Error updating feature:', error);
+    }
   };
 
-  const deleteFeature = (id) => {
-    setFeatures(features.filter((f) => f.id !== id));
+  const deleteFeature = async (id) => {
+    if (window.confirm('Are you sure you want to delete this feature?')) {
+      try {
+        await ecommerceService.deleteFeature(id);
+        setFeatures(features.filter((f) => f.id !== id));
+      } catch (error) {
+        console.error('Error deleting feature:', error);
+      }
+    }
   };
 
-  // Handle process step CRUD
-  const addProcessStep = () => {
+  // Process Steps Functions
+  const addProcessStep = async () => {
     const newStep = {
-      id: processSteps.length + 1,
-      step: `০${processSteps.length + 1}`,
-      title: '',
-      description: '',
+      step_number: `০${processSteps.length + 1}`,
+      title: 'নতুন ধাপ',
+      description: 'বর্ণনা লিখুন...',
       gradient: 'from-blue-500 to-cyan-600',
-      iconBg: 'bg-blue-100',
+      icon_bg: 'bg-blue-100',
+      display_order: processSteps.length + 1,
     };
-    setProcessSteps([...processSteps, newStep]);
-    setEditingProcessStep(newStep.id);
+
+    try {
+      const savedStep = await ecommerceService.createProcessStep(newStep);
+      setProcessSteps([...processSteps, savedStep]);
+      setEditingProcessStep(savedStep.id);
+    } catch (error) {
+      console.error('Error creating process step:', error);
+    }
   };
 
-  const updateProcessStep = (id, updatedData) => {
-    setProcessSteps(processSteps.map((s) => (s.id === id ? { ...s, ...updatedData } : s)));
-    setEditingProcessStep(null);
+  const updateProcessStep = async (id, updatedData) => {
+    try {
+      await ecommerceService.updateProcessStep(id, updatedData);
+      setProcessSteps(processSteps.map((s) => (s.id === id ? { ...s, ...updatedData } : s)));
+      setEditingProcessStep(null);
+    } catch (error) {
+      console.error('Error updating process step:', error);
+    }
   };
 
-  const deleteProcessStep = (id) => {
-    setProcessSteps(processSteps.filter((s) => s.id !== id));
+  const deleteProcessStep = async (id) => {
+    if (window.confirm('Are you sure you want to delete this process step?')) {
+      try {
+        await ecommerceService.deleteProcessStep(id);
+        setProcessSteps(processSteps.filter((s) => s.id !== id));
+      } catch (error) {
+        console.error('Error deleting process step:', error);
+      }
+    }
   };
 
-  // Handle demo project CRUD
-  const addDemoProject = () => {
+  // Demo Projects Functions
+  const addDemoProject = async () => {
     const newProject = {
-      id: demoProjects.length + 1,
-      title: '',
-      description: '',
-      image: '',
+      title: 'নতুন প্রজেক্ট',
+      description: 'বর্ণনা লিখুন...',
+      image_url: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=400&fit=crop',
       gradient: 'from-blue-500 to-cyan-600',
+      display_order: demoProjects.length + 1,
     };
-    setDemoProjects([...demoProjects, newProject]);
-    setEditingDemoProject(newProject.id);
+
+    try {
+      const savedProject = await ecommerceService.createDemoProject(newProject);
+      setDemoProjects([...demoProjects, savedProject]);
+      setEditingDemoProject(savedProject.id);
+    } catch (error) {
+      console.error('Error creating demo project:', error);
+    }
   };
 
-  const updateDemoProject = (id, updatedData) => {
-    setDemoProjects(demoProjects.map((p) => (p.id === id ? { ...p, ...updatedData } : p)));
-    setEditingDemoProject(null);
+  const updateDemoProject = async (id, updatedData) => {
+    try {
+      await ecommerceService.updateDemoProject(id, updatedData);
+      setDemoProjects(demoProjects.map((p) => (p.id === id ? { ...p, ...updatedData } : p)));
+      setEditingDemoProject(null);
+    } catch (error) {
+      console.error('Error updating demo project:', error);
+    }
   };
 
-  const deleteDemoProject = (id) => {
-    setDemoProjects(demoProjects.filter((p) => p.id !== id));
+  const deleteDemoProject = async (id) => {
+    if (window.confirm('Are you sure you want to delete this demo project?')) {
+      try {
+        await ecommerceService.deleteDemoProject(id);
+        setDemoProjects(demoProjects.filter((p) => p.id !== id));
+      } catch (error) {
+        console.error('Error deleting demo project:', error);
+      }
+    }
   };
 
-  // Handle client CRUD
-  const addClient = () => {
+  // Clients Functions
+  const addClient = async () => {
     const newClient = {
-      id: clients.length + 1,
-      name: '',
-      domain: '',
+      name: 'নতুন ক্লায়েন্ট',
+      domain: 'example.com',
+      display_order: clients.length + 1,
     };
-    setClients([...clients, newClient]);
-    setEditingClient(newClient.id);
+
+    try {
+      const savedClient = await ecommerceService.createClient(newClient);
+      setClients([...clients, savedClient]);
+      setEditingClient(savedClient.id);
+    } catch (error) {
+      console.error('Error creating client:', error);
+    }
   };
 
-  const updateClient = (id, updatedData) => {
-    setClients(clients.map((c) => (c.id === id ? { ...c, ...updatedData } : c)));
-    setEditingClient(null);
+  const updateClient = async (id, updatedData) => {
+    try {
+      await ecommerceService.updateClient(id, updatedData);
+      setClients(clients.map((c) => (c.id === id ? { ...c, ...updatedData } : c)));
+      setEditingClient(null);
+    } catch (error) {
+      console.error('Error updating client:', error);
+    }
   };
 
-  const deleteClient = (id) => {
-    setClients(clients.filter((c) => c.id !== id));
-  };
-
-  // Save changes (mock API call)
-  const saveChanges = () => {
-    console.log('Saving changes:', { heroData, features, processSteps, demoProjects, clients });
-    alert('Changes saved successfully!');
-    setEditingHero(false);
+  const deleteClient = async (id) => {
+    if (window.confirm('Are you sure you want to delete this client?')) {
+      try {
+        await ecommerceService.deleteClient(id);
+        setClients(clients.filter((c) => c.id !== id));
+      } catch (error) {
+        console.error('Error deleting client:', error);
+      }
+    }
   };
 
   // Icon options for features
   const iconOptions = ['Zap', 'Shield', 'Globe', 'Rocket', 'Sparkles', 'Clock'];
+
+  if (loading) {
+    return (
+      <div className="p-6 flex justify-center items-center h-64">
+        <div className="text-lg">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!heroData) {
+    return (
+      <div className="p-6">
+        <div className="text-lg">No data available. Please check your backend connection.</div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 md:p-10 bg-gray-100 min-h-screen font-hind">
@@ -356,21 +310,21 @@ const AdminEcommerceSolution = () => {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block font-semibold mb-1 font-hind">CTA 1</label>
+                <label className="block font-semibold mb-1 font-hind">CTA 1 Text</label>
                 <input
                   type="text"
-                  name="cta1"
-                  value={heroData.cta1}
+                  name="cta1_text"
+                  value={heroData.cta1_text}
                   onChange={handleHeroChange}
                   className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:outline-none"
                 />
               </div>
               <div>
-                <label className="block font-semibold mb-1 font-hind">CTA 2</label>
+                <label className="block font-semibold mb-1 font-hind">CTA 2 Text</label>
                 <input
                   type="text"
-                  name="cta2"
-                  value={heroData.cta2}
+                  name="cta2_text"
+                  value={heroData.cta2_text}
                   onChange={handleHeroChange}
                   className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:outline-none"
                 />
@@ -378,14 +332,14 @@ const AdminEcommerceSolution = () => {
             </div>
             <div className="space-y-4">
               <h3 className="font-semibold font-hind">Stats</h3>
-              {heroData.stats.map((stat, index) => (
+              {(heroData.stats || []).map((stat, index) => (
                 <div key={index} className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block font-semibold mb-1 font-hind">Number</label>
+                    <label className="block font-semibold mb-1 font-hind">Value</label>
                     <input
                       type="text"
-                      value={stat.number}
-                      onChange={(e) => handleStatChange(index, 'number', e.target.value)}
+                      value={stat.value}
+                      onChange={(e) => handleStatChange(index, 'value', e.target.value)}
                       className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:outline-none"
                     />
                   </div>
@@ -403,7 +357,7 @@ const AdminEcommerceSolution = () => {
             </div>
             <div className="flex gap-4">
               <button
-                onClick={saveChanges}
+                onClick={handleSaveHero}
                 className="bg-blue-500 text-white px-6 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-600"
               >
                 <Save size={18} /> Save
@@ -424,13 +378,13 @@ const AdminEcommerceSolution = () => {
               <p className="text-xl font-bold font-hind">{heroData.title}</p>
               <p className="text-gray-600 font-hind whitespace-pre-line">{heroData.description}</p>
               <div className="flex gap-4 mt-2">
-                <button className="bg-yellow-500 text-gray-900 px-4 py-2 rounded-lg font-hind">{heroData.cta1}</button>
-                <button className="border-2 border-gray-300 text-gray-700 px-4 py-2 rounded-lg font-hind">{heroData.cta2}</button>
+                <button className="bg-yellow-500 text-gray-900 px-4 py-2 rounded-lg font-hind">{heroData.cta1_text}</button>
+                <button className="border-2 border-gray-300 text-gray-700 px-4 py-2 rounded-lg font-hind">{heroData.cta2_text}</button>
               </div>
               <div className="grid grid-cols-3 gap-3 mt-4">
-                {heroData.stats.map((stat, index) => (
+                {(heroData.stats || []).map((stat, index) => (
                   <div key={index} className="bg-gray-100 p-2 rounded-lg text-center">
-                    <p className="font-bold font-hind">{stat.number}</p>
+                    <p className="font-bold font-hind">{stat.value}</p>
                     <p className="text-sm text-gray-600 font-hind">{stat.label}</p>
                   </div>
                 ))}
@@ -471,7 +425,7 @@ const AdminEcommerceSolution = () => {
                     <input
                       type="text"
                       value={feature.title}
-                      onChange={(e) => updateFeature(feature.id, { ...feature, title: e.target.value })}
+                      onChange={(e) => setFeatures(features.map(f => f.id === feature.id ? {...f, title: e.target.value} : f))}
                       className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:outline-none"
                     />
                   </div>
@@ -480,7 +434,7 @@ const AdminEcommerceSolution = () => {
                     <input
                       type="text"
                       value={feature.description}
-                      onChange={(e) => updateFeature(feature.id, { ...feature, description: e.target.value })}
+                      onChange={(e) => setFeatures(features.map(f => f.id === feature.id ? {...f, description: e.target.value} : f))}
                       className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:outline-none"
                     />
                   </div>
@@ -488,7 +442,7 @@ const AdminEcommerceSolution = () => {
                     <label className="block font-semibold mb-1 font-hind">Icon</label>
                     <select
                       value={feature.icon}
-                      onChange={(e) => updateFeature(feature.id, { ...feature, icon: e.target.value })}
+                      onChange={(e) => setFeatures(features.map(f => f.id === feature.id ? {...f, icon: e.target.value} : f))}
                       className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:outline-none"
                     >
                       {iconOptions.map((icon) => (
@@ -501,7 +455,7 @@ const AdminEcommerceSolution = () => {
                     <input
                       type="text"
                       value={feature.gradient}
-                      onChange={(e) => updateFeature(feature.id, { ...feature, gradient: e.target.value })}
+                      onChange={(e) => setFeatures(features.map(f => f.id === feature.id ? {...f, gradient: e.target.value} : f))}
                       className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:outline-none"
                       placeholder="e.g., from-blue-500 to-cyan-600"
                     />
@@ -510,8 +464,8 @@ const AdminEcommerceSolution = () => {
                     <label className="block font-semibold mb-1 font-hind">Icon Background</label>
                     <input
                       type="text"
-                      value={feature.iconBg}
-                      onChange={(e) => updateFeature(feature.id, { ...feature, iconBg: e.target.value })}
+                      value={feature.icon_bg}
+                      onChange={(e) => setFeatures(features.map(f => f.id === feature.id ? {...f, icon_bg: e.target.value} : f))}
                       className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:outline-none"
                       placeholder="e.g., bg-blue-100"
                     />
@@ -540,7 +494,7 @@ const AdminEcommerceSolution = () => {
               ) : (
                 <div>
                   <div className="flex items-center gap-2 mb-2">
-                    <div className={`inline-flex items-center justify-center w-10 h-10 ${feature.iconBg} rounded-lg`}>
+                    <div className={`inline-flex items-center justify-center w-10 h-10 ${feature.icon_bg} rounded-lg`}>
                       {iconMap[feature.icon] ? (
                         React.createElement(iconMap[feature.icon], { className: 'w-6 h-6 text-gray-700' })
                       ) : (
@@ -551,7 +505,7 @@ const AdminEcommerceSolution = () => {
                   </div>
                   <p className="text-gray-600 font-hind">{feature.description}</p>
                   <p className="text-gray-600 font-hind">Gradient: {feature.gradient}</p>
-                  <p className="text-gray-600 font-hind">Icon Background: {feature.iconBg}</p>
+                  <p className="text-gray-600 font-hind">Icon Background: {feature.icon_bg}</p>
                   <button
                     onClick={() => setEditingFeature(feature.id)}
                     className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-600"
@@ -589,8 +543,8 @@ const AdminEcommerceSolution = () => {
                     <label className="block font-semibold mb-1 font-hind">Step Number</label>
                     <input
                       type="text"
-                      value={step.step}
-                      onChange={(e) => updateProcessStep(step.id, { ...step, step: e.target.value })}
+                      value={step.step_number}
+                      onChange={(e) => setProcessSteps(processSteps.map(s => s.id === step.id ? {...s, step_number: e.target.value} : s))}
                       className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:outline-none"
                     />
                   </div>
@@ -599,7 +553,7 @@ const AdminEcommerceSolution = () => {
                     <input
                       type="text"
                       value={step.title}
-                      onChange={(e) => updateProcessStep(step.id, { ...step, title: e.target.value })}
+                      onChange={(e) => setProcessSteps(processSteps.map(s => s.id === step.id ? {...s, title: e.target.value} : s))}
                       className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:outline-none"
                     />
                   </div>
@@ -608,7 +562,7 @@ const AdminEcommerceSolution = () => {
                     <input
                       type="text"
                       value={step.description}
-                      onChange={(e) => updateProcessStep(step.id, { ...step, description: e.target.value })}
+                      onChange={(e) => setProcessSteps(processSteps.map(s => s.id === step.id ? {...s, description: e.target.value} : s))}
                       className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:outline-none"
                     />
                   </div>
@@ -617,7 +571,7 @@ const AdminEcommerceSolution = () => {
                     <input
                       type="text"
                       value={step.gradient}
-                      onChange={(e) => updateProcessStep(step.id, { ...step, gradient: e.target.value })}
+                      onChange={(e) => setProcessSteps(processSteps.map(s => s.id === step.id ? {...s, gradient: e.target.value} : s))}
                       className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:outline-none"
                       placeholder="e.g., from-blue-500 to-cyan-600"
                     />
@@ -626,8 +580,8 @@ const AdminEcommerceSolution = () => {
                     <label className="block font-semibold mb-1 font-hind">Icon Background</label>
                     <input
                       type="text"
-                      value={step.iconBg}
-                      onChange={(e) => updateProcessStep(step.id, { ...step, iconBg: e.target.value })}
+                      value={step.icon_bg}
+                      onChange={(e) => setProcessSteps(processSteps.map(s => s.id === step.id ? {...s, icon_bg: e.target.value} : s))}
                       className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:outline-none"
                       placeholder="e.g., bg-blue-100"
                     />
@@ -655,10 +609,10 @@ const AdminEcommerceSolution = () => {
                 </div>
               ) : (
                 <div>
-                  <h3 className="font-semibold font-hind">{step.step} - {step.title}</h3>
+                  <h3 className="font-semibold font-hind">{step.step_number} - {step.title}</h3>
                   <p className="text-gray-600 font-hind">{step.description}</p>
                   <p className="text-gray-600 font-hind">Gradient: {step.gradient}</p>
-                  <p className="text-gray-600 font-hind">Icon Background: {step.iconBg}</p>
+                  <p className="text-gray-600 font-hind">Icon Background: {step.icon_bg}</p>
                   <button
                     onClick={() => setEditingProcessStep(step.id)}
                     className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-600"
@@ -697,7 +651,7 @@ const AdminEcommerceSolution = () => {
                     <input
                       type="text"
                       value={project.title}
-                      onChange={(e) => updateDemoProject(project.id, { ...project, title: e.target.value })}
+                      onChange={(e) => setDemoProjects(demoProjects.map(p => p.id === project.id ? {...p, title: e.target.value} : p))}
                       className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:outline-none"
                     />
                   </div>
@@ -706,7 +660,7 @@ const AdminEcommerceSolution = () => {
                     <input
                       type="text"
                       value={project.description}
-                      onChange={(e) => updateDemoProject(project.id, { ...project, description: e.target.value })}
+                      onChange={(e) => setDemoProjects(demoProjects.map(p => p.id === project.id ? {...p, description: e.target.value} : p))}
                       className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:outline-none"
                     />
                   </div>
@@ -714,8 +668,8 @@ const AdminEcommerceSolution = () => {
                     <label className="block font-semibold mb-1 font-hind">Image URL</label>
                     <input
                       type="url"
-                      value={project.image}
-                      onChange={(e) => updateDemoProject(project.id, { ...project, image: e.target.value })}
+                      value={project.image_url}
+                      onChange={(e) => setDemoProjects(demoProjects.map(p => p.id === project.id ? {...p, image_url: e.target.value} : p))}
                       className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:outline-none"
                     />
                   </div>
@@ -724,7 +678,7 @@ const AdminEcommerceSolution = () => {
                     <input
                       type="text"
                       value={project.gradient}
-                      onChange={(e) => updateDemoProject(project.id, { ...project, gradient: e.target.value })}
+                      onChange={(e) => setDemoProjects(demoProjects.map(p => p.id === project.id ? {...p, gradient: e.target.value} : p))}
                       className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:outline-none"
                       placeholder="e.g., from-blue-500 to-cyan-600"
                     />
@@ -752,7 +706,7 @@ const AdminEcommerceSolution = () => {
                 </div>
               ) : (
                 <div>
-                  <img src={project.image} alt={project.title} className="w-full h-32 object-cover rounded-lg mb-2" />
+                  <img src={project.image_url} alt={project.title} className="w-full h-32 object-cover rounded-lg mb-2" />
                   <h3 className="font-semibold font-hind">{project.title}</h3>
                   <p className="text-gray-600 font-hind">{project.description}</p>
                   <p className="text-gray-600 font-hind">Gradient: {project.gradient}</p>
@@ -794,7 +748,7 @@ const AdminEcommerceSolution = () => {
                     <input
                       type="text"
                       value={client.name}
-                      onChange={(e) => updateClient(client.id, { ...client, name: e.target.value })}
+                      onChange={(e) => setClients(clients.map(c => c.id === client.id ? {...c, name: e.target.value} : c))}
                       className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:outline-none"
                     />
                   </div>
@@ -803,7 +757,7 @@ const AdminEcommerceSolution = () => {
                     <input
                       type="text"
                       value={client.domain}
-                      onChange={(e) => updateClient(client.id, { ...client, domain: e.target.value })}
+                      onChange={(e) => setClients(clients.map(c => c.id === client.id ? {...c, domain: e.target.value} : c))}
                       className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:outline-none"
                     />
                   </div>

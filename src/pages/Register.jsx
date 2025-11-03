@@ -1,71 +1,62 @@
 import React, { useState, useContext } from 'react';
 import { ChevronRight } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
-import AuthContext from '../context/AuthContext.jsx';
+import AuthContext from '../context/AuthContext';
 
 const Register = () => {
-  const { register, login } = useContext(AuthContext);
+  const { register, googleLogin } = useContext(AuthContext);
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
-  const [otp, setOtp] = useState('');
-  const [userId, setUserId] = useState(null);
-  const [step, setStep] = useState(1); // 1: Form, 2: OTP
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSendOtp = async () => {
-    // Validation
-    if (!name || name.trim().length < 2) {
-      setError('নাম কমপক্ষে ২ অক্ষরের হতে হবে');
-      return;
-    }
-    if (!phone || phone.length < 10) {
-      setError('সঠিক ফোন নম্বর দিন');
-      return;
-    }
-    if (email && !email.includes('@')) {
-      setError('সঠিক ইমেইল দিন');
-      return;
-    }
+  const handleRegister = async () => {
+  // Validation
+  if (!name || name.trim().length < 2) {
+    setError('নাম কমপক্ষে ২ অক্ষরের হতে হবে');
+    return;
+  }
+  if (!phone || phone.length < 10) {
+    setError('সঠিক ফোন নম্বর দিন');
+    return;
+  }
+  if (email && !email.includes('@')) {
+    setError('সঠিক ইমেইল দিন');
+    return;
+  }
 
-    setLoading(true);
-    setError('');
+  setLoading(true);
+  setError('');
 
-    try {
-      const userId = await register({ name, phone, email });
-      setUserId(userId);
-      setStep(2);
-    } catch (err) {
+  try {
+    await register({ name, phone, email });
+    navigate('/');
+  } catch (err) {
+    // Better error handling to see validation errors
+    console.error('Registration error:', err.response?.data);
+    
+    if (err.response?.data?.errors) {
+      // Show validation errors
+      const errors = err.response.data.errors;
+      const errorMessages = Object.values(errors).flat().join(', ');
+      setError(errorMessages);
+    } else {
       setError(err.response?.data?.message || 'রেজিস্ট্রেশন ব্যর্থ হয়েছে');
-    } finally {
-      setLoading(false);
     }
+  } finally {
+    setLoading(false);
+  }
+};
+
+  const handleGoogleLogin = () => {
+    googleLogin();
   };
 
-  const handleVerifyAndRegister = async () => {
-    if (!otp || otp.length < 4) {
-      setError('সঠিক OTP দিন');
-      return;
-    }
-
-    setLoading(true);
-    setError('');
-
-    try {
-      await login(userId, otp);
-      navigate('/'); // Redirect to home after successful registration
-    } catch (err) {
-      setError(err.response?.data?.message || 'ভুল OTP');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleKeyPress = (e, action) => {
+  const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
-      action();
+      handleRegister();
     }
   };
 
@@ -79,9 +70,7 @@ const Register = () => {
           <h2 className="text-3xl font-bold bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
             রেজিস্টার
           </h2>
-          <p className="mt-2 text-gray-600">
-            {step === 1 ? 'আপনার তথ্য দিন' : 'OTP যাচাই করুন'}
-          </p>
+          <p className="mt-2 text-gray-600">আপনার তথ্য দিন</p>
         </div>
 
         {error && (
@@ -90,82 +79,72 @@ const Register = () => {
           </div>
         )}
 
-        {step === 1 ? (
-          <div className="space-y-4">
-            <input
-              type="text"
-              placeholder="নাম"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full px-4 py-3 rounded-full border border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition-all"
-              disabled={loading}
-            />
-            <input
-              type="tel"
-              placeholder="ফোন নম্বর (০১XXXXXXXXX)"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className="w-full px-4 py-3 rounded-full border border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition-all"
-              disabled={loading}
-            />
-            <input
-              type="email"
-              placeholder="ইমেইল (ঐচ্ছিক)"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              onKeyPress={(e) => handleKeyPress(e, handleSendOtp)}
-              className="w-full px-4 py-3 rounded-full border border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition-all"
-              disabled={loading}
-            />
-            <button
-              onClick={handleSendOtp}
-              disabled={loading}
-              className="w-full bg-gradient-to-r from-red-500 to-pink-600 text-white py-3 rounded-full font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? 'পাঠানো হচ্ছে...' : 'OTP পাঠান'}
-              {!loading && <ChevronRight className="w-5 h-5" />}
-            </button>
-            <div className="text-center mt-4">
-              <Link 
-                to="/login" 
-                className="text-red-600 hover:text-red-700 font-medium"
-              >
-                ইতিমধ্যে অ্যাকাউন্ট আছে? লগইন করুন
-              </Link>
+        <div className="space-y-4">
+          <input
+            type="text"
+            placeholder="নাম"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full px-4 py-3 rounded-full border border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition-all"
+            disabled={loading}
+          />
+          <input
+            type="tel"
+            placeholder="ফোন নম্বর (০১XXXXXXXXX)"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            className="w-full px-4 py-3 rounded-full border border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition-all"
+            disabled={loading}
+          />
+          <input
+            type="email"
+            placeholder="ইমেইল (ঐচ্ছিক)"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            onKeyPress={handleKeyPress}
+            className="w-full px-4 py-3 rounded-full border border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition-all"
+            disabled={loading}
+          />
+          <button
+            onClick={handleRegister}
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-red-500 to-pink-600 text-white py-3 rounded-full font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? 'রেজিস্ট্রেশন হচ্ছে...' : 'রেজিস্টার করুন'}
+            {!loading && <ChevronRight className="w-5 h-5" />}
+          </button>
+
+          {/* Google Register Button */}
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-white text-gray-500">বা</span>
             </div>
           </div>
-        ) : (
-          <div className="space-y-4">
-            <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-lg text-sm text-center">
-              OTP পাঠানো হয়েছে {phone} নম্বরে
-            </div>
-            <input
-              type="text"
-              placeholder="OTP লিখুন"
-              value={otp}
-              onChange={(e) => setOtp(e.target.value)}
-              onKeyPress={(e) => handleKeyPress(e, handleVerifyAndRegister)}
-              className="w-full px-4 py-3 rounded-full border border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition-all"
-              maxLength="6"
-              disabled={loading}
+
+          <button
+            onClick={handleGoogleLogin}
+            className="w-full bg-white border border-gray-300 text-gray-700 py-3 rounded-full font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2"
+          >
+            <img 
+              src="https://www.google.com/favicon.ico" 
+              alt="Google" 
+              className="w-5 h-5"
             />
-            <button
-              onClick={handleVerifyAndRegister}
-              disabled={loading}
-              className="w-full bg-gradient-to-r from-red-500 to-pink-600 text-white py-3 rounded-full font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            Google দিয়ে রেজিস্টার করুন
+          </button>
+
+          <div className="text-center mt-4">
+            <Link 
+              to="/login" 
+              className="text-red-600 hover:text-red-700 font-medium"
             >
-              {loading ? 'যাচাই করা হচ্ছে...' : 'যাচাই করুন এবং রেজিস্টার'}
-              {!loading && <ChevronRight className="w-5 h-5" />}
-            </button>
-            <button
-              onClick={() => setStep(1)}
-              className="w-full text-gray-600 hover:text-gray-800 py-2 text-sm"
-              disabled={loading}
-            >
-              তথ্য পরিবর্তন করুন
-            </button>
+              ইতিমধ্যে অ্যাকাউন্ট আছে? লগইন করুন
+            </Link>
           </div>
-        )}
+        </div>
       </div>
     </section>
   );

@@ -1,7 +1,9 @@
+// src/services/api.js
 import axios from 'axios';
 
-const API_BASE_URL = 'http://127.0.0.1:8000/api';
+const API_BASE_URL = 'http://localhost:8000/api';
 
+// Create axios instance with default config
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -10,31 +12,54 @@ const api = axios.create({
   },
 });
 
-// Pricing Plans API
+// Add token to requests if available
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// Handle response errors
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      // Unauthorized - clear token and redirect to login
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
+
+// ==================== PRICING PLANS API ====================
 export const pricingPlansAPI = {
-  getAll: () => api.get('/pricing-plans'),
-  getOne: (id) => api.get(`/pricing-plans/${id}`),
-  create: (data) => api.post('/pricing-plans', data),
-  update: (id, data) => api.put(`/pricing-plans/${id}`, data),
-  delete: (id) => api.delete(`/pricing-plans/${id}`),
+  getAll: () => api.get('/pricing/plans'),
+  create: (data) => api.post('/pricing/plans', data),
+  update: (id, data) => api.put(`/pricing/plans/${id}`, data),
+  delete: (id) => api.delete(`/pricing/plans/${id}`),
 };
 
-// Extra Services API
+// ==================== EXTRA SERVICES API ====================
 export const extraServicesAPI = {
-  getAll: () => api.get('/extra-services'),
-  getOne: (id) => api.get(`/extra-services/${id}`),
-  create: (data) => api.post('/extra-services', data),
-  update: (id, data) => api.put(`/extra-services/${id}`, data),
-  delete: (id) => api.delete(`/extra-services/${id}`),
+  getAll: () => api.get('/pricing/services'),
+  create: (data) => api.post('/pricing/services', data),
+  update: (id, data) => api.put(`/pricing/services/${id}`, data),
+  delete: (id) => api.delete(`/pricing/services/${id}`),
 };
 
-// Plan Comparisons API
+// ==================== PLAN COMPARISONS API ====================
 export const planComparisonsAPI = {
-  getAll: () => api.get('/plan-comparisons'),
-  getOne: (id) => api.get(`/plan-comparisons/${id}`),
-  create: (data) => api.post('/plan-comparisons', data),
-  update: (id, data) => api.put(`/plan-comparisons/${id}`, data),
-  delete: (id) => api.delete(`/plan-comparisons/${id}`),
+  getAll: () => api.get('/pricing/comparisons'),
+  create: (data) => api.post('/pricing/comparisons', data),
+  update: (id, data) => api.put(`/pricing/comparisons/${id}`, data),
+  delete: (id) => api.delete(`/pricing/comparisons/${id}`),
 };
 
 export default api;
