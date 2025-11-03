@@ -1,4 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
+import ProtectedRoute from '../utils/protectedRoute';
 
 // Main Pages
 import SMECubeLanding from "../pages/SMECubeLanding";
@@ -10,7 +11,7 @@ import Tools from "../pages/Tools";
 import Pricing from "../pages/Pricing";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
-
+import BlogDetail from "../pages/BlogDetail.jsx";
 // Service Pages
 import EcommerceSolution from "../pages/services/EcommerceSolution";
 import DomainHostings from "../pages/services/DomainHostings";
@@ -24,16 +25,17 @@ import GraphicDesign from "../pages/services/GraphicDesign";
 import LandingPage from "../pages/services/LandingPage";
 import App from "../layouts/App";
 import BusinessTraining from "../pages/services/BusinessTraining";
+import IssueFixing from "../pages/services/IssueFixing";
 
 // Admin
-import AdminPricing from "../pages/admin/dashboard/AdminPricing";
 import AdminLayout from "../layouts/AdminLayout";
-import AdminDashboard from "../pages/admin/dashboard/AdminDashboard";
+import Dashboard from "../pages/admin/Dashboard";
+import AdminPricing from "../pages/admin/dashboard/AdminPricing";
 import AdminSettings from "../pages/admin/dashboard/AdminSettings";
+import AdminBlogs from "../pages/admin/dashboard/AdminBlogs";
 import AdminWebdev from "../pages/admin/dashboard/AdminWebdev";
 import AdminFacebookBoosting from "../pages/admin/dashboard/AdminFacebookBoosting";
 import AdminEcommerceSolution from "../pages/admin/dashboard/AdminEcommerceSolution";
-import IssueFixing from "../pages/services/IssueFixing";
 import AdminChatbotSetup from "../pages/admin/dashboard/AdminChatbotSetup";
 import AdminIssueFixing from "../pages/admin/dashboard/AdminIssueFixing";
 import AdminBusinessTraining from "../pages/admin/dashboard/AdminBusinessTraining";
@@ -54,15 +56,7 @@ import NotificationsAlerts from "../pages/clientUser/NotificationsAlerts";
 import SupportHelpDesk from "../pages/clientUser/SupportHelpDesk.jsx";
 import AccountProfileSettings from "../pages/clientUser/AccountProfileSettings";
 
-// Blog Pages
-import FacebookBoostingGuide from "../pages/blogPages/FacebookBoostingGuide";
-import EcommerceSolutionBlog from "../pages/blogPages/EcommerceSolution";
-import ResponsiveWebDesign from "../pages/blogPages/ResponsiveWebdesign";
-import BusinessConsultingGuide from "../pages/blogPages/BusinessConsultingGuide";
-import ChatbotSetupGuide from "../pages/blogPages/ChatbotSetupGuide";
-import DigitalMarketingTrends from "../pages/blogPages/DigitalMarketingTrends";
-import LandingPageStrategies from "../pages/blogPages/LandingPageStrategies";
-import GraphicDesignBranding from "../pages/blogPages/GraphicDesignBranding";
+
 
 export const router = createBrowserRouter([
   {
@@ -74,20 +68,13 @@ export const router = createBrowserRouter([
       { path: "contact", element: <Contact /> },
       { path: "services", element: <Services /> },
       { path: "blogs", element: <Blogs /> },
+      // ADD THIS - it will catch ALL blog slugs dynamically
+      { path: "blogs/:slug", element: <BlogDetail /> },
       { path: "tools", element: <Tools /> },
       { path: "pricing", element: <Pricing /> },
       { path: "login", element: <Login /> },
       { path: "register", element: <Register /> },
 
-      // Blog Routes
-      { path: "blogs/facebook-boosting-guide", element: <FacebookBoostingGuide /> },
-      { path: "blogs/ecommerce-solution", element: <EcommerceSolutionBlog /> },
-      { path: "blogs/responsive-web-design", element: <ResponsiveWebDesign /> },
-      { path: "blogs/business-consulting-guide", element: <BusinessConsultingGuide /> },
-      { path: "blogs/chatbot-setup-guide", element: <ChatbotSetupGuide /> },
-      { path: "blogs/digital-marketing-trends", element: <DigitalMarketingTrends /> },
-      { path: "blogs/landing-page-strategies", element: <LandingPageStrategies /> },
-      { path: "blogs/graphic-design-branding", element: <GraphicDesignBranding /> },
 
       // Service Routes
       { path: "services/brand-page-setup", element: <BrandPageSetup /> },
@@ -106,11 +93,17 @@ export const router = createBrowserRouter([
   },
   {
     path: "admin",
-    element: <AdminLayout />,
+    element: (
+      <ProtectedRoute requiredRole="admin">
+        <AdminLayout />
+      </ProtectedRoute>
+    ),
     children: [
-      { path: "dashboard", element: <AdminDashboard /> },
+      { index: true, element: <Dashboard /> },
+      { path: "dashboard", element: <Dashboard /> },
+      { path: "pricing", element: <AdminPricing /> },
+      { path: "blogs", element: <AdminBlogs /> },
       { path: "settings", element: <AdminSettings /> },
-      { path: "pricing", element: <AdminPricing /> }, // ✅ ADDED THIS LINE
       { path: "web-development", element: <AdminWebdev /> },
       { path: "bulk-sms", element: <AdminBulkSMS /> },
       { path: "landing-page", element: <AdminLandingPage /> },
@@ -126,7 +119,11 @@ export const router = createBrowserRouter([
   },
   {
     path: "client",
-    element: <ClientLayout />,
+    element: (
+      <ProtectedRoute requiredRole="client">
+        <ClientLayout />
+      </ProtectedRoute>
+    ),
     children: [
       { path: "dashboard", element: <ClientDashboard /> },
       { path: "services-subscriptions", element: <ServicesSubscriptions /> },
