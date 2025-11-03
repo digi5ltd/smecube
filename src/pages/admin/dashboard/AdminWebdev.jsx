@@ -15,7 +15,7 @@ import {
 import { webdevHeroAPI } from "../../../services/api";
 
 const AdminWebdev = () => {
-  const [heroData, setHeroData] = useState([]);
+  const [heroData, setHeroData] = useState({});
 
   useEffect(() => {
     fetchHeroData();
@@ -127,18 +127,19 @@ const AdminWebdev = () => {
 
   const handleHeroChange = (e) => {
     const { name, value } = e.target;
-    setHeroData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setHeroData((prev) => {
+      const updated = [...prev]; // copy array
+      updated[0] = { ...updated[0], [name]: value }; // update first object
+      return updated;
+    });
   };
 
   const saveChangesHeroSection = async () => {
-    console.log(heroData[0].id);
+    console.log(heroData[0]?.id);
 
     try {
       // Replace with your actual axios call
-      const response = await webdevHeroAPI.update(heroData[0].id, heroData);
+      const response = await webdevHeroAPI.update(heroData[0]?.id, heroData[0]);
 
       console.log("Saving hero data:", response);
 
@@ -340,7 +341,7 @@ const AdminWebdev = () => {
                     <input
                       type="text"
                       name="title"
-                      value={heroData[0].title}
+                      value={heroData[0]?.title}
                       onChange={handleHeroChange}
                       className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all duration-300"
                       placeholder="টাইটেল লিখুন"
@@ -353,7 +354,7 @@ const AdminWebdev = () => {
                     </label>
                     <textarea
                       name="description"
-                      value={heroData[0].description}
+                      value={heroData[0]?.description}
                       onChange={handleHeroChange}
                       className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all duration-300"
                       rows="4"
@@ -368,7 +369,7 @@ const AdminWebdev = () => {
                     <input
                       type="url"
                       name="image"
-                      value={heroData[0].image}
+                      value={heroData[0]?.image}
                       onChange={handleHeroChange}
                       className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all duration-300"
                       placeholder="https://example.com/image.jpg"
@@ -383,7 +384,7 @@ const AdminWebdev = () => {
                       <input
                         type="text"
                         name="cta1"
-                        value={heroData[0].cta1}
+                        value={heroData[0]?.cta1}
                         onChange={handleHeroChange}
                         className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all duration-300"
                         placeholder="বাটন টেক্সট"
@@ -396,7 +397,7 @@ const AdminWebdev = () => {
                       <input
                         type="text"
                         name="cta2"
-                        value={heroData[0].cta2}
+                        value={heroData[0]?.cta2}
                         onChange={handleHeroChange}
                         className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all duration-300"
                         placeholder="বাটন টেক্সট"
@@ -431,26 +432,26 @@ const AdminWebdev = () => {
                         <span className="font-semibold text-sm text-gray-500">
                           টাইটেল:
                         </span>
-                        <p className="mt-1">{heroData[0].title}</p>
+                        <p className="mt-1">{heroData[0]?.title}</p>
                       </div>
                       <div>
                         <span className="font-semibold text-sm text-gray-500">
                           বিবরণ:
                         </span>
-                        <p className="mt-1">{heroData[0].description}</p>
+                        <p className="mt-1">{heroData[0]?.description}</p>
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div>
                           <span className="font-semibold text-sm text-gray-500">
                             বাটন ১:
                           </span>
-                          <p className="mt-1">{heroData[0].cta1}</p>
+                          <p className="mt-1">{heroData[0]?.cta1}</p>
                         </div>
                         <div>
                           <span className="font-semibold text-sm text-gray-500">
                             বাটন ২:
                           </span>
-                          <p className="mt-1">{heroData[0].cta2}</p>
+                          <p className="mt-1">{heroData[0]?.cta2}</p>
                         </div>
                       </div>
                     </div>

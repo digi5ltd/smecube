@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { motion } from "framer-motion";
 import CustomwebDesign from "../../assets/img/svg/webdevelopment/servicesvg/CustomWebdesign";
@@ -20,8 +20,32 @@ import javascript from "../../assets/img/svg/webdevelopment/technologysvg/javasc
 import restaurantpic from "../../assets/img/webdevelopment/restaurant.jpg";
 import schoolPic from "../../assets/img/webdevelopment/school.jfif";
 import realstatePic from "../../assets/img/webdevelopment/real-state.jpg";
+import { webdevHeroAPI } from "../../services/api";
 
 const WebDevelopment = () => {
+  const [heroData, setHeroData] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchHeroData = async () => {
+      try {
+        const response = await webdevHeroAPI.getAll(); // or your endpoint
+        console.log(response);
+
+        console.log(response.data[0]); // take first hero object
+        setHeroData(response.data[0] || {}); // take first hero object
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching hero data:", err);
+        setError("Failed to load hero data");
+        setLoading(false);
+      }
+    };
+
+    fetchHeroData();
+  }, []);
+
   const services = [
     {
       icon: <CustomwebDesign />,
@@ -232,24 +256,23 @@ const WebDevelopment = () => {
               <HeroSvg />
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              প্রফেশনাল ওয়েব ডেভেলপমেন্ট সার্ভিস
+              {heroData.title}
             </h1>
             <p className="text-xl mb-8 text-gray-100 max-w-3xl mx-auto">
-              আপনার ব্যবসার জন্য আধুনিক, দ্রুত এবং SEO ফ্রেন্ডলি ওয়েবসাইট তৈরি
-              করি। রেসপন্সিভ ডিজাইন এবং ইউজার ফ্রেন্ডলি ইন্টারফেস সহ।
+              {heroData.description}
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link
                 to="/contact"
                 className="bg-white text-purple-600 px-8 py-4 rounded-full font-bold hover:bg-gray-100 transition"
               >
-                প্রজেক্ট শুরু করুন →
+                {heroData.cta1}
               </Link>
               <a
                 href="#portfolio"
                 className="border-2 border-white px-8 py-4 rounded-full font-bold hover:bg-white hover:text-purple-600 transition"
               >
-                পোর্টফোলিও দেখুন
+                {heroData.cta2}
               </a>
             </div>
           </div>
