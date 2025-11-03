@@ -46,4 +46,13 @@ export const webdevHeroAPI = {
   delete: (id) => api.delete(`/webdev-hero/${id}`),
 };
 
+// Webdev Portfolio API
+export const webdevPortfolioAPI = {
+  getAll: () => api.get("/webdev-portfolios"),
+  getOne: (id) => api.get(`/webdev-portfolios/${id}`),
+  create: (data) => api.post("/webdev-portfolios", data),
+  update: (id, data) => api.post(`/webdev-portfolios/${id}`, data),
+  delete: (id) => api.delete(`/webdev-portfolios/${id}`),
+};
+
 export default api;
