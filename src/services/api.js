@@ -55,4 +55,13 @@ export const webdevPortfolioAPI = {
   delete: (id) => api.delete(`/webdev-portfolios/${id}`),
 };
 
+// Wevdev Packages API
+export const webdevPackagesApi = {
+  getAll: () => api.get("/webdev-packages"),
+  getOne: (id) => api.get(`/webdev-packages/${id}`),
+  create: (id, data) => api.post(`/webdev-packages/${id}`, data),
+  update: (id) => api.update(`/webdev-packages/${id}`),
+  delete: (id) => api.delete(`/webdev-packages/${id}`),
+};
+
 export default api;

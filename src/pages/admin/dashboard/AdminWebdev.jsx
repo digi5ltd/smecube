@@ -12,7 +12,11 @@ import {
   X,
   Briefcase,
 } from "lucide-react";
-import { webdevHeroAPI, webdevPortfolioAPI } from "../../../services/api";
+import {
+  webdevHeroAPI,
+  webdevPackagesApi,
+  webdevPortfolioAPI,
+} from "../../../services/api";
 
 const AdminWebdev = () => {
   const [heroData, setHeroData] = useState({});
@@ -20,6 +24,7 @@ const AdminWebdev = () => {
   useEffect(() => {
     fetchHeroData();
     fetchPortfolioData();
+    fetchPackageData();
   }, []);
 
   const fetchHeroData = async () => {
@@ -37,8 +42,75 @@ const AdminWebdev = () => {
 
   const [editingHero, setEditingHero] = useState(false);
   // const [showPreview, setShowPreview] = useState(false);
+
+  const [notification, setNotification] = useState({
+    show: false,
+    message: "",
+    type: "",
+  });
+
+  const [animate, setAnimate] = useState(true);
+  const [sectionData, setSectionData] = useState({
+    title: "আমাদের সাম্প্রতিক কাজ",
+    subtitle: "বিভিন্ন শিল্পে আমাদের সফলতার গল্প",
+  });
+
+  const fetchPortfolioData = async () => {
+    try {
+      const response = await webdevPortfolioAPI.getAll();
+      // console.log(response);
+
+      // const data = await response.json();
+      setPortfolio(response.data);
+      // console.log(response.data);
+    } catch (error) {
+      console.error("Error fetching hero data:", error);
+    }
+  };
+
+  const [editingSection, setEditingSection] = useState(false);
+  const [editingProject, setEditingProject] = useState(null);
+
+  const handleHeroChange = (e) => {
+    const { name, value } = e.target;
+    setHeroData((prev) => {
+      const updated = [...prev]; // copy array
+      updated[0] = { ...updated[0], [name]: value }; // update first object
+      return updated;
+    });
+  };
+
+  const saveChangesHeroSection = async () => {
+    // console.log(heroData[0]?.id);
+
+    try {
+      // Replace with your actual axios call
+      const response = await webdevHeroAPI.update(heroData[0]?.id, heroData[0]);
+
+      console.log("Saving hero data:", response);
+
+      setNotification({
+        show: true,
+        message: "হিরো সেকশন সফলভাবে আপডেট হয়েছে!",
+        type: "success",
+      });
+
+      setEditingHero(false);
+
+      setTimeout(() => {
+        setNotification({ show: false, message: "", type: "" });
+      }, 3000);
+    } catch (error) {
+      setNotification({
+        show: true,
+        message: "আপডেট করতে সমস্যা হয়েছে!",
+        type: "error",
+      });
+    }
+  };
+
   const [packages, setPackages] = useState([
-    {
+    /*  {
       name: "বেসিক",
       price: "5000",
       duration: "মাস",
@@ -69,73 +141,13 @@ const AdminWebdev = () => {
         "ই-কমার্স",
       ],
       span: 2,
-    },
+    }, */
   ]);
 
-  const [notification, setNotification] = useState({
-    show: false,
-    message: "",
-    type: "",
-  });
-
-  const [animate, setAnimate] = useState(true);
-  const [sectionData, setSectionData] = useState({
-    title: "আমাদের সাম্প্রতিক কাজ",
-    subtitle: "বিভিন্ন শিল্পে আমাদের সফলতার গল্প",
-  });
-
-  const fetchPortfolioData = async () => {
-    try {
-      const response = await webdevPortfolioAPI.getAll();
-      console.log(response);
-
-      // const data = await response.json();
-      setPortfolio(response.data);
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error fetching hero data:", error);
-    }
-  };
-
-  const [editingSection, setEditingSection] = useState(false);
-  const [editingProject, setEditingProject] = useState(null);
-
-  const handleHeroChange = (e) => {
-    const { name, value } = e.target;
-    setHeroData((prev) => {
-      const updated = [...prev]; // copy array
-      updated[0] = { ...updated[0], [name]: value }; // update first object
-      return updated;
-    });
-  };
-
-  const saveChangesHeroSection = async () => {
-    console.log(heroData[0]?.id);
-
-    try {
-      // Replace with your actual axios call
-      const response = await webdevHeroAPI.update(heroData[0]?.id, heroData[0]);
-
-      console.log("Saving hero data:", response);
-
-      setNotification({
-        show: true,
-        message: "হিরো সেকশন সফলভাবে আপডেট হয়েছে!",
-        type: "success",
-      });
-
-      setEditingHero(false);
-
-      setTimeout(() => {
-        setNotification({ show: false, message: "", type: "" });
-      }, 3000);
-    } catch (error) {
-      setNotification({
-        show: true,
-        message: "আপডেট করতে সমস্যা হয়েছে!",
-        type: "error",
-      });
-    }
+  const fetchPackageData = () => {
+    const response = webdevPackagesApi.getAll();
+    setPackages(response);
+    console.log(response);
   };
 
   const handlePackageChange = (index, field, value) => {
@@ -183,6 +195,7 @@ const AdminWebdev = () => {
   const handleSubmit = async () => {
     try {
       // Replace with your actual axios call
+
       // const response = await axios.post('/api/pricing-plans', { packages });
 
       console.log("Submitting packages:", packages);
@@ -536,7 +549,7 @@ const AdminWebdev = () => {
         {/* Packages Grid */}
         <div className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-            {packages.map((pkg, packageIndex) => (
+            {packages?.map((pkg, packageIndex) => (
               <div
                 key={packageIndex}
                 className={`bg-white rounded-2xl shadow-xl p-6 relative overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-2xl ${
