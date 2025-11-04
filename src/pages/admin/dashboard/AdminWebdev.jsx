@@ -97,45 +97,6 @@ const AdminWebdev = () => {
     }
   };
 
-  const [portfolio, setPortfolio] = useState([
-    /* {
-      name: "ই-কমার্স ওয়েবসাইট",
-      category: "ই-কমার্স",
-      image: "🛒",
-      description: "একটি সম্পূর্ণ অনলাইন শপিং সমাধান",
-    },
-    {
-      name: "রেস্টুরেন্ট ওয়েবসাইট",
-      category: "রেস্টুরেন্ট",
-      image: "🍽️",
-      description: "অনলাইন অর্ডারিং সিস্টেম সহ",
-    },
-    {
-      name: "কর্পোরেট ওয়েবসাইট",
-      category: "কর্পোরেট",
-      image: "💼",
-      description: "পেশাদার বিজনেস সমাধান",
-    },
-    {
-      name: "শিক্ষা পোর্টাল",
-      category: "শিক্ষা",
-      image: "📚",
-      description: "অনলাইন লার্নিং প্ল্যাটফর্ম",
-    },
-    {
-      name: "হেলথকেয়ার সিস্টেম",
-      category: "স্বাস্থ্য",
-      image: "🏥",
-      description: "রোগী ব্যবস্থাপনা সিস্টেম",
-    },
-    {
-      name: "রিয়েল এস্টেট",
-      category: "রিয়েল এস্টেট",
-      image: "🏢",
-      description: "প্রপার্টি লিস্টিং ওয়েবসাইট",
-    }, */
-  ]);
-
   const [editingSection, setEditingSection] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
 
@@ -252,41 +213,98 @@ const AdminWebdev = () => {
     }));
   };
 
+  const [portfolio, setPortfolio] = useState([
+    /* {
+      name: "ই-কমার্স ওয়েবসাইট",
+      category: "ই-কমার্স",
+      image: "🛒",
+      description: "একটি সম্পূর্ণ অনলাইন শপিং সমাধান",
+    },
+    {
+      name: "রেস্টুরেন্ট ওয়েবসাইট",
+      category: "রেস্টুরেন্ট",
+      image: "🍽️",
+      description: "অনলাইন অর্ডারিং সিস্টেম সহ",
+    },
+    {
+      name: "কর্পোরেট ওয়েবসাইট",
+      category: "কর্পোরেট",
+      image: "💼",
+      description: "পেশাদার বিজনেস সমাধান",
+    },
+    {
+      name: "শিক্ষা পোর্টাল",
+      category: "শিক্ষা",
+      image: "📚",
+      description: "অনলাইন লার্নিং প্ল্যাটফর্ম",
+    },
+    {
+      name: "হেলথকেয়ার সিস্টেম",
+      category: "স্বাস্থ্য",
+      image: "🏥",
+      description: "রোগী ব্যবস্থাপনা সিস্টেম",
+    },
+    {
+      name: "রিয়েল এস্টেট",
+      category: "রিয়েল এস্টেট",
+      image: "🏢",
+      description: "প্রপার্টি লিস্টিং ওয়েবসাইট",
+    }, */
+  ]);
+
   const handleProjectChange = (index, field, value) => {
     const updatedPortfolio = [...portfolio];
     updatedPortfolio[index][field] = value;
     setPortfolio(updatedPortfolio);
   };
 
-  const addProject = () => {
-    setPortfolio([
-      ...portfolio,
-      {
-        name: "",
+  const addProject = async () => {
+    try {
+      // 🆕 Create an empty project in DB immediately
+      const { data } = await webdevPortfolioAPI.create({
+        name: "নতুন প্রজেক্ট",
         category: "",
         image: "📁",
         description: "",
-      },
-    ]);
-    setEditingProject(portfolio.length);
+      });
+
+      setPortfolio([...portfolio, data]); // ✅ UPDATED
+      setEditingProject(portfolio.length);
+    } catch (error) {
+      console.error("Error adding project:", error);
+    }
   };
 
-  const removeProject = (index) => {
-    const updatedPortfolio = portfolio.filter((_, i) => i !== index);
-    setPortfolio(updatedPortfolio);
-    setEditingProject(null);
+  const removeProject = async (index) => {
+    const projectToDelete = portfolio[index];
+
+    try {
+      // 🆕 Delete from DB first
+      await webdevPortfolioAPI.delete(projectToDelete.id);
+
+      const updatedPortfolio = portfolio.filter((_, i) => i !== index);
+      setPortfolio(updatedPortfolio);
+      setEditingProject(null);
+    } catch (error) {
+      console.error("Error deleting project:", error);
+    }
   };
 
   const saveChangesProjectSection = async () => {
     try {
-      // Replace with your actual axios call
-      const response = await webdevPortfolioAPI.update(portfolio);
+      // 🆕 Loop through all projects and update each one
+      await Promise.all(
+        portfolio.map((proj) =>
+          webdevPortfolioAPI.update(proj.id, {
+            name: proj.name,
+            category: proj.category,
+            image: proj.image,
+            description: proj.description,
+          })
+        )
+      ); // ✅ UPDATED
 
-      console.log("Saving portfolio data:", {
-        response,
-        sectionData,
-        portfolio,
-      });
+      console.log("✅ All portfolio data saved successfully");
 
       setNotification({
         show: true,
@@ -294,13 +312,13 @@ const AdminWebdev = () => {
         type: "success",
       });
 
-      setEditingSection(false);
       setEditingProject(null);
 
       setTimeout(() => {
         setNotification({ show: false, message: "", type: "" });
       }, 3000);
     } catch (error) {
+      console.error("❌ Error saving portfolio:", error);
       setNotification({
         show: true,
         message: "আপডেট করতে সমস্যা হয়েছে!",
@@ -311,7 +329,7 @@ const AdminWebdev = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 py-8 px-4">
       <h1 className="text-center mb-8 text-3xl font-bold">
-        ওয়েব ডেভেলপমেন্ট অ্যাডমিন প্যানেল{" "}
+        ওয়েব ডেভেলপমেন্ট অ্যাডমিন প্যানেল
       </h1>
       <div className="min-h-screen py-8 px-4">
         <div className="max-w-7xl mx-auto">
@@ -336,7 +354,7 @@ const AdminWebdev = () => {
             </div>
           )}
 
-          <div className="grid lg:grid-cols-2 gap-6">
+          <div className="grid gap-6">
             {/* Editor Section */}
             <div className="bg-white rounded-2xl shadow-xl p-6 transform transition-all duration-300 hover:shadow-2xl">
               <div className="flex items-center justify-between mb-6">
@@ -770,7 +788,7 @@ const AdminWebdev = () => {
           </div>
         )}
 
-        <div className="grid lg:grid-cols-2 gap-6">
+        <div className="grid gap-6">
           {/* Editor Section */}
           <div className="space-y-6">
             <div className="bg-white rounded-2xl shadow-xl p-6">
