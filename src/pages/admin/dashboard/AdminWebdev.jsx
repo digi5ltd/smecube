@@ -1007,7 +1007,7 @@ const AdminWebdev = () => {
                         className="flex items-center gap-3 cursor-pointer"
                       >
                         <div className="text-3xl bg-gradient-to-br from-purple-100 to-pink-100 w-14 h-14 rounded-lg flex items-center justify-center">
-                          {project.image}
+                          <img src={project.image} alt="" />
                         </div>
                         <div className="flex-1">
                           <h4 className="font-bold text-gray-800">
