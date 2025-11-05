@@ -144,10 +144,14 @@ const AdminWebdev = () => {
     }, */
   ]);
 
-  const fetchPackageData = () => {
-    const response = webdevPackagesApi.getAll();
-    setPackages(response);
-    console.log(response);
+  const fetchPackageData = async () => {
+    try {
+      const response = await webdevPackagesApi.getAll();
+      setPackages(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handlePackageChange = (index, field, value) => {
@@ -192,13 +196,29 @@ const AdminWebdev = () => {
     setPackages(updatedPackages);
   };
 
+  const banglaToEnglish = (num) => {
+    const eng = "0123456789";
+    const bangla = "০১২৩৪৫৬৭৮৯";
+    return num.replace(/[০১২৩৪৫৬৭৮৯]/g, (d) => eng[bangla.indexOf(d)]);
+  };
+
   const handleSubmit = async () => {
     try {
-      // Replace with your actual axios call
+      for (const pkg of packages) {
+        const payload = {
+          ...pkg,
+          features: pkg.features.filter((f) => f.trim() !== ""),
+          price: banglaToEnglish(pkg.price),
+        };
 
-      // const response = await axios.post('/api/pricing-plans', { packages });
-
-      console.log("Submitting packages:", packages);
+        if (pkg.id) {
+          // update existing
+          await webdevPackagesApi.update(pkg.id, payload);
+        } else {
+          // create new
+          await webdevPackagesApi.create(payload);
+        }
+      }
 
       setNotification({
         show: true,
@@ -206,10 +226,13 @@ const AdminWebdev = () => {
         type: "success",
       });
 
+      fetchPackageData(); // refresh after update
+
       setTimeout(() => {
         setNotification({ show: false, message: "", type: "" });
       }, 3000);
     } catch (error) {
+      console.error("Error saving packages:", error);
       setNotification({
         show: true,
         message: "আপডেট করতে সমস্যা হয়েছে!",
@@ -217,6 +240,7 @@ const AdminWebdev = () => {
       });
     }
   };
+  // };
 
   const handleSectionChange = (e) => {
     const { name, value } = e.target;
@@ -339,6 +363,7 @@ const AdminWebdev = () => {
       });
     }
   };
+  // };
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 py-8 px-4">
       <h1 className="text-center mb-8 text-3xl font-bold">
@@ -617,7 +642,7 @@ const AdminWebdev = () => {
                     মূল্য (৳)
                   </label>
                   <input
-                    type="number"
+                    type="text"
                     value={pkg.price}
                     onChange={(e) =>
                       handlePackageChange(packageIndex, "price", e.target.value)

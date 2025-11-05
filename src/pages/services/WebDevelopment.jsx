@@ -20,13 +20,18 @@ import javascript from "../../assets/img/svg/webdevelopment/technologysvg/javasc
 import restaurantpic from "../../assets/img/webdevelopment/restaurant.jpg";
 import schoolPic from "../../assets/img/webdevelopment/school.jfif";
 import realstatePic from "../../assets/img/webdevelopment/real-state.jpg";
-import { webdevHeroAPI, webdevPortfolioAPI } from "../../services/api";
+import {
+  webdevHeroAPI,
+  webdevPackagesApi,
+  webdevPortfolioAPI,
+} from "../../services/api";
 
 const WebDevelopment = () => {
   const [heroData, setHeroData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [portfolio, setPortfolio] = useState([]);
+  const [packages, setPackages] = useState([]);
 
   useEffect(() => {
     const fetchHeroData = async () => {
@@ -177,8 +182,8 @@ const WebDevelopment = () => {
     },
   ];
 
-  const packages = [
-    {
+  /* const packages = [
+     {
       name: "ল্যান্ডিং পেজ",
       price: "১৫,০০০",
       duration: "একবার",
@@ -218,7 +223,26 @@ const WebDevelopment = () => {
       ],
       span: 2,
     },
-  ];
+  ]; */
+
+  const engnumConvToBangla = (num) => {
+    const eng = "0123456789";
+    const bang = "০১২৩৪৫৬৭৮৯";
+    return num.toString().replace(/[0123456789]/g, (d) => bang[eng.indexOf(d)]);
+  };
+
+  // packages data
+  useEffect(() => {
+    webdevPackagesApi
+      .getAll()
+      .then((response) => {
+        setPackages(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   // Animation variants
   const fadeIn = {
@@ -465,7 +489,9 @@ const WebDevelopment = () => {
                   {pkg.name}
                 </h3>
                 <div className="mb-6">
-                  <span className="text-4xl font-bold">৳{pkg.price}</span>
+                  <span className="text-4xl font-bold">
+                    ৳{engnumConvToBangla(parseInt(pkg.price))}
+                  </span>
                   <span
                     className={pkg.popular ? "text-gray-200" : "text-gray-600"}
                   >

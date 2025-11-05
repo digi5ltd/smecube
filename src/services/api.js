@@ -59,8 +59,8 @@ export const webdevPortfolioAPI = {
 export const webdevPackagesApi = {
   getAll: () => api.get("/webdev-packages"),
   getOne: (id) => api.get(`/webdev-packages/${id}`),
-  create: (id, data) => api.post(`/webdev-packages/${id}`, data),
-  update: (id) => api.update(`/webdev-packages/${id}`),
+  create: (data) => api.post(`/webdev-packages`, data),
+  update: (id, data) => api.put(`/webdev-packages/${id}`, data),
   delete: (id) => api.delete(`/webdev-packages/${id}`),
 };
 
