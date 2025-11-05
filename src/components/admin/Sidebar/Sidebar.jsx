@@ -6,7 +6,7 @@ import {
   X,
   RefreshCcw,
   LayoutDashboard,
-  DollarSign
+  DollarSign,
 } from "lucide-react";
 import UserDropdown from "../Dropdowns/UserDropdown";
 
@@ -22,10 +22,10 @@ const Sidebar = () => {
       name: "Dashboard",
       icon: <LayoutDashboard size={18} />,
     },
-    { 
-      path: "/admin/pricing", 
-      name: "Pricing", 
-      icon: <DollarSign size={18} /> 
+    {
+      path: "/admin/pricing",
+      name: "Pricing",
+      icon: <DollarSign size={18} />,
     },
     {
       // path: "/admin/update-services",
@@ -35,6 +35,7 @@ const Sidebar = () => {
         { path: "/admin/facebook-boosting", name: "Facebook Boosting" },
         { path: "/admin/ecommerce-solution", name: "Ecommerce Solution" },
         { path: "/admin/web-development", name: "Develop Website" },
+        { path: "/admin/domain-hosting", name: "Domain Hosting" },
         { path: "/admin/landing-page", name: "Landing Page" },
         { path: "/admin/bulk-sms", name: "Bulk SMS" },
         { path: "/admin/business-consulting", name: "Business Consulting" },
@@ -45,10 +46,10 @@ const Sidebar = () => {
         { path: "/admin/business-training", name: "Business Training" },
       ],
     },
-    { 
-      path: "/admin/settings", 
-      name: "Settings", 
-      icon: <Settings size={18} /> 
+    {
+      path: "/admin/settings",
+      name: "Settings",
+      icon: <Settings size={18} />,
     },
   ];
 
@@ -142,7 +143,9 @@ const Sidebar = () => {
                   {item.subcategories && (
                     <svg
                       className={`w-3 h-3 text-gray-400 transition-transform duration-200 ${
-                        expandedCategory === item.name ? "rotate-90" : "rotate-0"
+                        expandedCategory === item.name
+                          ? "rotate-90"
+                          : "rotate-0"
                       }`}
                       xmlns="http://www.w3.org/2000/svg"
                       fill="currentColor"

@@ -5,7 +5,7 @@ import SMECubeLanding from "../pages/SMECubeLanding";
 import About from "../pages/About";
 import Contact from "../pages/Contact";
 import Services from "../pages/Services";
-import Blogs from "../pages/Blogs"; 
+import Blogs from "../pages/Blogs";
 import Tools from "../pages/Tools";
 import Pricing from "../pages/Pricing";
 import Login from "../pages/Login";
@@ -63,6 +63,7 @@ import ChatbotSetupGuide from "../pages/blogPages/ChatbotSetupGuide";
 import DigitalMarketingTrends from "../pages/blogPages/DigitalMarketingTrends";
 import LandingPageStrategies from "../pages/blogPages/LandingPageStrategies";
 import GraphicDesignBranding from "../pages/blogPages/GraphicDesignBranding";
+import AdminDomain from "../pages/admin/dashboard/AdminDomain.jsx";
 
 export const router = createBrowserRouter([
   {
@@ -80,14 +81,29 @@ export const router = createBrowserRouter([
       { path: "register", element: <Register /> },
 
       // Blog Routes
-      { path: "blogs/facebook-boosting-guide", element: <FacebookBoostingGuide /> },
+      {
+        path: "blogs/facebook-boosting-guide",
+        element: <FacebookBoostingGuide />,
+      },
       { path: "blogs/ecommerce-solution", element: <EcommerceSolutionBlog /> },
       { path: "blogs/responsive-web-design", element: <ResponsiveWebDesign /> },
-      { path: "blogs/business-consulting-guide", element: <BusinessConsultingGuide /> },
+      {
+        path: "blogs/business-consulting-guide",
+        element: <BusinessConsultingGuide />,
+      },
       { path: "blogs/chatbot-setup-guide", element: <ChatbotSetupGuide /> },
-      { path: "blogs/digital-marketing-trends", element: <DigitalMarketingTrends /> },
-      { path: "blogs/landing-page-strategies", element: <LandingPageStrategies /> },
-      { path: "blogs/graphic-design-branding", element: <GraphicDesignBranding /> },
+      {
+        path: "blogs/digital-marketing-trends",
+        element: <DigitalMarketingTrends />,
+      },
+      {
+        path: "blogs/landing-page-strategies",
+        element: <LandingPageStrategies />,
+      },
+      {
+        path: "blogs/graphic-design-branding",
+        element: <GraphicDesignBranding />,
+      },
 
       // Service Routes
       { path: "services/brand-page-setup", element: <BrandPageSetup /> },
@@ -122,6 +138,7 @@ export const router = createBrowserRouter([
       { path: "business-consulting", element: <AdminBusinessConsulting /> },
       { path: "brand-page-setup", element: <AdminBrandPageSetup /> },
       { path: "graphic-design", element: <AdminGraphicDesign /> },
+      { path: "domain-hosting", element: <AdminDomain /> },
     ],
   },
   {
