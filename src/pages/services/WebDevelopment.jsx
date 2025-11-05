@@ -59,42 +59,6 @@ const WebDevelopment = () => {
     });
   }, []);
 
-  /* const portfolio = [
-    {
-      name: "রেস্টুরেন্ট ওয়েবসাইট",
-      category: "খাদ্য ও পানীয়",
-      image: (
-        <img
-          src={restaurantpic}
-          alt="Restaurant"
-          className="w-full h-full object-cover"
-        />
-      ),
-    },
-    {
-      name: "শিক্ষা প্রতিষ্ঠান",
-      category: "শিক্ষা",
-      image: (
-        <img
-          src={schoolPic}
-          alt="School"
-          className="w-full h-full object-cover"
-        />
-      ),
-    },
-    {
-      name: "রিয়েল এস্টেট",
-      category: "সম্পত্তি",
-      image: (
-        <img
-          src={realstatePic}
-          alt="Real Estate"
-          className="w-full h-full object-cover"
-        />
-      ),
-    },
-  ]; */
-
   const services = [
     {
       icon: <CustomwebDesign />,
