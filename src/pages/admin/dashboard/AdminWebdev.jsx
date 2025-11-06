@@ -12,7 +12,6 @@ import {
   X,
   Briefcase,
 } from "lucide-react";
-
 import {
   webdevHeroAPI,
   webdevPackagesApi,

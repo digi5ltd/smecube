@@ -73,4 +73,13 @@ export const domainhostHeroAPI = {
   delete: (id) => api.delete(`/domain-host-hero/${id}`),
 };
 
+// Domain Hosting Packages API
+export const domainhostPackageAPI = {
+  getAll: () => api.get("/domain-host-packages"),
+  getOne: (id) => api.get(`/domain-host-packages/${id}`),
+  create: (data) => api.post(`/domain-host-packages`, data),
+  update: (id, data) => api.put(`/domain-host-packages/${id}`, data),
+  delete: (id) => api.delete(`/domain-host-packages/${id}`),
+};
+
 export default api;

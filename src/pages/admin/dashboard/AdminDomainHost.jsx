@@ -12,7 +12,7 @@ import {
   X,
   Briefcase,
 } from "lucide-react";
-import { domainhostHeroAPI } from "../../../services/api";
+import { domainhostHeroAPI, domainhostPackageAPI } from "../../../services/api";
 
 const AdminDomainHost = () => {
   const [heroData, setHeroData] = useState({});
@@ -112,7 +112,7 @@ const AdminDomainHost = () => {
 
   const fetchPackageData = async () => {
     try {
-      const response = await webdevPackagesApi.getAll();
+      const response = await domainhostPackageAPI.getAll();
       setPackages(response.data);
       console.log(response.data);
     } catch (error) {
@@ -179,10 +179,10 @@ const AdminDomainHost = () => {
 
         if (pkg.id) {
           // update existing
-          await webdevPackagesApi.update(pkg.id, payload);
+          await domainhostPackageAPI.update(pkg.id, payload);
         } else {
           // create new
-          await webdevPackagesApi.create(payload);
+          await domainhostPackageAPI.create(payload);
         }
       }
 
@@ -596,8 +596,8 @@ const AdminDomainHost = () => {
                     }
                     className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:outline-none transition"
                   >
-                    <option value="মাস">মাস</option>
-                    <option value="বছর">বছর</option>
+                    <option value="১ মাস">১ মাস</option>
+                    <option value="১ বছর">১ বছর</option>
                     <option value="একবার">একবার</option>
                   </select>
                 </div>

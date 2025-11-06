@@ -8,13 +8,14 @@ import sslIcon from "../../assets/icones/domainhosting/ssl.svg";
 import upIcon from "../../assets/icones/domainhosting/uptime.svg";
 import cpanelIcon from "../../assets/icones/domainhosting/cpanel.svg";
 import supportIcon from "../../assets/icones/domainhosting/customer-care.svg";
-import { domainhostHeroAPI } from "../../services/api";
+import { domainhostHeroAPI, domainhostPackageAPI } from "../../services/api";
 
 const DomainHostings = () => {
   // const [packages, setPackages] = useState([]);
   const [heroData, setHeroData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [packages, setPackages] = useState([]);
 
   useEffect(() => {
     const fetchHeroData = async () => {
@@ -33,6 +34,25 @@ const DomainHostings = () => {
     };
 
     fetchHeroData();
+  }, []);
+
+  const engnumConvToBangla = (num) => {
+    const eng = "0123456789";
+    const bang = "০১২৩৪৫৬৭৮৯";
+    return num.toString().replace(/[0123456789]/g, (d) => bang[eng.indexOf(d)]);
+  };
+
+  // packages data
+  useEffect(() => {
+    domainhostPackageAPI
+      .getAll()
+      .then((response) => {
+        setPackages(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
   const features = [
@@ -91,7 +111,7 @@ const DomainHostings = () => {
     },
   ];
 
-  const packages = [
+  /* const packages = [
     {
       name: "বেসিক হোস্টিং",
       price: "১,৫০০",
@@ -130,7 +150,7 @@ const DomainHostings = () => {
       ],
       span: 2,
     },
-  ];
+  ]; */
 
   // Animation variants
   const fadeIn = {
@@ -326,7 +346,7 @@ const DomainHostings = () => {
                 </h3>
                 <div className="mb-2">
                   <span className="text-4xl md:text-2xl font-bold">
-                    ৳{pkg.price}
+                    ৳{engnumConvToBangla(pkg.price)}
                   </span>
                 </div>
                 <div
