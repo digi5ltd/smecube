@@ -316,7 +316,7 @@ const AdminDomainHost = () => {
                         />
                       </div>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                           <label className="block font-semibold mb-2 text-gray-700">
                             প্রথম বাটন টেক্সট
@@ -343,7 +343,7 @@ const AdminDomainHost = () => {
                             placeholder="বাটন টেক্সট"
                           />
                         </div>
-                      </div>
+                      </div> */}
 
                       <div className="flex flex-col sm:flex-row gap-3 pt-4">
                         <button
@@ -380,7 +380,7 @@ const AdminDomainHost = () => {
                             </span>
                             <p className="mt-1">{heroData[0]?.description}</p>
                           </div>
-                          <div className="grid grid-cols-2 gap-3">
+                          {/* <div className="grid grid-cols-2 gap-3">
                             <div>
                               <span className="font-semibold text-sm text-gray-500">
                                 বাটন ১:
@@ -393,7 +393,7 @@ const AdminDomainHost = () => {
                               </span>
                               <p className="mt-1">{heroData[0]?.cta2}</p>
                             </div>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
 
