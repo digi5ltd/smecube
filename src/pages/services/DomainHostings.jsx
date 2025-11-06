@@ -111,47 +111,6 @@ const DomainHostings = () => {
     },
   ];
 
-  /* const packages = [
-    {
-      name: "বেসিক হোস্টিং",
-      price: "১,৫০০",
-      duration: "১ বছর",
-      features: [
-        "১টি ডোমেইন হোস্টিং",
-        "১GB SSD Storage",
-        "১০GB Bandwidth",
-        "ফ্রি SSL সার্টিফিকেট",
-        "২৪/৭ সাপোর্ট",
-      ],
-    },
-    {
-      name: "প্রো হোস্টিং",
-      price: "৩,৫০০",
-      duration: "১ বছর",
-      popular: true,
-      features: [
-        "৫টি ডোমেইন হোস্টিং",
-        "৫GB SSD Storage",
-        "৫০GB Bandwidth",
-        "ফ্রি SSL + ডেইলি ব্যাকআপ",
-        "২৪/৭ প্রায়োরিটি সাপোর্ট",
-      ],
-    },
-    {
-      name: "এন্টারপ্রাইজ হোস্টিং",
-      price: "৭,০০০",
-      duration: "১ বছর",
-      features: [
-        "আনলিমিটেড ডোমেইন",
-        "২০GB SSD Storage",
-        "আনলিমিটেড Bandwidth",
-        "ফ্রি SSL + ক্লাউড ব্যাকআপ",
-        "ডেডিকেটেড সার্ভার পারফরম্যান্স",
-      ],
-      span: 2,
-    },
-  ]; */
-
   // Animation variants
   const fadeIn = {
     hidden: { opacity: 0, y: 50 },

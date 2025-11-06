@@ -19,7 +19,7 @@ const AdminDomainHost = () => {
 
   useEffect(() => {
     fetchHeroData();
-    fetchPortfolioData();
+    // fetchPortfolioData();
     fetchPackageData();
   }, []);
 
@@ -51,7 +51,7 @@ const AdminDomainHost = () => {
     subtitle: "বিভিন্ন শিল্পে আমাদের সফলতার গল্প",
   });
 
-  const fetchPortfolioData = async () => {
+  /* const fetchPortfolioData = async () => {
     try {
       const response = await webdevPortfolioAPI.getAll();
       // console.log(response);
@@ -62,10 +62,10 @@ const AdminDomainHost = () => {
     } catch (error) {
       console.error("Error fetching hero data:", error);
     }
-  };
+  }; */
 
   const [editingSection, setEditingSection] = useState(false);
-  const [editingProject, setEditingProject] = useState(null);
+  // const [editingProject, setEditingProject] = useState(null);
 
   const handleHeroChange = (e) => {
     const { name, value } = e.target;
@@ -157,9 +157,19 @@ const AdminDomainHost = () => {
     ]);
   };
 
-  const removePackage = (index) => {
-    const updatedPackages = packages.filter((_, i) => i !== index);
+  const removePackage = async (id) => {
+    console.log(id);
+
+    const updatedPackages = await packages.filter((pkg) => pkg.id !== id);
+    console.log(updatedPackages);
+
     setPackages(updatedPackages);
+
+    try {
+      await domainhostPackageAPI.delete(id);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const banglaToEnglish = (num) => {
@@ -218,13 +228,13 @@ const AdminDomainHost = () => {
 
   const [portfolio, setPortfolio] = useState([]);
 
-  const handleProjectChange = (index, field, value) => {
+  /* const handleProjectChange = (index, field, value) => {
     const updatedPortfolio = [...portfolio];
     updatedPortfolio[index][field] = value;
     setPortfolio(updatedPortfolio);
-  };
+  }; */
 
-  const addProject = async () => {
+  /* const addProject = async () => {
     try {
       // 🆕 Create an empty project in DB immediately
       const { data } = await webdevPortfolioAPI.create({
@@ -239,9 +249,9 @@ const AdminDomainHost = () => {
     } catch (error) {
       console.error("Error adding project:", error);
     }
-  };
+  }; */
 
-  const removeProject = async (index) => {
+  /* const removeProject = async (index) => {
     const projectToDelete = portfolio[index];
 
     try {
@@ -254,9 +264,9 @@ const AdminDomainHost = () => {
     } catch (error) {
       console.error("Error deleting project:", error);
     }
-  };
+  }; */
 
-  const saveChangesProjectSection = async () => {
+  /* const saveChangesProjectSection = async () => {
     try {
       // 🆕 Loop through all projects and update each one
       await Promise.all(
@@ -291,7 +301,7 @@ const AdminDomainHost = () => {
         type: "error",
       });
     }
-  };
+  }; */
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 py-8 px-4">
       <h1 className="text-center mb-8 text-3xl font-bold">
@@ -517,7 +527,7 @@ const AdminDomainHost = () => {
                 {/* Delete Button */}
                 {packages.length > 1 && (
                   <button
-                    onClick={() => removePackage(packageIndex)}
+                    onClick={() => removePackage(pkg.id)}
                     className="absolute top-4 right-4 p-2 bg-red-100 hover:bg-red-200 text-red-600 rounded-full transition transform hover:scale-110"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -732,8 +742,8 @@ const AdminDomainHost = () => {
           `}</style> */}
 
       {/* Admin Project or portfolio*/}
-      <div className="max-w-7xl mx-auto mt-10">
-        {/* Header */}
+      {/* <div className="max-w-7xl mx-auto mt-10">
+        
         <div className="text-center mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
             পোর্টফোলিও সেকশন ম্যানেজমেন্ট
@@ -743,7 +753,7 @@ const AdminDomainHost = () => {
           </p>
         </div>
 
-        {/* Notification */}
+        
         {notification.show && (
           <div
             className={`fixed top-4 right-4 z-50 px-6 py-4 rounded-lg shadow-lg ${
@@ -755,7 +765,7 @@ const AdminDomainHost = () => {
         )}
 
         <div className="grid gap-6">
-          {/* Editor Section */}
+         
           <div className="space-y-6">
             <div className="bg-white rounded-2xl shadow-xl p-6">
               <div className="flex items-center justify-between mb-6">
@@ -766,10 +776,7 @@ const AdminDomainHost = () => {
                 <button
                   // onClick={() => setShowPreview(!showPreview)}
                   className="lg:hidden bg-purple-100 text-purple-600 px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-purple-200 transition"
-                >
-                  {/* {showPreview ? <EyeOff size={18} /> : <Eye size={18} />} */}
-                  {/* {showPreview ? "এডিটর" : "প্রিভিউ"} */}
-                </button>
+                ></button>
               </div>
 
               {editingSection ? (
@@ -848,7 +855,7 @@ const AdminDomainHost = () => {
               )}
             </div>
 
-            {/* Projects Editor */}
+            
             <div className="bg-white rounded-2xl shadow-xl p-6">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
@@ -999,7 +1006,7 @@ const AdminDomainHost = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
