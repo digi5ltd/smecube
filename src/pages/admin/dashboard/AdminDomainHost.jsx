@@ -12,14 +12,9 @@ import {
   X,
   Briefcase,
 } from "lucide-react";
+import { domainhostHeroAPI } from "../../../services/api";
 
-import {
-  webdevHeroAPI,
-  webdevPackagesApi,
-  webdevPortfolioAPI,
-} from "../../../services/api";
-
-const AdminWebdev = () => {
+const AdminDomainHost = () => {
   const [heroData, setHeroData] = useState({});
 
   useEffect(() => {
@@ -30,7 +25,7 @@ const AdminWebdev = () => {
 
   const fetchHeroData = async () => {
     try {
-      const response = await webdevHeroAPI.getAll();
+      const response = await domainhostHeroAPI.getAll();
       console.log(response);
 
       // const data = await response.json();
@@ -86,7 +81,10 @@ const AdminWebdev = () => {
 
     try {
       // Replace with your actual axios call
-      const response = await webdevHeroAPI.update(heroData[0]?.id, heroData[0]);
+      const response = await domainhostHeroAPI.update(
+        heroData[0]?.id,
+        heroData[0]
+      );
 
       console.log("Saving hero data:", response);
 
@@ -294,11 +292,10 @@ const AdminWebdev = () => {
       });
     }
   };
-  // };
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 py-8 px-4">
       <h1 className="text-center mb-8 text-3xl font-bold">
-        ওয়েব ডেভেলপমেন্ট অ্যাডমিন প্যানেল
+        ডোমেইন ও হোস্টিং অ্যাডমিন প্যানেল
       </h1>
       <div className="min-h-screen py-8 px-4">
         <div className="max-w-7xl mx-auto">
@@ -308,7 +305,7 @@ const AdminWebdev = () => {
               হিরো সেকশন ম্যানেজমেন্ট
             </h1>
             <p className="text-gray-600">
-              ওয়েবসাইট ডেভেলপমেন্ট পেজের হিরো সেকশন এডিট করুন
+              ডোমেইন ও হোস্টিং পেজের হিরো সেকশন এডিট করুন
             </p>
           </div>
 
@@ -677,62 +674,62 @@ const AdminWebdev = () => {
       </div>
 
       <style>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes slideIn {
-          from {
-            transform: translateX(100%);
-            opacity: 0;
-          }
-          to {
-            transform: translateX(0);
-            opacity: 1;
-          }
-        }
-
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-
-        .animate-slide-in {
-          animation: slideIn 0.3s ease-out;
-        }
-
-        .animate-fade-in {
-          animation: fadeIn 0.3s ease-out;
-        }
-      `}</style>
+            @keyframes fadeInUp {
+              from {
+                opacity: 0;
+                transform: translateY(20px);
+              }
+              to {
+                opacity: 1;
+                transform: translateY(0);
+              }
+            }
+    
+            @keyframes slideIn {
+              from {
+                transform: translateX(100%);
+                opacity: 0;
+              }
+              to {
+                transform: translateX(0);
+                opacity: 1;
+              }
+            }
+    
+            @keyframes fadeIn {
+              from {
+                opacity: 0;
+              }
+              to {
+                opacity: 1;
+              }
+            }
+    
+            .animate-slide-in {
+              animation: slideIn 0.3s ease-out;
+            }
+    
+            .animate-fade-in {
+              animation: fadeIn 0.3s ease-out;
+            }
+          `}</style>
 
       {/*  <style>{`
-        @keyframes slideIn {
-          from {
-            transform: translateX(100%);
-            opacity: 0;
-          }
-          to {
-            transform: translateX(0);
-            opacity: 1;
-          }
-        }
-
-        .animate-slide-in {
-          animation: slideIn 0.3s ease-out;
-        }
-      `}</style> */}
+            @keyframes slideIn {
+              from {
+                transform: translateX(100%);
+                opacity: 0;
+              }
+              to {
+                transform: translateX(0);
+                opacity: 1;
+              }
+            }
+    
+            .animate-slide-in {
+              animation: slideIn 0.3s ease-out;
+            }
+          `}</style> */}
 
       {/* Admin Project or portfolio*/}
       <div className="max-w-7xl mx-auto mt-10">
@@ -1007,4 +1004,4 @@ const AdminWebdev = () => {
   );
 };
 
-export default AdminWebdev;
+export default AdminDomainHost;

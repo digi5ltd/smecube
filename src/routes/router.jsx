@@ -63,7 +63,7 @@ import ChatbotSetupGuide from "../pages/blogPages/ChatbotSetupGuide";
 import DigitalMarketingTrends from "../pages/blogPages/DigitalMarketingTrends";
 import LandingPageStrategies from "../pages/blogPages/LandingPageStrategies";
 import GraphicDesignBranding from "../pages/blogPages/GraphicDesignBranding";
-import AdminDomain from "../pages/admin/dashboard/AdminDomain.jsx";
+import AdminDomain from "../pages/admin/dashboard/AdminDomainHost.jsx";
 
 export const router = createBrowserRouter([
   {
