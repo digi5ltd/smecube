@@ -16,6 +16,7 @@ import { domainhostHeroAPI, domainhostPackageAPI } from "../../../services/api";
 
 const AdminDomainHost = () => {
   const [heroData, setHeroData] = useState({});
+  const [activeTab, setActiveTab] = useState("hero");
 
   useEffect(() => {
     fetchHeroData();
@@ -50,19 +51,6 @@ const AdminDomainHost = () => {
     title: "আমাদের সাম্প্রতিক কাজ",
     subtitle: "বিভিন্ন শিল্পে আমাদের সফলতার গল্প",
   });
-
-  /* const fetchPortfolioData = async () => {
-    try {
-      const response = await webdevPortfolioAPI.getAll();
-      // console.log(response);
-
-      // const data = await response.json();
-      setPortfolio(response.data);
-      // console.log(response.data);
-    } catch (error) {
-      console.error("Error fetching hero data:", error);
-    }
-  }; */
 
   const [editingSection, setEditingSection] = useState(false);
   // const [editingProject, setEditingProject] = useState(null);
@@ -218,795 +206,454 @@ const AdminDomainHost = () => {
   };
   // };
 
-  const handleSectionChange = (e) => {
-    const { name, value } = e.target;
-    setSectionData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const [portfolio, setPortfolio] = useState([]);
-
-  /* const handleProjectChange = (index, field, value) => {
-    const updatedPortfolio = [...portfolio];
-    updatedPortfolio[index][field] = value;
-    setPortfolio(updatedPortfolio);
-  }; */
-
-  /* const addProject = async () => {
-    try {
-      // 🆕 Create an empty project in DB immediately
-      const { data } = await webdevPortfolioAPI.create({
-        name: "নতুন প্রজেক্ট",
-        category: "",
-        image: "📁",
-        description: "",
-      });
-
-      setPortfolio([...portfolio, data]); // ✅ UPDATED
-      setEditingProject(portfolio.length);
-    } catch (error) {
-      console.error("Error adding project:", error);
-    }
-  }; */
-
-  /* const removeProject = async (index) => {
-    const projectToDelete = portfolio[index];
-
-    try {
-      // 🆕 Delete from DB first
-      await webdevPortfolioAPI.delete(projectToDelete.id);
-
-      const updatedPortfolio = portfolio.filter((_, i) => i !== index);
-      setPortfolio(updatedPortfolio);
-      setEditingProject(null);
-    } catch (error) {
-      console.error("Error deleting project:", error);
-    }
-  }; */
-
-  /* const saveChangesProjectSection = async () => {
-    try {
-      // 🆕 Loop through all projects and update each one
-      await Promise.all(
-        portfolio.map((proj) =>
-          webdevPortfolioAPI.update(proj.id, {
-            name: proj.name,
-            category: proj.category,
-            image: proj.image,
-            description: proj.description,
-          })
-        )
-      ); // ✅ UPDATED
-
-      console.log("✅ All portfolio data saved successfully");
-
-      setNotification({
-        show: true,
-        message: "পোর্টফোলিও সেকশন সফলভাবে আপডেট হয়েছে!",
-        type: "success",
-      });
-
-      setEditingProject(null);
-
-      setTimeout(() => {
-        setNotification({ show: false, message: "", type: "" });
-      }, 3000);
-    } catch (error) {
-      console.error("❌ Error saving portfolio:", error);
-      setNotification({
-        show: true,
-        message: "আপডেট করতে সমস্যা হয়েছে!",
-        type: "error",
-      });
-    }
-  }; */
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 py-8 px-4">
       <h1 className="text-center mb-8 text-3xl font-bold">
         ডোমেইন ও হোস্টিং অ্যাডমিন প্যানেল
       </h1>
-      <div className="min-h-screen py-8 px-4">
-        <div className="max-w-7xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">
-              হিরো সেকশন ম্যানেজমেন্ট
-            </h1>
-            <p className="text-gray-600">
-              ডোমেইন ও হোস্টিং পেজের হিরো সেকশন এডিট করুন
-            </p>
-          </div>
 
-          {/* Notification */}
-          {notification.show && (
-            <div
-              className={`fixed top-4 right-4 z-50 px-6 py-4 rounded-lg shadow-lg ${
-                notification.type === "success" ? "bg-green-500" : "bg-red-500"
-              } text-white font-medium transform transition-all duration-300 animate-slide-in`}
-            >
-              {notification.message}
-            </div>
-          )}
+      {/* Notification */}
+      {notification.show && (
+        <div
+          className={`fixed top-4 right-4 z-50 px-6 py-4 rounded-lg shadow-lg ${
+            notification.type === "success" ? "bg-green-500" : "bg-red-500"
+          } text-white font-medium transform transition-all duration-300 animate-slide-in`}
+        >
+          {notification.message}
+        </div>
+      )}
 
-          <div className="grid gap-6">
-            {/* Editor Section */}
-            <div className="bg-white rounded-2xl shadow-xl p-6 transform transition-all duration-300 hover:shadow-2xl">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-                  <Edit className="w-6 h-6 text-blue-500" />
-                  এডিট করুন
-                </h2>
-                <button
-                  // onClick={() => setShowPreview(!showPreview)}
-                  className="lg:hidden bg-blue-100 text-blue-600 px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-200 transition"
-                ></button>
+      <div className="max-w-7xl mx-auto">
+        {/* Tab Navigation */}
+        <div className="bg-white rounded-2xl shadow-xl p-2 mb-6 flex gap-2">
+          <button
+            onClick={() => setActiveTab("hero")}
+            className={`flex-1 py-3 px-6 rounded-lg font-semibold transition-all duration-300 ${
+              activeTab === "hero"
+                ? "bg-gradient-to-r from-blue-500 to-cyan-600 text-white shadow-md"
+                : "text-gray-600 hover:bg-gray-100"
+            }`}
+          >
+            হিরো সেকশন ম্যানেজমেন্ট
+          </button>
+          <button
+            onClick={() => setActiveTab("pricing")}
+            className={`flex-1 py-3 px-6 rounded-lg font-semibold transition-all duration-300 ${
+              activeTab === "pricing"
+                ? "bg-gradient-to-r from-purple-500 to-pink-600 text-white shadow-md"
+                : "text-gray-600 hover:bg-gray-100"
+            }`}
+          >
+            প্রাইসিং প্ল্যান আপডেট
+          </button>
+        </div>
+
+        {/* Hero Section Content */}
+        {activeTab === "hero" && (
+          <div className="min-h-screen py-8 px-4">
+            <div className="max-w-7xl mx-auto">
+              {/* Header */}
+              <div className="text-center mb-8">
+                <h1 className="text-3xl font-bold text-gray-800 mb-2">
+                  হিরো সেকশন ম্যানেজমেন্ট
+                </h1>
+                <p className="text-gray-600">
+                  ডোমেইন ও হোস্টিং পেজের হিরো সেকশন এডিট করুন
+                </p>
               </div>
 
-              {editingHero ? (
-                <div className="space-y-5">
-                  <div>
-                    <label className="block font-semibold mb-2 text-gray-700">
-                      টাইটেল
-                    </label>
-                    <input
-                      type="text"
-                      name="title"
-                      value={heroData[0]?.title}
-                      onChange={handleHeroChange}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all duration-300"
-                      placeholder="টাইটেল লিখুন"
-                    />
+              <div className="grid gap-6">
+                {/* Editor Section */}
+                <div className="bg-white rounded-2xl shadow-xl p-6 transform transition-all duration-300 hover:shadow-2xl">
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+                      <Edit className="w-6 h-6 text-blue-500" />
+                      এডিট করুন
+                    </h2>
                   </div>
 
-                  <div>
-                    <label className="block font-semibold mb-2 text-gray-700">
-                      বিবরণ
-                    </label>
-                    <textarea
-                      name="description"
-                      value={heroData[0]?.description}
-                      onChange={handleHeroChange}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all duration-300"
-                      rows="4"
-                      placeholder="বিবরণ লিখুন"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block font-semibold mb-2 text-gray-700">
-                      ছবির URL
-                    </label>
-                    <input
-                      type="url"
-                      name="image"
-                      value={heroData[0]?.image}
-                      onChange={handleHeroChange}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all duration-300"
-                      placeholder="https://example.com/image.jpg"
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block font-semibold mb-2 text-gray-700">
-                        প্রথম বাটন টেক্সট
-                      </label>
-                      <input
-                        type="text"
-                        name="cta1"
-                        value={heroData[0]?.cta1}
-                        onChange={handleHeroChange}
-                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all duration-300"
-                        placeholder="বাটন টেক্সট"
-                      />
-                    </div>
-                    <div>
-                      <label className="block font-semibold mb-2 text-gray-700">
-                        দ্বিতীয় বাটন টেক্সট
-                      </label>
-                      <input
-                        type="text"
-                        name="cta2"
-                        value={heroData[0]?.cta2}
-                        onChange={handleHeroChange}
-                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all duration-300"
-                        placeholder="বাটন টেক্সট"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row gap-3 pt-4">
-                    <button
-                      onClick={saveChangesHeroSection}
-                      className="bg-gradient-to-r from-blue-500 to-cyan-600 text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 hover:scale-105 hover:shadow-lg transition-all duration-300 font-semibold"
-                    >
-                      <Save size={18} /> পরিবর্তন সংরক্ষণ করুন
-                    </button>
-                    <button
-                      onClick={() => setEditingHero(false)}
-                      className="bg-gray-100 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-200 hover:scale-105 transition-all duration-300 font-semibold flex items-center justify-center gap-2"
-                    >
-                      <X size={18} /> বাতিল করুন
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div className="space-y-6">
-                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl border-2 border-blue-100">
-                    <h3 className="font-semibold text-lg text-gray-800 mb-3 flex items-center gap-2">
-                      <Eye className="w-5 h-5 text-blue-500" />
-                      বর্তমান কন্টেন্ট
-                    </h3>
-                    <div className="space-y-3 text-gray-700">
+                  {editingHero ? (
+                    <div className="space-y-5">
                       <div>
-                        <span className="font-semibold text-sm text-gray-500">
-                          টাইটেল:
-                        </span>
-                        <p className="mt-1">{heroData[0]?.title}</p>
-                      </div>
-                      <div>
-                        <span className="font-semibold text-sm text-gray-500">
-                          বিবরণ:
-                        </span>
-                        <p className="mt-1">{heroData[0]?.description}</p>
-                      </div>
-                      <div className="grid grid-cols-2 gap-3">
-                        <div>
-                          <span className="font-semibold text-sm text-gray-500">
-                            বাটন ১:
-                          </span>
-                          <p className="mt-1">{heroData[0]?.cta1}</p>
-                        </div>
-                        <div>
-                          <span className="font-semibold text-sm text-gray-500">
-                            বাটন ২:
-                          </span>
-                          <p className="mt-1">{heroData[0]?.cta2}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={() => setEditingHero(true)}
-                    className="w-full bg-gradient-to-r from-blue-500 to-cyan-600 text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 hover:scale-105 hover:shadow-lg transition-all duration-300 font-semibold"
-                  >
-                    <Edit size={18} /> এডিট শুরু করুন
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Pricing Plan Update Section */}
-      <div className="max-w-7xl mx-auto mt-10">
-        {/* Header */}
-        <div
-          className={`text-center mb-2 transition-all duration-700 ${
-            animate ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
-          }`}
-        >
-          <h1 className="text-3xl font-bold text-gray-800 mb-3">
-            প্রাইসিং প্ল্যান আপডেট করুন
-          </h1>
-          <p className="text-lg text-gray-600">
-            আপনার সার্ভিস প্যাকেজ সহজেই পরিচালনা করুন
-          </p>
-        </div>
-
-        {/* Notification */}
-        {notification.show && (
-          <div
-            className={`fixed top-4 right-4 z-50 px-6 py-4 rounded-lg shadow-lg ${
-              notification.type === "success" ? "bg-green-500" : "bg-red-500"
-            } text-white font-medium transform transition-all duration-300 animate-slide-in`}
-          >
-            {notification.message}
-          </div>
-        )}
-
-        {/* Packages Grid */}
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-            {packages?.map((pkg, packageIndex) => (
-              <div
-                key={packageIndex}
-                className={`bg-white rounded-2xl shadow-xl p-6 relative overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-2xl ${
-                  pkg.span === 2 ? "lg:col-span-2 xl:col-span-1" : ""
-                }`}
-                style={{
-                  animation: `fadeInUp 0.5s ease-out ${
-                    packageIndex * 0.1
-                  }s both`,
-                }}
-              >
-                {/* Delete Button */}
-                {packages.length > 1 && (
-                  <button
-                    onClick={() => removePackage(pkg.id)}
-                    className="absolute top-4 right-4 p-2 bg-red-100 hover:bg-red-200 text-red-600 rounded-full transition transform hover:scale-110"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                )}
-
-                {/* Popular Toggle */}
-                <div className="mb-4 flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id={`popular-${packageIndex}`}
-                    checked={pkg.popular}
-                    onChange={(e) =>
-                      handlePackageChange(
-                        packageIndex,
-                        "popular",
-                        e.target.checked
-                      )
-                    }
-                    className="w-4 h-4 text-purple-600 rounded"
-                  />
-                  <label
-                    htmlFor={`popular-${packageIndex}`}
-                    className="flex items-center gap-1 text-sm text-gray-700 cursor-pointer"
-                  >
-                    <Star className="w-4 h-4 text-yellow-500" />
-                    প্রস্তাবিত
-                  </label>
-                </div>
-
-                {/* Package Name */}
-                <div className="mb-4">
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    প্যাকেজ নাম
-                  </label>
-                  <input
-                    type="text"
-                    value={pkg.name}
-                    onChange={(e) =>
-                      handlePackageChange(packageIndex, "name", e.target.value)
-                    }
-                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:outline-none transition"
-                    placeholder="প্যাকেজ নাম লিখুন"
-                  />
-                </div>
-
-                {/* Price */}
-                <div className="mb-4">
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    মূল্য (৳)
-                  </label>
-                  <input
-                    type="text"
-                    value={pkg.price}
-                    onChange={(e) =>
-                      handlePackageChange(packageIndex, "price", e.target.value)
-                    }
-                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:outline-none transition"
-                    placeholder="মূল্য লিখুন"
-                  />
-                </div>
-
-                {/* Duration */}
-                <div className="mb-4">
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    সময়কাল
-                  </label>
-                  <select
-                    value={pkg.duration}
-                    onChange={(e) =>
-                      handlePackageChange(
-                        packageIndex,
-                        "duration",
-                        e.target.value
-                      )
-                    }
-                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:outline-none transition"
-                  >
-                    <option value="১ মাস">১ মাস</option>
-                    <option value="১ বছর">১ বছর</option>
-                    <option value="একবার">একবার</option>
-                  </select>
-                </div>
-
-                {/* Features */}
-                <div className="mb-4">
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    ফিচার সমূহ
-                  </label>
-                  <div className="space-y-2">
-                    {pkg.features.map((feature, featureIndex) => (
-                      <div
-                        key={featureIndex}
-                        className="flex gap-2 animate-fade-in"
-                      >
+                        <label className="block font-semibold mb-2 text-gray-700">
+                          টাইটেল
+                        </label>
                         <input
                           type="text"
-                          value={feature}
-                          onChange={(e) =>
-                            handleFeatureChange(
-                              packageIndex,
-                              featureIndex,
-                              e.target.value
-                            )
-                          }
-                          className="flex-1 px-3 py-2 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:outline-none transition text-sm"
-                          placeholder="ফিচার লিখুন"
+                          name="title"
+                          value={heroData[0]?.title}
+                          onChange={handleHeroChange}
+                          className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all duration-300"
+                          placeholder="টাইটেল লিখুন"
                         />
-                        {pkg.features.length > 1 && (
-                          <button
-                            onClick={() =>
-                              removeFeature(packageIndex, featureIndex)
-                            }
-                            className="p-2 bg-red-100 hover:bg-red-200 text-red-600 rounded-lg transition transform hover:scale-110"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        )}
                       </div>
-                    ))}
-                  </div>
-                  <button
-                    onClick={() => addFeature(packageIndex)}
-                    className="mt-2 w-full py-2 bg-purple-100 hover:bg-purple-200 text-purple-700 rounded-lg transition flex items-center justify-center gap-2 text-sm font-medium transform hover:scale-105"
-                  >
-                    <Plus className="w-4 h-4" />
-                    নতুন ফিচার যোগ করুন
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
 
-          <div className="mt-8 flex flex-col md:flex-row gap-4 justify-center">
-            {/* Add Package Button */}
-            <button
-              onClick={addPackage}
-              className="w-full md:w-auto px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition flex items-center justify-center gap-2 mx-auto transform hover:scale-105 flex-1"
-            >
-              <Package className="w-5 h-5" />
-              নতুন প্যাকেজ যোগ করুন
-            </button>
-
-            {/* Submit Button */}
-            <button
-              onClick={handleSubmit}
-              className="w-full py-4 bg-gradient-to-r from-purple-500 to-pink-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition flex items-center justify-center gap-2 text-lg transform hover:scale-105 flex-1"
-            >
-              <Save className="w-6 h-6" />
-              পরিবর্তন সংরক্ষণ করুন
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <style>{`
-            @keyframes fadeInUp {
-              from {
-                opacity: 0;
-                transform: translateY(20px);
-              }
-              to {
-                opacity: 1;
-                transform: translateY(0);
-              }
-            }
-    
-            @keyframes slideIn {
-              from {
-                transform: translateX(100%);
-                opacity: 0;
-              }
-              to {
-                transform: translateX(0);
-                opacity: 1;
-              }
-            }
-    
-            @keyframes fadeIn {
-              from {
-                opacity: 0;
-              }
-              to {
-                opacity: 1;
-              }
-            }
-    
-            .animate-slide-in {
-              animation: slideIn 0.3s ease-out;
-            }
-    
-            .animate-fade-in {
-              animation: fadeIn 0.3s ease-out;
-            }
-          `}</style>
-
-      {/*  <style>{`
-            @keyframes slideIn {
-              from {
-                transform: translateX(100%);
-                opacity: 0;
-              }
-              to {
-                transform: translateX(0);
-                opacity: 1;
-              }
-            }
-    
-            .animate-slide-in {
-              animation: slideIn 0.3s ease-out;
-            }
-          `}</style> */}
-
-      {/* Admin Project or portfolio*/}
-      {/* <div className="max-w-7xl mx-auto mt-10">
-        
-        <div className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
-            পোর্টফোলিও সেকশন ম্যানেজমেন্ট
-          </h1>
-          <p className="text-gray-600">
-            আপনার সাম্প্রতিক কাজ এবং প্রজেক্ট পরিচালনা করুন
-          </p>
-        </div>
-
-        
-        {notification.show && (
-          <div
-            className={`fixed top-4 right-4 z-50 px-6 py-4 rounded-lg shadow-lg ${
-              notification.type === "success" ? "bg-green-500" : "bg-red-500"
-            } text-white font-medium transform transition-all duration-300 animate-slide-in`}
-          >
-            {notification.message}
-          </div>
-        )}
-
-        <div className="grid gap-6">
-         
-          <div className="space-y-6">
-            <div className="bg-white rounded-2xl shadow-xl p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-                  <Edit className="w-6 h-6 text-purple-500" />
-                  সেকশন এডিট করুন
-                </h2>
-                <button
-                  // onClick={() => setShowPreview(!showPreview)}
-                  className="lg:hidden bg-purple-100 text-purple-600 px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-purple-200 transition"
-                ></button>
-              </div>
-
-              {editingSection ? (
-                <div className="space-y-4">
-                  <div>
-                    <label className="block font-semibold mb-2 text-gray-700">
-                      সেকশন টাইটেল
-                    </label>
-                    <input
-                      type="text"
-                      name="title"
-                      value={sectionData.title}
-                      onChange={handleSectionChange}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:ring-2 focus:ring-purple-200 focus:outline-none transition-all duration-300"
-                      placeholder="টাইটেল লিখুন"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block font-semibold mb-2 text-gray-700">
-                      সাবটাইটেল
-                    </label>
-                    <input
-                      type="text"
-                      name="subtitle"
-                      value={sectionData.subtitle}
-                      onChange={handleSectionChange}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:ring-2 focus:ring-purple-200 focus:outline-none transition-all duration-300"
-                      placeholder="সাবটাইটেল লিখুন"
-                    />
-                  </div>
-
-                  <div className="flex gap-3 pt-2">
-                    <button
-                      onClick={saveChangesProjectSection}
-                      className="flex-1 bg-gradient-to-r from-purple-500 to-pink-600 text-white px-4 py-3 rounded-lg flex items-center justify-center gap-2 hover:scale-105 hover:shadow-lg transition-all duration-300 font-semibold"
-                    >
-                      <Save size={18} /> সংরক্ষণ করুন
-                    </button>
-                    <button
-                      onClick={() => setEditingSection(false)}
-                      className="px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition"
-                    >
-                      <X size={18} />
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-xl border-2 border-purple-100">
-                    <div className="space-y-2">
                       <div>
-                        <span className="text-sm font-semibold text-gray-500">
-                          টাইটেল:
-                        </span>
-                        <p className="text-gray-800 font-medium">
-                          {sectionData.title}
-                        </p>
+                        <label className="block font-semibold mb-2 text-gray-700">
+                          বিবরণ
+                        </label>
+                        <textarea
+                          name="description"
+                          value={heroData[0]?.description}
+                          onChange={handleHeroChange}
+                          className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all duration-300"
+                          rows="4"
+                          placeholder="বিবরণ লিখুন"
+                        />
                       </div>
+
                       <div>
-                        <span className="text-sm font-semibold text-gray-500">
-                          সাবটাইটেল:
-                        </span>
-                        <p className="text-gray-600">{sectionData.subtitle}</p>
+                        <label className="block font-semibold mb-2 text-gray-700">
+                          ছবির URL
+                        </label>
+                        <input
+                          type="url"
+                          name="image"
+                          value={heroData[0]?.image}
+                          onChange={handleHeroChange}
+                          className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all duration-300"
+                          placeholder="https://example.com/image.jpg"
+                        />
                       </div>
-                    </div>
-                  </div>
 
-                  <button
-                    onClick={() => setEditingSection(true)}
-                    className="w-full bg-gradient-to-r from-purple-500 to-pink-600 text-white px-4 py-3 rounded-lg flex items-center justify-center gap-2 hover:scale-105 hover:shadow-lg transition-all duration-300 font-semibold"
-                  >
-                    <Edit size={18} /> সেকশন এডিট করুন
-                  </button>
-                </div>
-              )}
-            </div>
-
-            
-            <div className="bg-white rounded-2xl shadow-xl p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-                  <Briefcase className="w-6 h-6 text-blue-500" />
-                  প্রজেক্ট সমূহ
-                </h2>
-                <button
-                  onClick={addProject}
-                  className="bg-blue-100 text-blue-600 px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-200 transition font-semibold"
-                >
-                  <Plus size={18} /> নতুন
-                </button>
-              </div>
-
-              <div className="space-y-3 max-h-96 overflow-y-auto pr-2">
-                {portfolio.map((project, index) => (
-                  <div
-                    key={index}
-                    className={`border-2 rounded-xl p-4 transition-all ${
-                      editingProject === index
-                        ? "border-purple-500 bg-purple-50"
-                        : "border-gray-200 hover:border-gray-300"
-                    }`}
-                  >
-                    {editingProject === index ? (
-                      <div className="space-y-3">
-                        <div className="grid grid-cols-2 gap-3">
-                          <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-1">
-                              প্রজেক্টের নাম
-                            </label>
-                            <input
-                              type="text"
-                              value={project.name}
-                              onChange={(e) =>
-                                handleProjectChange(
-                                  index,
-                                  "name",
-                                  e.target.value
-                                )
-                              }
-                              className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:outline-none transition text-sm"
-                              placeholder="নাম লিখুন"
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-1">
-                              ক্যাটাগরি
-                            </label>
-                            <input
-                              type="text"
-                              value={project.category}
-                              onChange={(e) =>
-                                handleProjectChange(
-                                  index,
-                                  "category",
-                                  e.target.value
-                                )
-                              }
-                              className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:outline-none transition text-sm"
-                              placeholder="ক্যাটাগরি"
-                            />
-                          </div>
-                        </div>
-
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-sm font-semibold text-gray-700 mb-1">
-                            ইমোজি/আইকন
+                          <label className="block font-semibold mb-2 text-gray-700">
+                            প্রথম বাটন টেক্সট
                           </label>
                           <input
                             type="text"
-                            value={project.image}
-                            onChange={(e) =>
-                              handleProjectChange(
-                                index,
-                                "image",
-                                e.target.value
-                              )
-                            }
-                            className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:outline-none transition text-sm"
-                            placeholder="🎨 ইমোজি যোগ করুন"
+                            name="cta1"
+                            value={heroData[0]?.cta1}
+                            onChange={handleHeroChange}
+                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all duration-300"
+                            placeholder="বাটন টেক্সট"
                           />
                         </div>
-
                         <div>
-                          <label className="block text-sm font-semibold text-gray-700 mb-1">
-                            বিবরণ
+                          <label className="block font-semibold mb-2 text-gray-700">
+                            দ্বিতীয় বাটন টেক্সট
                           </label>
-                          <textarea
-                            value={project.description}
-                            onChange={(e) =>
-                              handleProjectChange(
-                                index,
-                                "description",
-                                e.target.value
-                              )
-                            }
-                            className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:outline-none transition text-sm"
-                            rows="2"
-                            placeholder="সংক্ষিপ্ত বিবরণ"
+                          <input
+                            type="text"
+                            name="cta2"
+                            value={heroData[0]?.cta2}
+                            onChange={handleHeroChange}
+                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all duration-300"
+                            placeholder="বাটন টেক্সট"
                           />
                         </div>
+                      </div>
 
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => setEditingProject(null)}
-                            className="flex-1 bg-green-500 text-white px-3 py-2 rounded-lg hover:bg-green-600 transition text-sm font-semibold"
-                          >
-                            সম্পন্ন
-                          </button>
-                          <button
-                            onClick={() => removeProject(index)}
-                            className="px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
-                          >
-                            <Trash2 size={16} />
-                          </button>
+                      <div className="flex flex-col sm:flex-row gap-3 pt-4">
+                        <button
+                          onClick={saveChangesHeroSection}
+                          className="bg-gradient-to-r from-blue-500 to-cyan-600 text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 hover:scale-105 hover:shadow-lg transition-all duration-300 font-semibold"
+                        >
+                          <Save size={18} /> পরিবর্তন সংরক্ষণ করুন
+                        </button>
+                        <button
+                          onClick={() => setEditingHero(false)}
+                          className="bg-gray-100 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-200 hover:scale-105 transition-all duration-300 font-semibold flex items-center justify-center gap-2"
+                        >
+                          <X size={18} /> বাতিল করুন
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-6">
+                      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl border-2 border-blue-100">
+                        <h3 className="font-semibold text-lg text-gray-800 mb-3 flex items-center gap-2">
+                          <Eye className="w-5 h-5 text-blue-500" />
+                          বর্তমান কন্টেন্ট
+                        </h3>
+                        <div className="space-y-3 text-gray-700">
+                          <div>
+                            <span className="font-semibold text-sm text-gray-500">
+                              টাইটেল:
+                            </span>
+                            <p className="mt-1">{heroData[0]?.title}</p>
+                          </div>
+                          <div>
+                            <span className="font-semibold text-sm text-gray-500">
+                              বিবরণ:
+                            </span>
+                            <p className="mt-1">{heroData[0]?.description}</p>
+                          </div>
+                          <div className="grid grid-cols-2 gap-3">
+                            <div>
+                              <span className="font-semibold text-sm text-gray-500">
+                                বাটন ১:
+                              </span>
+                              <p className="mt-1">{heroData[0]?.cta1}</p>
+                            </div>
+                            <div>
+                              <span className="font-semibold text-sm text-gray-500">
+                                বাটন ২:
+                              </span>
+                              <p className="mt-1">{heroData[0]?.cta2}</p>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    ) : (
-                      <div
-                        onClick={() => setEditingProject(index)}
-                        className="flex items-center gap-3 cursor-pointer"
+
+                      <button
+                        onClick={() => setEditingHero(true)}
+                        className="w-full bg-gradient-to-r from-blue-500 to-cyan-600 text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 hover:scale-105 hover:shadow-lg transition-all duration-300 font-semibold"
                       >
-                        <div className="text-3xl bg-gradient-to-br from-purple-100 to-pink-100 w-14 h-14 rounded-lg flex items-center justify-center">
-                          <img src={project.image} alt="" />
-                        </div>
-                        <div className="flex-1">
-                          <h4 className="font-bold text-gray-800">
-                            {project.name}
-                          </h4>
-                          <p className="text-sm text-purple-600 font-semibold">
-                            {project.category}
-                          </p>
-                        </div>
-                        <Edit size={16} className="text-gray-400" />
-                      </div>
+                        <Edit size={18} /> এডিট শুরু করুন
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Pricing Section Content */}
+        {activeTab === "pricing" && (
+          <div className="max-w-7xl mx-auto mt-10">
+            {/* Header */}
+            <div
+              className={`text-center mb-2 transition-all duration-700 ${
+                animate
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 -translate-y-4"
+              }`}
+            >
+              <h1 className="text-3xl font-bold text-gray-800 mb-3">
+                প্রাইসিং প্ল্যান আপডেট করুন
+              </h1>
+              <p className="text-lg text-gray-600">
+                আপনার সার্ভিস প্যাকেজ সহজেই পরিচালনা করুন
+              </p>
+            </div>
+
+            {/* Packages Grid */}
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                {packages?.map((pkg, packageIndex) => (
+                  <div
+                    key={packageIndex}
+                    className={`bg-white rounded-2xl shadow-xl p-6 relative overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-2xl ${
+                      pkg.span === 2 ? "lg:col-span-2 xl:col-span-1" : ""
+                    }`}
+                    style={{
+                      animation: `fadeInUp 0.5s ease-out ${
+                        packageIndex * 0.1
+                      }s both`,
+                    }}
+                  >
+                    {/* Delete Button */}
+                    {packages.length > 1 && (
+                      <button
+                        onClick={() => removePackage(pkg.id)}
+                        className="absolute top-4 right-4 p-2 bg-red-100 hover:bg-red-200 text-red-600 rounded-full transition transform hover:scale-110"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
                     )}
+
+                    {/* Popular Toggle */}
+                    <div className="mb-4 flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        id={`popular-${packageIndex}`}
+                        checked={pkg.popular}
+                        onChange={(e) =>
+                          handlePackageChange(
+                            packageIndex,
+                            "popular",
+                            e.target.checked
+                          )
+                        }
+                        className="w-4 h-4 text-purple-600 rounded"
+                      />
+                      <label
+                        htmlFor={`popular-${packageIndex}`}
+                        className="flex items-center gap-1 text-sm text-gray-700 cursor-pointer"
+                      >
+                        <Star className="w-4 h-4 text-yellow-500" />
+                        প্রস্তাবিত
+                      </label>
+                    </div>
+
+                    {/* Package Name */}
+                    <div className="mb-4">
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        প্যাকেজ নাম
+                      </label>
+                      <input
+                        type="text"
+                        value={pkg.name}
+                        onChange={(e) =>
+                          handlePackageChange(
+                            packageIndex,
+                            "name",
+                            e.target.value
+                          )
+                        }
+                        className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:outline-none transition"
+                        placeholder="প্যাকেজ নাম লিখুন"
+                      />
+                    </div>
+
+                    {/* Price */}
+                    <div className="mb-4">
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        মূল্য (৳)
+                      </label>
+                      <input
+                        type="text"
+                        value={pkg.price}
+                        onChange={(e) =>
+                          handlePackageChange(
+                            packageIndex,
+                            "price",
+                            e.target.value
+                          )
+                        }
+                        className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:outline-none transition"
+                        placeholder="মূল্য লিখুন"
+                      />
+                    </div>
+
+                    {/* Duration */}
+                    <div className="mb-4">
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        সময়কাল
+                      </label>
+                      <select
+                        value={pkg.duration}
+                        onChange={(e) =>
+                          handlePackageChange(
+                            packageIndex,
+                            "duration",
+                            e.target.value
+                          )
+                        }
+                        className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:outline-none transition"
+                      >
+                        <option value="১ মাস">১ মাস</option>
+                        <option value="১ বছর">১ বছর</option>
+                        <option value="একবার">একবার</option>
+                      </select>
+                    </div>
+
+                    {/* Features */}
+                    <div className="mb-4">
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        ফিচার সমূহ
+                      </label>
+                      <div className="space-y-2">
+                        {pkg.features.map((feature, featureIndex) => (
+                          <div
+                            key={featureIndex}
+                            className="flex gap-2 animate-fade-in"
+                          >
+                            <input
+                              type="text"
+                              value={feature}
+                              onChange={(e) =>
+                                handleFeatureChange(
+                                  packageIndex,
+                                  featureIndex,
+                                  e.target.value
+                                )
+                              }
+                              className="flex-1 px-3 py-2 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:outline-none transition text-sm"
+                              placeholder="ফিচার লিখুন"
+                            />
+                            {pkg.features.length > 1 && (
+                              <button
+                                onClick={() =>
+                                  removeFeature(packageIndex, featureIndex)
+                                }
+                                className="p-2 bg-red-100 hover:bg-red-200 text-red-600 rounded-lg transition transform hover:scale-110"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                      <button
+                        onClick={() => addFeature(packageIndex)}
+                        className="mt-2 w-full py-2 bg-purple-100 hover:bg-purple-200 text-purple-700 rounded-lg transition flex items-center justify-center gap-2 text-sm font-medium transform hover:scale-105"
+                      >
+                        <Plus className="w-4 h-4" />
+                        নতুন ফিচার যোগ করুন
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
 
-              <button
-                onClick={saveChangesProjectSection}
-                className="w-full mt-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-3 rounded-lg flex items-center justify-center gap-2 hover:scale-105 hover:shadow-lg transition-all duration-300 font-semibold"
-              >
-                <Save size={18} /> সকল পরিবর্তন সংরক্ষণ করুন
-              </button>
+              <div className="mt-8 flex flex-col md:flex-row gap-4 justify-center">
+                {/* Add Package Button */}
+                <button
+                  onClick={addPackage}
+                  className="w-full md:w-auto px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition flex items-center justify-center gap-2 mx-auto transform hover:scale-105 flex-1"
+                >
+                  <Package className="w-5 h-5" />
+                  নতুন প্যাকেজ যোগ করুন
+                </button>
+
+                {/* Submit Button */}
+                <button
+                  onClick={handleSubmit}
+                  className="w-full py-4 bg-gradient-to-r from-purple-500 to-pink-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition flex items-center justify-center gap-2 text-lg transform hover:scale-105 flex-1"
+                >
+                  <Save className="w-6 h-6" />
+                  পরিবর্তন সংরক্ষণ করুন
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      </div> */}
+        )}
+      </div>
+
+      <style>{`
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes slideIn {
+          from {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          to {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        .animate-slide-in {
+          animation: slideIn 0.3s ease-out;
+        }
+
+        .animate-fade-in {
+          animation: fadeIn 0.3s ease-out;
+        }
+      `}</style>
     </div>
   );
 };
