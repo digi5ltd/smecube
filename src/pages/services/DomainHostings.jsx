@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { motion } from "framer-motion";
 import heroDomain from "../../assets/png/domaiinhosting/domain.png";
@@ -8,8 +8,33 @@ import sslIcon from "../../assets/icones/domainhosting/ssl.svg";
 import upIcon from "../../assets/icones/domainhosting/uptime.svg";
 import cpanelIcon from "../../assets/icones/domainhosting/cpanel.svg";
 import supportIcon from "../../assets/icones/domainhosting/customer-care.svg";
+import { domainhostHeroAPI } from "../../services/api";
 
 const DomainHostings = () => {
+  // const [packages, setPackages] = useState([]);
+  const [heroData, setHeroData] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchHeroData = async () => {
+      try {
+        const response = await domainhostHeroAPI.getAll(); // or your endpoint
+        console.log(response);
+
+        console.log(response.data[0]); // take first hero object
+        setHeroData(response.data[0] || {}); // take first hero object
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching hero data:", err);
+        setError("Failed to load hero data");
+        setLoading(false);
+      }
+    };
+
+    fetchHeroData();
+  }, []);
+
   const features = [
     {
       icon: domainIcon,
@@ -155,7 +180,7 @@ const DomainHostings = () => {
             transition={{ duration: 0.7 }}
             className="text-3xl lg:text-5xl font-extrabold mb-6 drop-shadow-lg mt-8 sm:mt-0"
           >
-            ডোমেইন ও হোস্টিং সার্ভিস
+            {heroData.title}
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
@@ -163,8 +188,7 @@ const DomainHostings = () => {
             transition={{ delay: 0.3, duration: 1 }}
             className="text-xl md:text-2xl mb-10 text-orange-100 max-w-3xl mx-auto leading-relaxed"
           >
-            আপনার ওয়েবসাইটের ভিত্তি তৈরি করুন আমাদের নির্ভরযোগ্য ডোমেইন ও
-            হোস্টিং সার্ভিসের মাধ্যমে।
+            {heroData.description}
           </motion.p>
           <Link
             to="/contact"
