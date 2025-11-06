@@ -158,9 +158,21 @@ const AdminWebdev = () => {
     ]);
   };
 
-  const removePackage = (index) => {
-    const updatedPackages = packages.filter((_, i) => i !== index);
+  const removePackage = async (id) => {
+    console.log(id);
+
+    const updatedPackages = await packages.filter((pkg) => pkg.id !== id); // packages.filter((_, i) => i !== index);
+    console.log(updatedPackages);
+    // console.log(updatedPackages[index]);
+    // console.log(updatedPackages[index].id);
+
     setPackages(updatedPackages);
+
+    try {
+      await webdevPackagesApi.delete(id);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const banglaToEnglish = (num) => {
@@ -519,7 +531,7 @@ const AdminWebdev = () => {
                 {/* Delete Button */}
                 {packages.length > 1 && (
                   <button
-                    onClick={() => removePackage(packageIndex)}
+                    onClick={() => removePackage(pkg.id)}
                     className="absolute top-4 right-4 p-2 bg-red-100 hover:bg-red-200 text-red-600 rounded-full transition transform hover:scale-110"
                   >
                     <Trash2 className="w-4 h-4" />
