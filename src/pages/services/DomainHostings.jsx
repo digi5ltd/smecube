@@ -8,7 +8,11 @@ import sslIcon from "../../assets/icones/domainhosting/ssl.svg";
 import upIcon from "../../assets/icones/domainhosting/uptime.svg";
 import cpanelIcon from "../../assets/icones/domainhosting/cpanel.svg";
 import supportIcon from "../../assets/icones/domainhosting/customer-care.svg";
-import { domainhostHeroAPI, domainhostPackageAPI } from "../../services/api";
+import {
+  domainhostHeroAPI,
+  domainhostPackageAPI,
+  domainhostServiceFeatureTitleDescAPI,
+} from "../../services/api";
 
 const DomainHostings = () => {
   // const [packages, setPackages] = useState([]);
@@ -52,6 +56,24 @@ const DomainHostings = () => {
       })
       .catch((error) => {
         console.log(error);
+      });
+  }, []);
+
+  // Service feature data
+  // Service feature title and description
+
+  const [featureTitle, setFeatureTitle] = useState({});
+
+  useEffect(() => {
+    domainhostServiceFeatureTitleDescAPI
+      .getAll()
+      .then((response) => {
+        // Assuming response.data is always an array with one object
+        setFeatureTitle(response.data[0] || {});
+        console.log("Feature title data:", response.data[0]);
+      })
+      .catch((error) => {
+        console.log("Error fetching feature title:", error);
       });
   }, []);
 
@@ -187,7 +209,7 @@ const DomainHostings = () => {
           viewport={{ once: true }}
           variants={fadeIn}
         >
-          সার্ভিস ফিচার
+          {featureTitle?.title}
         </motion.h2>
 
         <motion.div

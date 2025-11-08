@@ -89,6 +89,9 @@ export const domainhostServiceFeatureTitleDescAPI = {
   create: (data) => api.post(`/domain-host-features-titledesc`, data),
   update: (id, data) => api.put(`/domain-host-features-titledesc/${id}`, data),
   delete: (id) => api.delete(`/domain-host-features-titledesc/${id}`),
+  // or if using PATCH:
+  /*  update: (id, data) =>
+    api.patch(`/domain-host-features-titledesc/${id}`, data), */
 };
 
 export default api;

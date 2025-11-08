@@ -240,21 +240,23 @@ const AdminDomainHost = () => {
 
   const handleFeatureTitleChange = (e) => {
     const { name, value } = e.target;
-    console.log(name, value);
-    setFeatureTitle((prev) => {
-      let updated = { ...prev }; // copy array
-      updated = { ...updated, [name]: value }; // update first object
-      return updated;
-    });
+    setFeatureTitle((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const fetchFeatureTitleDescData = async () => {
     try {
       const response = await domainhostServiceFeatureTitleDescAPI.getAll();
       console.log(response);
+      console.log(typeof response.data);
 
-      // const data = await response.json();
-      setFeatureTitle(response.data);
+      const data = Array.isArray(response.data)
+        ? response.data[0] || {}
+        : response.data;
+      setFeatureTitle(data);
+      console.log("Fetched feature title data:", data);
       console.log(response.data);
     } catch (error) {
       console.error("Error fetching feature title data:", error);
@@ -273,7 +275,7 @@ const AdminDomainHost = () => {
 
       setFeatureTitle(response.data); */
       console.log(featureTitle);
-
+      console.log("Feature title ID:", featureTitle.id);
       if (featureTitle.id) {
         // update existing
         await domainhostServiceFeatureTitleDescAPI.update(
@@ -834,7 +836,7 @@ const AdminDomainHost = () => {
                         <input
                           type="text"
                           name="title"
-                          value={featureTitle[0]?.title}
+                          value={featureTitle?.title || ""}
                           onChange={handleFeatureTitleChange}
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all duration-300"
                           placeholder="টাইটেল লিখুন"
@@ -847,7 +849,7 @@ const AdminDomainHost = () => {
                         </label>
                         <textarea
                           name="description"
-                          value={featureTitle[0]?.description}
+                          value={featureTitle?.description || ""}
                           onChange={handleFeatureTitleChange}
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all duration-300"
                           rows="4"
@@ -883,15 +885,13 @@ const AdminDomainHost = () => {
                             <span className="font-semibold text-sm text-gray-500">
                               টাইটেল:
                             </span>
-                            <p className="mt-1">{featureTitle[0]?.title}</p>
+                            <p className="mt-1">{featureTitle?.title}</p>
                           </div>
                           <div>
                             <span className="font-semibold text-sm text-gray-500">
                               বিবরণ:
                             </span>
-                            <p className="mt-1">
-                              {featureTitle[0]?.description}
-                            </p>
+                            <p className="mt-1">{featureTitle?.description}</p>
                           </div>
                         </div>
                       </div>
