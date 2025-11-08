@@ -9,10 +9,12 @@ import upIcon from "../../assets/icones/domainhosting/uptime.svg";
 import cpanelIcon from "../../assets/icones/domainhosting/cpanel.svg";
 import supportIcon from "../../assets/icones/domainhosting/customer-care.svg";
 import {
+  domainhostFeatureAPI,
   domainhostHeroAPI,
   domainhostPackageAPI,
   domainhostServiceFeatureTitleDescAPI,
 } from "../../services/api";
+import dummyIcones from "../../assets/icones/domainhosting/dummyIcones";
 
 const DomainHostings = () => {
   // const [packages, setPackages] = useState([]);
@@ -25,9 +27,9 @@ const DomainHostings = () => {
     const fetchHeroData = async () => {
       try {
         const response = await domainhostHeroAPI.getAll(); // or your endpoint
-        console.log(response);
+        // console.log(response);
 
-        console.log(response.data[0]); // take first hero object
+        // console.log(response.data[0]); // take first hero object
         setHeroData(response.data[0] || {}); // take first hero object
         setLoading(false);
       } catch (err) {
@@ -70,14 +72,28 @@ const DomainHostings = () => {
       .then((response) => {
         // Assuming response.data is always an array with one object
         setFeatureTitle(response.data[0] || {});
-        console.log("Feature title data:", response.data[0]);
+        // console.log("Feature title data:", response.data[0]);
       })
       .catch((error) => {
         console.log("Error fetching feature title:", error);
       });
   }, []);
 
-  const features = [
+  const [features, setFeatures] = useState([]);
+  useEffect(() => {
+    domainhostFeatureAPI
+      .getAll()
+      .then((response) => {
+        // Assuming response.data is always an array with one object
+        setFeatures(response.data);
+        console.log("Feature data:", response.data);
+      })
+      .catch((error) => {
+        console.log("Error fetching feature:", error);
+      });
+  }, []);
+
+  /* const features = [
     {
       icon: domainIcon,
       title: "ডোমেইন রেজিস্ট্রেশন",
@@ -108,7 +124,7 @@ const DomainHostings = () => {
       title: "২৪/৭ কাস্টমার সাপোর্ট",
       description: "লাইভ চ্যাট ও কল সাপোর্ট দিয়ে সর্বদা পাশে আছি।",
     },
-  ];
+  ]; */
 
   const steps = [
     {
@@ -219,7 +235,7 @@ const DomainHostings = () => {
           viewport={{ once: true }}
           variants={staggerContainer}
         >
-          {features.map((f, i) => (
+          {features.map((feature, i) => (
             <motion.div
               key={i}
               className="p-3 bg-gradient-to-br from-white to-orange-50 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-orange-100/50 cursor-pointer group backdrop-blur-sm"
@@ -233,18 +249,18 @@ const DomainHostings = () => {
                   transition: { duration: 0.5 },
                 }}
               >
+                {/* {dummyIcones[feature.icon]} */}
                 <img
                   className="w-10 h-10 md:w-12 md:h-12"
-                  src={f.icon}
+                  src={dummyIcones[feature.icon]}
                   alt=""
-                  srcset=""
                 />
               </motion.div>
               <h3 className="text-sm lg:text-[16px] font-bold mb-3 text-gray-800 group-hover:text-orange-600 transition-colors">
-                {f.title}
+                {feature.title}
               </h3>
               <p className="text-gray-600 leading-relaxed text-[10px] lg:text-sm">
-                {f.description}
+                {feature.description}
               </p>
             </motion.div>
           ))}

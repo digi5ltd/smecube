@@ -16,6 +16,7 @@ import {
   Briefcase,
 } from "lucide-react";
 import {
+  domainhostFeatureAPI,
   domainhostHeroAPI,
   domainhostPackageAPI,
   domainhostServiceFeatureTitleDescAPI,
@@ -320,7 +321,7 @@ const AdminDomainHost = () => {
   const [isEditing, setIsEditing] = useState(false);
   // const [showForm, setShowForm] = useState(false);
 
-  const handleSubmitFeature = async (e) => {
+  /* const handleSubmitFeature = async (e) => {
     e.preventDefault();
 
     if (isEditing) {
@@ -333,7 +334,7 @@ const AdminDomainHost = () => {
       // Create new feature
       const newFeature = {
         ...formData,
-        id: Date.now(),
+        // id: Date.now(),
       };
       setFeatures([...features, newFeature]);
       console.log("new features", formData);
@@ -349,6 +350,62 @@ const AdminDomainHost = () => {
     //   headers: { 'Content-Type': 'application/json' },
     //   body: JSON.stringify(formData)
     // });
+  }; */
+
+  const handleSubmitFeature = async (e) => {
+    e.preventDefault();
+
+    try {
+      if (isEditing) {
+        // Update existing feature
+        const response = await domainhostFeatureAPI.update(
+          formData.id,
+          formData
+        );
+
+        // Update local state with the response data from API
+        setFeatures(
+          features.map((f) => (f.id === formData.id ? response.data : f))
+        );
+        console.log("Feature updated successfully:", response.data);
+      } else {
+        // Create new feature
+        const response = await domainhostFeatureAPI.create(formData);
+
+        // Add new feature to local state with the ID from API response
+        setFeatures([...features, response.data]);
+        console.log("Feature created successfully:", response.data);
+      }
+
+      // Show success notification
+      setNotification({
+        show: true,
+        message: isEditing
+          ? "ফিচার সফলভাবে আপডেট হয়েছে!"
+          : "ফিচার সফলভাবে তৈরি হয়েছে!",
+        type: "success",
+      });
+
+      // Reset form
+      setFormData({ id: null, icon: "", title: "", description: "" });
+      setIsEditing(false);
+
+      // Hide notification after 3 seconds
+      setTimeout(() => {
+        setNotification({ show: false, message: "", type: "" });
+      }, 3000);
+    } catch (error) {
+      console.error("Error saving feature:", error);
+
+      // Show error notification
+      setNotification({
+        show: true,
+        message: isEditing
+          ? "ফিচার আপডেট করতে সমস্যা হয়েছে!"
+          : "ফিচার তৈরি করতে সমস্যা হয়েছে!",
+        type: "error",
+      });
+    }
   };
 
   const handleEdit = (feature) => {
@@ -1072,7 +1129,7 @@ const AdminDomainHost = () => {
             </div>
 
             {/* Stats */}
-            <motion.div
+            {/*  <motion.div
               className="mt-12 grid grid-cols-3 gap-6 text-center"
               initial="hidden"
               whileInView="show"
@@ -1095,7 +1152,7 @@ const AdminDomainHost = () => {
                 <div className="text-2xl font-bold text-orange-600">CRUD</div>
                 <div className="text-sm text-orange-700">অপারেশনস</div>
               </div>
-            </motion.div>
+            </motion.div> */}
           </section>
         )}
       </div>

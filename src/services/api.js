@@ -82,6 +82,15 @@ export const domainhostPackageAPI = {
   delete: (id) => api.delete(`/domain-host-packages/${id}`),
 };
 
+// Domain Hosting Service Feature Api
+export const domainhostFeatureAPI = {
+  getAll: () => api.get("/domain-host-features"),
+  getOne: (id) => api.get(`/domain-host-features/${id}`),
+  create: (data) => api.post(`/domain-host-features`, data),
+  update: (id, data) => api.put(`/domain-host-features/${id}`, data),
+  delete: (id) => api.delete(`/domain-host-features/${id}`),
+};
+
 // Domain Hosting Service Feature Title Desc Routes
 export const domainhostServiceFeatureTitleDescAPI = {
   getAll: () => api.get("/domain-host-features-titledesc"),
