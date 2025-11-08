@@ -17,9 +17,7 @@ import wordpresssvg from "../../assets/img/svg/webdevelopment/technologysvg/word
 import mongodbsvg from "../../assets/img/svg/webdevelopment/technologysvg/mongodb-svgrepo-com.svg";
 import laravelsvg from "../../assets/img/svg/webdevelopment/technologysvg/laravel-svgrepo-com.svg";
 import javascript from "../../assets/img/svg/webdevelopment/technologysvg/javascript-svgrepo-com.svg";
-import restaurantpic from "../../assets/img/webdevelopment/restaurant.jpg";
-import schoolPic from "../../assets/img/webdevelopment/school.jfif";
-import realstatePic from "../../assets/img/webdevelopment/real-state.jpg";
+
 import {
   webdevHeroAPI,
   webdevPackagesApi,

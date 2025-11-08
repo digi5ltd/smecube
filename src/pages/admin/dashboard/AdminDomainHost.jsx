@@ -15,7 +15,11 @@ import {
   X,
   Briefcase,
 } from "lucide-react";
-import { domainhostHeroAPI, domainhostPackageAPI } from "../../../services/api";
+import {
+  domainhostHeroAPI,
+  domainhostPackageAPI,
+  domainhostServiceFeatureTitleDescAPI,
+} from "../../../services/api";
 import dummyIcones from "../../../assets/icones/domainhosting/dummyIcones";
 
 const fadeIn = {
@@ -44,8 +48,8 @@ const AdminDomainHost = () => {
 
   useEffect(() => {
     fetchHeroData();
-    // fetchPortfolioData();
     fetchPackageData();
+    fetchFeatureTitleDescData();
   }, []);
 
   const fetchHeroData = async () => {
@@ -71,12 +75,12 @@ const AdminDomainHost = () => {
   });
 
   const [animate, setAnimate] = useState(true);
-  const [sectionData, setSectionData] = useState({
+  /* const [sectionData, setSectionData] = useState({
     title: "আমাদের সাম্প্রতিক কাজ",
     subtitle: "বিভিন্ন শিল্পে আমাদের সফলতার গল্প",
-  });
+  }); */
 
-  const [editingSection, setEditingSection] = useState(false);
+  // const [editingSection, setEditingSection] = useState(false);
   // const [editingProject, setEditingProject] = useState(null);
 
   const handleHeroChange = (e) => {
@@ -230,6 +234,80 @@ const AdminDomainHost = () => {
   };
 
   // Feature section functionality
+  // Feature section title and subtitle management
+  const [featureTitle, setFeatureTitle] = useState({});
+  const [editingFeatureTitle, setEditingFeatureTitle] = useState(false);
+
+  const handleFeatureTitleChange = (e) => {
+    const { name, value } = e.target;
+    console.log(name, value);
+    setFeatureTitle((prev) => {
+      let updated = { ...prev }; // copy array
+      updated = { ...updated, [name]: value }; // update first object
+      return updated;
+    });
+  };
+
+  const fetchFeatureTitleDescData = async () => {
+    try {
+      const response = await domainhostServiceFeatureTitleDescAPI.getAll();
+      console.log(response);
+
+      // const data = await response.json();
+      setFeatureTitle(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error fetching feature title data:", error);
+    }
+  };
+
+  const saveChangesFeatureTitleSection = async () => {
+    // console.log(heroData[0]?.id);
+
+    try {
+      // Replace with your actual axios call
+      /* const response = await domainhostServiceFeatureTitleDescAPI.update(
+        featureTitle[0]?.id,
+        featureTitle[0]
+      );
+
+      setFeatureTitle(response.data); */
+      console.log(featureTitle);
+
+      if (featureTitle.id) {
+        // update existing
+        await domainhostServiceFeatureTitleDescAPI.update(
+          featureTitle.id,
+          featureTitle
+        );
+      } else {
+        // create new
+        await domainhostServiceFeatureTitleDescAPI.create(featureTitle);
+      }
+
+      console.log("Saving feature data:", featureTitle);
+
+      setNotification({
+        show: true,
+        message: "সার্ভিস ফিচার শিরোনাম ও বিবরণ সফলভাবে আপডেট হয়েছে!",
+        type: "success",
+      });
+
+      setEditingFeatureTitle(false);
+
+      setTimeout(() => {
+        setNotification({ show: false, message: "", type: "" });
+      }, 3000);
+    } catch (error) {
+      setNotification({
+        show: true,
+        message: "আপডেট করতে সমস্যা হয়েছে!",
+        type: "error",
+      });
+    }
+  };
+
+  // Feature section service and feature management
   const [features, setFeatures] = useState([]);
   const [formData, setFormData] = useState({
     id: null,
@@ -717,7 +795,7 @@ const AdminDomainHost = () => {
               variants={fadeIn}
             >
               <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent py-1.5 mb-4">
-                সার্ভিস ফিচার CRUD ম্যানেজমেন্ট
+                সার্ভিস ফিচার ম্যানেজমেন্ট
               </h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                 নতুন ফিচার তৈরি করুন, বিদ্যমান ফিচার এডিট করুন, বা ফিচার ডিলিট
@@ -725,157 +803,272 @@ const AdminDomainHost = () => {
               </p>
             </motion.div>
 
-            <div className="grid lg:grid-cols-2 gap-12">
-              {/* CRUD Form */}
-              <motion.div
-                className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-3xl p-8 shadow-2xl border border-purple-100"
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true }}
-                variants={fadeIn}
-              >
-                <h3 className="text-2xl font-bold text-purple-800 mb-6 text-center">
-                  {isEditing ? "ফিচার এডিট করুন ✏️" : "নতুন ফিচার যোগ করুন ➕"}
-                </h3>
+            {/* Feature section title and description */}
+            <div>
+              {/* Header */}
+              <div className="text-center mb-8">
+                <h1 className="text-3xl font-bold text-gray-800 mb-2">
+                  সার্ভিস ফিচার শিরোনাম ও বিবরণ ম্যানেজমেন্ট
+                </h1>
+                {/* <p className="text-gray-600">
+                  ডোমেইন ও হোস্টিং পেজের হিরো সেকশন এডিট করুন
+                </p> */}
+              </div>
 
-                <form onSubmit={handleSubmitFeature} className="space-y-6">
-                  {/* Icon Selection */}
-                  <div>
-                    <label className="block text-sm font-semibold text-purple-700 mb-2">
-                      আইকন সিলেক্ট করুন
-                    </label>
-                    <select
-                      value={formData.icon}
-                      onChange={(e) =>
-                        setFormData({ ...formData, icon: e.target.value })
-                      }
-                      className="w-full p-3 rounded-xl border-2 border-purple-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-300 bg-white"
-                      required
-                    >
-                      <option value="">আইকন সিলেক্ট করুন</option>
-                      {Object.keys(dummyIcones).map((iconKey) => (
-                        <option key={iconKey} value={iconKey}>
-                          {iconKey}
-                        </option>
-                      ))}
-                    </select>
+              <div className="grid gap-6">
+                {/* Editor Section */}
+                <div className="bg-white rounded-2xl shadow-xl p-6 transform transition-all duration-300 hover:shadow-2xl">
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+                      <Edit className="w-6 h-6 text-blue-500" />
+                      এডিট করুন
+                    </h2>
+                  </div>
 
-                    {formData.icon && (
-                      <div className="mt-3 p-3 bg-white rounded-lg border border-purple-200">
-                        <p className="text-sm text-purple-600 mb-2">প্রিভিউ:</p>
-                        <div className="text-purple-500">
-                          {dummyIcones[formData.icon]}
+                  {editingFeatureTitle ? (
+                    <div className="space-y-5">
+                      <div>
+                        <label className="block font-semibold mb-2 text-gray-700">
+                          টাইটেল
+                        </label>
+                        <input
+                          type="text"
+                          name="title"
+                          value={featureTitle[0]?.title}
+                          onChange={handleFeatureTitleChange}
+                          className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all duration-300"
+                          placeholder="টাইটেল লিখুন"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block font-semibold mb-2 text-gray-700">
+                          বিবরণ
+                        </label>
+                        <textarea
+                          name="description"
+                          value={featureTitle[0]?.description}
+                          onChange={handleFeatureTitleChange}
+                          className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all duration-300"
+                          rows="4"
+                          placeholder="বিবরণ লিখুন"
+                        />
+                      </div>
+
+                      <div className="flex flex-col sm:flex-row gap-3 pt-4">
+                        <button
+                          onClick={saveChangesFeatureTitleSection}
+                          className="bg-gradient-to-r from-blue-500 to-cyan-600 text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 hover:scale-105 hover:shadow-lg transition-all duration-300 font-semibold"
+                        >
+                          <Save size={18} /> পরিবর্তন সংরক্ষণ করুন
+                        </button>
+
+                        <button
+                          onClick={() => setEditingFeatureTitle(false)}
+                          className="bg-gray-100 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-200 hover:scale-105 transition-all duration-300 font-semibold flex items-center justify-center gap-2"
+                        >
+                          <X size={18} /> বাতিল করুন
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-6">
+                      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl border-2 border-blue-100">
+                        <h3 className="font-semibold text-lg text-gray-800 mb-3 flex items-center gap-2">
+                          <Eye className="w-5 h-5 text-blue-500" />
+                          বর্তমান কন্টেন্ট
+                        </h3>
+                        <div className="space-y-3 text-gray-700">
+                          <div>
+                            <span className="font-semibold text-sm text-gray-500">
+                              টাইটেল:
+                            </span>
+                            <p className="mt-1">{featureTitle[0]?.title}</p>
+                          </div>
+                          <div>
+                            <span className="font-semibold text-sm text-gray-500">
+                              বিবরণ:
+                            </span>
+                            <p className="mt-1">
+                              {featureTitle[0]?.description}
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    )}
-                  </div>
 
-                  {/* Title Input */}
-                  <div>
-                    <label className="block text-sm font-semibold text-purple-700 mb-2">
-                      টাইটেল
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.title}
-                      onChange={(e) =>
-                        setFormData({ ...formData, title: e.target.value })
-                      }
-                      className="w-full p-3 rounded-xl border-2 border-purple-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-300 bg-white"
-                      placeholder="ফিচারের টাইটেল লিখুন..."
-                      required
-                    />
-                  </div>
-
-                  {/* Description Input */}
-                  <div>
-                    <label className="block text-sm font-semibold text-purple-700 mb-2">
-                      বর্ণনা
-                    </label>
-                    <textarea
-                      value={formData.description}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          description: e.target.value,
-                        })
-                      }
-                      rows="3"
-                      className="w-full p-3 rounded-xl border-2 border-purple-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-300 bg-white resize-none"
-                      placeholder="ফিচারের বিস্তারিত বর্ণনা লিখুন..."
-                      required
-                    />
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex gap-4 pt-4">
-                    <button
-                      type="submit"
-                      className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
-                    >
-                      {isEditing ? "আপডেট করুন 🔄" : "সেভ করুন 💾"}
-                    </button>
-
-                    {isEditing && (
                       <button
-                        type="button"
-                        onClick={handleCancel}
-                        className="px-6 py-3 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-xl font-semibold hover:from-gray-600 hover:to-gray-700 transform hover:scale-105 transition-all duration-300 shadow-lg"
+                        onClick={() => setEditingFeatureTitle(true)}
+                        className="w-full bg-gradient-to-r from-blue-500 to-cyan-600 text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 hover:scale-105 hover:shadow-lg transition-all duration-300 font-semibold"
                       >
-                        বাতিল ❌
-                      </button>
-                    )}
-                  </div>
-                </form>
-              </motion.div>
-
-              {/* Features Grid */}
-              <motion.div
-                className="grid grid-cols-1 md:grid-cols-2 gap-4"
-                // initial="hidden"
-                whileInView="show"
-                viewport={{ once: true }}
-                variants={staggerContainer}
-              >
-                {features.map((feature) => (
-                  <motion.div
-                    key={feature.id}
-                    className="p-4 bg-gradient-to-br from-white to-purple-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-purple-100 cursor-pointer group backdrop-blur-sm relative"
-                    variants={scaleIn}
-                    whileHover={{ scale: 1.03 }}
-                  >
-                    {/* Edit/Delete Buttons */}
-                    <div className="absolute top-3 right-3 flex gap-2 ">
-                      <button
-                        onClick={() => handleEdit(feature)}
-                        className="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600  hover:opacity-100 transition-opacity duration-300"
-                        title="Edit"
-                      >
-                        ✏️
-                      </button>
-                      <button
-                        onClick={() => handleDelete(feature.id)}
-                        className="p-2 bg-red-500 text-white rounded-lg hover:bg-red-700"
-                        title="Delete"
-                      >
-                        🗑️
+                        <Edit size={18} /> এডিট শুরু করুন
                       </button>
                     </div>
+                  )}
+                </div>
+              </div>
+            </div>
 
-                    <motion.div className="mb-3  transition-transform duration-300 text-purple-500">
-                      {dummyIcones[feature.icon]}
+            {/* service feature management section */}
+            <div className="mt-10">
+              <h1 className="text-3xl font-bold text-gray-800 mb-10 text-center">
+                সার্ভিস ফিচার ম্যানেজমেন্ট
+              </h1>
+              <div className="grid lg:grid-cols-2 gap-12 ">
+                {/* CRUD Form */}
+                <motion.div
+                  className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-3xl p-8 shadow-2xl border border-purple-100"
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true }}
+                  variants={fadeIn}
+                >
+                  <h3 className="text-2xl font-bold text-purple-800 mb-6 text-center">
+                    {isEditing
+                      ? "ফিচার এডিট করুন ✏️"
+                      : "নতুন ফিচার যোগ করুন ➕"}
+                  </h3>
+
+                  <form onSubmit={handleSubmitFeature} className="space-y-6">
+                    {/* Icon Selection */}
+                    <div>
+                      <label className="block text-sm font-semibold text-purple-700 mb-2">
+                        আইকন সিলেক্ট করুন
+                      </label>
+                      <select
+                        value={formData.icon}
+                        onChange={(e) =>
+                          setFormData({ ...formData, icon: e.target.value })
+                        }
+                        className="w-full p-3 rounded-xl border-2 border-purple-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-300 bg-white"
+                        required
+                      >
+                        <option value="">আইকন সিলেক্ট করুন</option>
+                        {Object.keys(dummyIcones).map((iconKey) => (
+                          <option key={iconKey} value={iconKey}>
+                            {iconKey}
+                          </option>
+                        ))}
+                      </select>
+
+                      {formData.icon && (
+                        <div className="mt-3 p-3 bg-white rounded-lg border border-purple-200">
+                          <p className="text-sm text-purple-600 mb-2">
+                            প্রিভিউ:
+                          </p>
+                          <div className="text-purple-500">
+                            {dummyIcones[formData.icon]}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Title Input */}
+                    <div>
+                      <label className="block text-sm font-semibold text-purple-700 mb-2">
+                        টাইটেল
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.title}
+                        onChange={(e) =>
+                          setFormData({ ...formData, title: e.target.value })
+                        }
+                        className="w-full p-3 rounded-xl border-2 border-purple-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-300 bg-white"
+                        placeholder="ফিচারের টাইটেল লিখুন..."
+                        required
+                      />
+                    </div>
+
+                    {/* Description Input */}
+                    <div>
+                      <label className="block text-sm font-semibold text-purple-700 mb-2">
+                        বর্ণনা
+                      </label>
+                      <textarea
+                        value={formData.description}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            description: e.target.value,
+                          })
+                        }
+                        rows="3"
+                        className="w-full p-3 rounded-xl border-2 border-purple-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-300 bg-white resize-none"
+                        placeholder="ফিচারের বিস্তারিত বর্ণনা লিখুন..."
+                        required
+                      />
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex gap-4 pt-4">
+                      <button
+                        type="submit"
+                        className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+                      >
+                        {isEditing ? "আপডেট করুন 🔄" : "সেভ করুন 💾"}
+                      </button>
+
+                      {isEditing && (
+                        <button
+                          type="button"
+                          onClick={handleCancel}
+                          className="px-6 py-3 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-xl font-semibold hover:from-gray-600 hover:to-gray-700 transform hover:scale-105 transition-all duration-300 shadow-lg"
+                        >
+                          বাতিল ❌
+                        </button>
+                      )}
+                    </div>
+                  </form>
+                </motion.div>
+
+                {/* Features Grid */}
+                <motion.div
+                  className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                  // initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true }}
+                  variants={staggerContainer}
+                >
+                  {features.map((feature) => (
+                    <motion.div
+                      key={feature.id}
+                      className="p-4 bg-gradient-to-br from-white to-purple-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-purple-100 cursor-pointer group backdrop-blur-sm relative"
+                      variants={scaleIn}
+                      whileHover={{ scale: 1.03 }}
+                    >
+                      {/* Edit/Delete Buttons */}
+                      <div className="absolute top-3 right-3 flex gap-2 ">
+                        <button
+                          onClick={() => handleEdit(feature)}
+                          className="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600  hover:opacity-100 transition-opacity duration-300"
+                          title="Edit"
+                        >
+                          ✏️
+                        </button>
+                        <button
+                          onClick={() => handleDelete(feature.id)}
+                          className="p-2 bg-red-500 text-white rounded-lg hover:bg-red-700"
+                          title="Delete"
+                        >
+                          🗑️
+                        </button>
+                      </div>
+
+                      <motion.div className="mb-3  transition-transform duration-300 text-purple-500">
+                        {dummyIcones[feature.icon]}
+                      </motion.div>
+
+                      <h3 className="text-sm lg:text-[16px] font-bold mb-2 text-gray-800 group-hover:text-purple-600 transition-colors">
+                        {feature.title}
+                      </h3>
+
+                      <p className="text-gray-600 leading-relaxed text-[10px] lg:text-sm">
+                        {feature.description}
+                      </p>
                     </motion.div>
-
-                    <h3 className="text-sm lg:text-[16px] font-bold mb-2 text-gray-800 group-hover:text-purple-600 transition-colors">
-                      {feature.title}
-                    </h3>
-
-                    <p className="text-gray-600 leading-relaxed text-[10px] lg:text-sm">
-                      {feature.description}
-                    </p>
-                  </motion.div>
-                ))}
-              </motion.div>
+                  ))}
+                </motion.div>
+              </div>
             </div>
 
             {/* Stats */}
