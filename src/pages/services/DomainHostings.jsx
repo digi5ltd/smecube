@@ -2,19 +2,16 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { motion } from "framer-motion";
 import heroDomain from "../../assets/png/domaiinhosting/domain.png";
-import domainIcon from "../../assets/icones/domainhosting/domain.svg";
-import ssdIcon from "../../assets/icones/domainhosting/ssd.svg";
-import sslIcon from "../../assets/icones/domainhosting/ssl.svg";
-import upIcon from "../../assets/icones/domainhosting/uptime.svg";
-import cpanelIcon from "../../assets/icones/domainhosting/cpanel.svg";
-import supportIcon from "../../assets/icones/domainhosting/customer-care.svg";
+
 import {
   domainhostFeatureAPI,
   domainhostHeroAPI,
   domainhostPackageAPI,
   domainhostServiceFeatureTitleDescAPI,
 } from "../../services/api";
-import dummyIcones from "../../assets/icones/domainhosting/dummyIcones";
+import dummyIcones, {
+  getIconByName,
+} from "../../assets/icones/domainhosting/dummyIcones";
 
 const DomainHostings = () => {
   // const [packages, setPackages] = useState([]);
@@ -249,6 +246,7 @@ const DomainHostings = () => {
                   transition: { duration: 0.5 },
                 }}
               >
+                {getIconByName(feature.icon)}
                 {/* {dummyIcones[feature.icon]} */}
                 <img
                   className="w-10 h-10 md:w-12 md:h-12"

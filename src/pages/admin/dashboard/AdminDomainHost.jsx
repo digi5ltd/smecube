@@ -21,7 +21,9 @@ import {
   domainhostPackageAPI,
   domainhostServiceFeatureTitleDescAPI,
 } from "../../../services/api";
-import dummyIcones from "../../../assets/icones/domainhosting/dummyIcones";
+import dummyIcones, {
+  getIconByName,
+} from "../../../assets/icones/domainhosting/dummyIcones";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
@@ -362,6 +364,8 @@ const AdminDomainHost = () => {
           formData.id,
           formData
         );
+
+        console.log(formData);
 
         // Update local state with the response data from API
         setFeatures(
@@ -1013,7 +1017,7 @@ const AdminDomainHost = () => {
                             প্রিভিউ:
                           </p>
                           <div className="text-purple-500">
-                            {dummyIcones[formData.icon]}
+                            {getIconByName(formData.icon)}
                           </div>
                         </div>
                       )}
