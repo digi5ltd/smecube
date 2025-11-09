@@ -22,6 +22,7 @@ import {
 } from "../../../services/api";
 
 import AdmDomHostFeature from "../../../components/AdmDomHostFeature";
+import AdmDomHostOrderProc from "../../../components/AdmDomHostOrderProc";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
@@ -325,6 +326,16 @@ const AdminDomainHost = () => {
             onClick={() => setActiveTab("feature")}
             className={`flex-1 py-3 px-6 rounded-lg font-semibold transition-all duration-300 ${
               activeTab === "feature"
+                ? "bg-gradient-to-r from-purple-500 to-pink-600 text-white shadow-md"
+                : "text-gray-600 hover:bg-gray-100"
+            }`}
+          >
+            ফিচার আপডেট
+          </button>
+          <button
+            onClick={() => setActiveTab("orderprocess")}
+            className={`flex-1 py-3 px-6 rounded-lg font-semibold transition-all duration-300 ${
+              activeTab === "orderprocess"
                 ? "bg-gradient-to-r from-purple-500 to-pink-600 text-white shadow-md"
                 : "text-gray-600 hover:bg-gray-100"
             }`}
@@ -822,6 +833,8 @@ const AdminDomainHost = () => {
             <AdmDomHostFeature />
           </section>
         )}
+
+        {activeTab === "orderprocess" && <AdmDomHostOrderProc />}
       </div>
 
       <style>{`
