@@ -61,16 +61,6 @@ const DomainHostFeatures = () => {
   return (
     <section className="">
       <div className="container mx-auto px-4">
-        {/* <motion.h2
-          className="text-4xl md:text-5xl font-bold text-center mb-16 bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent py-1.5"
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          variants={fadeIn}
-        >
-          {features?.title}
-        </motion.h2> */}
-
         <motion.div
           className="grid grid-cols-3 md:grid-cols-6 gap-3"
           initial="hidden"
