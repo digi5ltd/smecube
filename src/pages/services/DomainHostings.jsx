@@ -6,6 +6,7 @@ import heroDomain from "../../assets/png/domaiinhosting/domain.png";
 import {
   domainhostFeatureAPI,
   domainhostHeroAPI,
+  domainhostOrderProcessAPI,
   domainhostPackageAPI,
   domainhostServiceFeatureTitleDescAPI,
 } from "../../services/api";
@@ -92,6 +93,19 @@ const DomainHostings = () => {
       });
   }, []);
 
+  const [steps, setSteps] = useState([]);
+  useEffect(() => {
+    domainhostOrderProcessAPI
+      .getAll()
+      .then((response) => {
+        // Assuming response.data is always an array with one object
+        setSteps(response.data);
+        console.log("Steps data:", response.data);
+      })
+      .catch((error) => {
+        console.log("Error fetching steps:", error);
+      });
+  }, []);
   // Animation variants
   const fadeIn = {
     hidden: { opacity: 0, y: 50 },
@@ -189,7 +203,6 @@ const DomainHostings = () => {
 
           <motion.div
             className="grid grid-cols-2 lg:grid-cols-4 gap-6"
-            initial="hidden"
             whileInView="show"
             viewport={{ once: true }}
             variants={staggerContainer}
@@ -208,7 +221,7 @@ const DomainHostings = () => {
                   {s.title}
                 </h3>
                 <p className="text-gray-600 leading-relaxed text-sm">
-                  {s.desc}
+                  {s.description}
                 </p>
                 <div className="w-12 h-1 bg-gradient-to-r from-orange-500 to-red-600 rounded-full mt-4 mx-auto group-hover:w-16 transition-all duration-300"></div>
               </motion.div>
