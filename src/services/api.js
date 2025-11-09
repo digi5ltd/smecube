@@ -91,6 +91,15 @@ export const domainhostFeatureAPI = {
   delete: (id) => api.delete(`/domain-host-features/${id}`),
 };
 
+// Domain Hosting Order process Api
+export const domainhostOrderProcessAPI = {
+  getAll: () => api.get("/domain-host-order-process"),
+  getOne: (id) => api.get(`/domain-host-order-process/${id}`),
+  create: (data) => api.post(`/domain-host-order-process`, data),
+  update: (id, data) => api.put(`/domain-host-order-process/${id}`, data),
+  delete: (id) => api.delete(`/domain-host-order-process/${id}`),
+};
+
 // Domain Hosting Service Feature Title Desc Routes
 export const domainhostServiceFeatureTitleDescAPI = {
   getAll: () => api.get("/domain-host-features-titledesc"),
