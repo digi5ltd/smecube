@@ -410,6 +410,7 @@ const iconMap = {
 export default iconMap;
 
 // Helper function to get icon by name
-export const getIconByName = (iconName) => {
+/* export const getIconByName = (iconName) => {
   return iconMap[iconName] || null;
 };
+ */

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-// import heroDomain from "../../../assets/png/domaiinhosting/";
 
 import {
   Plus,
@@ -21,28 +20,12 @@ import {
   domainhostPackageAPI,
   domainhostServiceFeatureTitleDescAPI,
 } from "../../../services/api";
-import dummyIcones, {
-  getIconByName,
-} from "../../../assets/icones/domainhosting/dummyIcones";
+
+import AdmDomHostFeature from "../../../components/AdmDomHostFeature";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
   show: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-};
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-};
-
-const scaleIn = {
-  hidden: { opacity: 0, scale: 0.8 },
-  show: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
 };
 
 const AdminDomainHost = () => {
@@ -78,13 +61,6 @@ const AdminDomainHost = () => {
   });
 
   const [animate, setAnimate] = useState(true);
-  /* const [sectionData, setSectionData] = useState({
-    title: "আমাদের সাম্প্রতিক কাজ",
-    subtitle: "বিভিন্ন শিল্পে আমাদের সফলতার গল্প",
-  }); */
-
-  // const [editingSection, setEditingSection] = useState(false);
-  // const [editingProject, setEditingProject] = useState(null);
 
   const handleHeroChange = (e) => {
     const { name, value } = e.target;
@@ -270,15 +246,8 @@ const AdminDomainHost = () => {
     // console.log(heroData[0]?.id);
 
     try {
-      // Replace with your actual axios call
-      /* const response = await domainhostServiceFeatureTitleDescAPI.update(
-        featureTitle[0]?.id,
-        featureTitle[0]
-      );
-
-      setFeatureTitle(response.data); */
-      console.log(featureTitle);
-      console.log("Feature title ID:", featureTitle.id);
+      // console.log(featureTitle);
+      // console.log("Feature title ID:", featureTitle.id);
       if (featureTitle.id) {
         // update existing
         await domainhostServiceFeatureTitleDescAPI.update(
@@ -310,123 +279,6 @@ const AdminDomainHost = () => {
         type: "error",
       });
     }
-  };
-
-  // Feature section service and feature management
-  const [features, setFeatures] = useState([]);
-  const [formData, setFormData] = useState({
-    id: null,
-    title: "",
-    description: "",
-    icon: "domain",
-  });
-  const [isEditing, setIsEditing] = useState(false);
-  // const [showForm, setShowForm] = useState(false);
-
-  /* const handleSubmitFeature = async (e) => {
-    e.preventDefault();
-
-    if (isEditing) {
-      // Update existing feature
-      setFeatures(
-        features.map((f) => (f.id === formData.id ? { ...formData } : f))
-      );
-      console.log("edit features", formData);
-    } else {
-      // Create new feature
-      const newFeature = {
-        ...formData,
-        // id: Date.now(),
-      };
-      setFeatures([...features, newFeature]);
-      console.log("new features", formData);
-    }
-
-    // Reset form
-    setFormData({ id: null, icon: "", title: "", description: "" });
-    setIsEditing(false);
-
-    // Here you would typically make an API call to your Laravel backend
-    // await fetch('/api/features', {
-    //   method: isEditing ? 'PUT' : 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(formData)
-    // });
-  }; */
-
-  const handleSubmitFeature = async (e) => {
-    e.preventDefault();
-
-    try {
-      if (isEditing) {
-        // Update existing feature
-        const response = await domainhostFeatureAPI.update(
-          formData.id,
-          formData
-        );
-
-        console.log(formData);
-
-        // Update local state with the response data from API
-        setFeatures(
-          features.map((f) => (f.id === formData.id ? response.data : f))
-        );
-        console.log("Feature updated successfully:", response.data);
-      } else {
-        // Create new feature
-        const response = await domainhostFeatureAPI.create(formData);
-
-        // Add new feature to local state with the ID from API response
-        setFeatures([...features, response.data]);
-        console.log("Feature created successfully:", response.data);
-      }
-
-      // Show success notification
-      setNotification({
-        show: true,
-        message: isEditing
-          ? "ফিচার সফলভাবে আপডেট হয়েছে!"
-          : "ফিচার সফলভাবে তৈরি হয়েছে!",
-        type: "success",
-      });
-
-      // Reset form
-      setFormData({ id: null, icon: "", title: "", description: "" });
-      setIsEditing(false);
-
-      // Hide notification after 3 seconds
-      setTimeout(() => {
-        setNotification({ show: false, message: "", type: "" });
-      }, 3000);
-    } catch (error) {
-      console.error("Error saving feature:", error);
-
-      // Show error notification
-      setNotification({
-        show: true,
-        message: isEditing
-          ? "ফিচার আপডেট করতে সমস্যা হয়েছে!"
-          : "ফিচার তৈরি করতে সমস্যা হয়েছে!",
-        type: "error",
-      });
-    }
-  };
-
-  const handleEdit = (feature) => {
-    setFormData(feature);
-    setIsEditing(true);
-  };
-
-  const handleDelete = (id) => {
-    setFeatures(features.filter((f) => f.id !== id));
-
-    // API call for deletion
-    // await fetch(`/api/features/${id}`, { method: 'DELETE' });
-  };
-
-  const handleCancel = () => {
-    setFormData({ id: null, icon: "", title: "", description: "" });
-    setIsEditing(false);
   };
 
   return (
@@ -873,9 +725,6 @@ const AdminDomainHost = () => {
                 <h1 className="text-3xl font-bold text-gray-800 mb-2">
                   সার্ভিস ফিচার শিরোনাম ও বিবরণ ম্যানেজমেন্ট
                 </h1>
-                {/* <p className="text-gray-600">
-                  ডোমেইন ও হোস্টিং পেজের হিরো সেকশন এডিট করুন
-                </p> */}
               </div>
 
               <div className="grid gap-6">
@@ -970,193 +819,7 @@ const AdminDomainHost = () => {
             </div>
 
             {/* service feature management section */}
-            <div className="mt-10">
-              <h1 className="text-3xl font-bold text-gray-800 mb-10 text-center">
-                সার্ভিস ফিচার ম্যানেজমেন্ট
-              </h1>
-              <div className="grid lg:grid-cols-2 gap-12 ">
-                {/* CRUD Form */}
-                <motion.div
-                  className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-3xl p-8 shadow-2xl border border-purple-100"
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={{ once: true }}
-                  variants={fadeIn}
-                >
-                  <h3 className="text-2xl font-bold text-purple-800 mb-6 text-center">
-                    {isEditing
-                      ? "ফিচার এডিট করুন ✏️"
-                      : "নতুন ফিচার যোগ করুন ➕"}
-                  </h3>
-
-                  <form onSubmit={handleSubmitFeature} className="space-y-6">
-                    {/* Icon Selection */}
-                    <div>
-                      <label className="block text-sm font-semibold text-purple-700 mb-2">
-                        আইকন সিলেক্ট করুন
-                      </label>
-                      <select
-                        value={formData.icon}
-                        onChange={(e) =>
-                          setFormData({ ...formData, icon: e.target.value })
-                        }
-                        className="w-full p-3 rounded-xl border-2 border-purple-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-300 bg-white"
-                        required
-                      >
-                        <option value="">আইকন সিলেক্ট করুন</option>
-                        {Object.keys(dummyIcones).map((iconKey) => (
-                          <option key={iconKey} value={iconKey}>
-                            {iconKey}
-                          </option>
-                        ))}
-                      </select>
-
-                      {formData.icon && (
-                        <div className="mt-3 p-3 bg-white rounded-lg border border-purple-200">
-                          <p className="text-sm text-purple-600 mb-2">
-                            প্রিভিউ:
-                          </p>
-                          <div className="text-purple-500">
-                            {getIconByName(formData.icon)}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Title Input */}
-                    <div>
-                      <label className="block text-sm font-semibold text-purple-700 mb-2">
-                        টাইটেল
-                      </label>
-                      <input
-                        type="text"
-                        value={formData.title}
-                        onChange={(e) =>
-                          setFormData({ ...formData, title: e.target.value })
-                        }
-                        className="w-full p-3 rounded-xl border-2 border-purple-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-300 bg-white"
-                        placeholder="ফিচারের টাইটেল লিখুন..."
-                        required
-                      />
-                    </div>
-
-                    {/* Description Input */}
-                    <div>
-                      <label className="block text-sm font-semibold text-purple-700 mb-2">
-                        বর্ণনা
-                      </label>
-                      <textarea
-                        value={formData.description}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            description: e.target.value,
-                          })
-                        }
-                        rows="3"
-                        className="w-full p-3 rounded-xl border-2 border-purple-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-300 bg-white resize-none"
-                        placeholder="ফিচারের বিস্তারিত বর্ণনা লিখুন..."
-                        required
-                      />
-                    </div>
-
-                    {/* Action Buttons */}
-                    <div className="flex gap-4 pt-4">
-                      <button
-                        type="submit"
-                        className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
-                      >
-                        {isEditing ? "আপডেট করুন 🔄" : "সেভ করুন 💾"}
-                      </button>
-
-                      {isEditing && (
-                        <button
-                          type="button"
-                          onClick={handleCancel}
-                          className="px-6 py-3 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-xl font-semibold hover:from-gray-600 hover:to-gray-700 transform hover:scale-105 transition-all duration-300 shadow-lg"
-                        >
-                          বাতিল ❌
-                        </button>
-                      )}
-                    </div>
-                  </form>
-                </motion.div>
-
-                {/* Features Grid */}
-                <motion.div
-                  className="grid grid-cols-1 md:grid-cols-2 gap-4"
-                  // initial="hidden"
-                  whileInView="show"
-                  viewport={{ once: true }}
-                  variants={staggerContainer}
-                >
-                  {features.map((feature) => (
-                    <motion.div
-                      key={feature.id}
-                      className="p-4 bg-gradient-to-br from-white to-purple-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-purple-100 cursor-pointer group backdrop-blur-sm relative"
-                      variants={scaleIn}
-                      whileHover={{ scale: 1.03 }}
-                    >
-                      {/* Edit/Delete Buttons */}
-                      <div className="absolute top-3 right-3 flex gap-2 ">
-                        <button
-                          onClick={() => handleEdit(feature)}
-                          className="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600  hover:opacity-100 transition-opacity duration-300"
-                          title="Edit"
-                        >
-                          ✏️
-                        </button>
-                        <button
-                          onClick={() => handleDelete(feature.id)}
-                          className="p-2 bg-red-500 text-white rounded-lg hover:bg-red-700"
-                          title="Delete"
-                        >
-                          🗑️
-                        </button>
-                      </div>
-
-                      <motion.div className="mb-3  transition-transform duration-300 text-purple-500">
-                        {dummyIcones[feature.icon]}
-                      </motion.div>
-
-                      <h3 className="text-sm lg:text-[16px] font-bold mb-2 text-gray-800 group-hover:text-purple-600 transition-colors">
-                        {feature.title}
-                      </h3>
-
-                      <p className="text-gray-600 leading-relaxed text-[10px] lg:text-sm">
-                        {feature.description}
-                      </p>
-                    </motion.div>
-                  ))}
-                </motion.div>
-              </div>
-            </div>
-
-            {/* Stats */}
-            {/*  <motion.div
-              className="mt-12 grid grid-cols-3 gap-6 text-center"
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true }}
-              variants={fadeIn}
-            >
-              <div className="bg-gradient-to-br from-green-50 to-emerald-100 p-6 rounded-2xl border border-green-200">
-                <div className="text-2xl font-bold text-green-600">
-                  {features.length}
-                </div>
-                <div className="text-sm text-green-700">মোট ফিচার</div>
-              </div>
-              <div className="bg-gradient-to-br from-blue-50 to-cyan-100 p-6 rounded-2xl border border-blue-200">
-                <div className="text-2xl font-bold text-blue-600">
-                  {Object.keys(dummyIcones).length}
-                </div>
-                <div className="text-sm text-blue-700">সিলেক্টেবল আইকন</div>
-              </div>
-              <div className="bg-gradient-to-br from-orange-50 to-red-100 p-6 rounded-2xl border border-orange-200">
-                <div className="text-2xl font-bold text-orange-600">CRUD</div>
-                <div className="text-sm text-orange-700">অপারেশনস</div>
-              </div>
-            </motion.div> */}
+            <AdmDomHostFeature />
           </section>
         )}
       </div>

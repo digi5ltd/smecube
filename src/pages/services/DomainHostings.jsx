@@ -9,9 +9,11 @@ import {
   domainhostPackageAPI,
   domainhostServiceFeatureTitleDescAPI,
 } from "../../services/api";
-import dummyIcones, {
-  getIconByName,
-} from "../../assets/icones/domainhosting/dummyIcones";
+import DomainHostFeatures from "../../components/DomainHostFeatures";
+
+// import dummyIcones, {
+//   getIconByName,
+// } from "../../assets/icones/domainhosting/dummyIcones";
 
 const DomainHostings = () => {
   // const [packages, setPackages] = useState([]);
@@ -225,44 +227,7 @@ const DomainHostings = () => {
           {featureTitle?.title}
         </motion.h2>
 
-        <motion.div
-          className="grid grid-cols-3 md:grid-cols-6 gap-3"
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          variants={staggerContainer}
-        >
-          {features.map((feature, i) => (
-            <motion.div
-              key={i}
-              className="p-3 bg-gradient-to-br from-white to-orange-50 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-orange-100/50 cursor-pointer group backdrop-blur-sm"
-              variants={scaleIn}
-              whileHover={{ scale: 1.02 }}
-            >
-              <motion.div
-                className="mb-4 group-hover:scale-110 transition-transform duration-300"
-                whileHover={{
-                  // rotate: [0, -5, 5, 0],
-                  transition: { duration: 0.5 },
-                }}
-              >
-                {getIconByName(feature.icon)}
-                {/* {dummyIcones[feature.icon]} */}
-                <img
-                  className="w-10 h-10 md:w-12 md:h-12"
-                  src={dummyIcones[feature.icon]}
-                  alt=""
-                />
-              </motion.div>
-              <h3 className="text-sm lg:text-[16px] font-bold mb-3 text-gray-800 group-hover:text-orange-600 transition-colors">
-                {feature.title}
-              </h3>
-              <p className="text-gray-600 leading-relaxed text-[10px] lg:text-sm">
-                {feature.description}
-              </p>
-            </motion.div>
-          ))}
-        </motion.div>
+        <DomainHostFeatures />
       </section>
 
       {/* Process Section */}
